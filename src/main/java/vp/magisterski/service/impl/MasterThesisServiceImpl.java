@@ -1,5 +1,7 @@
 package vp.magisterski.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.service.MasterThesisService;
@@ -14,6 +16,11 @@ public class MasterThesisServiceImpl implements MasterThesisService {
 
     @Override
     public MasterThesis findThesisById(Long id) {
+        return null;
+    }
+
+    @Override
+    public Page<MasterThesis> findAll(Pageable pageable) {
         return null;
     }
 }
