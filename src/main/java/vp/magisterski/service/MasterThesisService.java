@@ -8,4 +8,5 @@ public interface MasterThesisService {
                       String description, String mentor, String firstMember,
                       String secondMember);
 
+    MasterThesis findThesisById(Long id);
 }

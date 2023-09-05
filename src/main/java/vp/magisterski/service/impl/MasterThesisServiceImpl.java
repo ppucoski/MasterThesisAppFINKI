@@ -11,4 +11,9 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     public MasterThesis save(String student, String title, String area, String description, String mentor, String firstMember, String secondMember) {
         return null;
     }
+
+    @Override
+    public MasterThesis findThesisById(Long id) {
+        return null;
+    }
 }
