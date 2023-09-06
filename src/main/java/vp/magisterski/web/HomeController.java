@@ -24,20 +24,13 @@ public class HomeController {
         return "index";
     }
 
-
-    @GetMapping("/MasterThesis-procedure")
-    public String getThesisProcedurePage() {
-        return "index/MasterThesis-procedure";
-    }
-
-
     @GetMapping("/list-MasterThesis")
     public String findAllThesis(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "10") int size,
                                 Model model) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
         model.addAttribute("MasterThesis", masterThesisService.findAll(pageable));
-        return "index/list-MasterThesis";
+        return "MasterThesisList";
     }
 
 }
