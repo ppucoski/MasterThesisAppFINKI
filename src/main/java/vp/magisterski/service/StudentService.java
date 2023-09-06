@@ -5,5 +5,5 @@ import vp.magisterski.model.shared.Student;
 import java.util.Optional;
 
 public interface StudentService {
-    Optional<Student> findStudentByIndex(String index);
+    Optional<Student> findStudent(String student);
 }
