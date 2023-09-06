@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vp.magisterski.model.magister.MasterThesis;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MasterThesisService {
@@ -14,4 +15,6 @@ public interface MasterThesisService {
     Optional<MasterThesis> findThesisById(Long id);
 
     Page<MasterThesis> findAll(Pageable pageable);
+
+    List<MasterThesis> filterMasterThesis(MasterThesis masterThesis);
 }

@@ -1,7 +1,9 @@
 package vp.magisterski.service.impl;
 
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import vp.magisterski.model.exceptions.ProfessorDoesNotExistException;
 import vp.magisterski.model.exceptions.StudentDoesNotExistException;
@@ -14,7 +16,10 @@ import vp.magisterski.repository.ProfessorRepository;
 import vp.magisterski.repository.StudentRepository;
 import vp.magisterski.service.MasterThesisService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class MasterThesisServiceImpl implements MasterThesisService {
@@ -52,5 +57,38 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     @Override
     public Page<MasterThesis> findAll(Pageable pageable) {
         return this.masterThesisRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<MasterThesis> filterMasterThesis(MasterThesis masterThesis) {
+        return masterThesisRepository.findAll((Specification<MasterThesis>) (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (masterThesis.getStudent() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("student"), masterThesis.getStudent()));
+            }
+
+            if (masterThesis.getStatus() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), masterThesis.getStatus()));
+            }
+
+            if (masterThesis.getMentor() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("mentor"), masterThesis.getMentor()));
+            }
+
+            if (masterThesis.getFirstMember() != null) {
+                predicates.add( criteriaBuilder.equal(root.get("firstMember"), masterThesis.getFirstMember()));
+            }
+
+            if (masterThesis.getSecondMember() != null) {
+                predicates.add(criteriaBuilder.equal(root.get("secondMember"), masterThesis.getSecondMember()));
+            }
+
+            if (masterThesis.getTitle() != null && !masterThesis.getTitle().isEmpty()) {
+                predicates.add(criteriaBuilder.like(root.get("title"), "%" + masterThesis.getTitle() + "%"));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        });
     }
 }
