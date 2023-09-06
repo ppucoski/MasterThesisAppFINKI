@@ -54,6 +54,17 @@ public class MasterThesis {
     // 5 - 10
     private Integer grade;
 
+    public MasterThesis(MasterThesisStatus status, Student student, String title, String area, String description, Professor mentor, Professor firstMember, Professor secondMember) {
+        this.status = status;
+        this.student = student;
+        this.title = title;
+        this.area = area;
+        this.description = description;
+        this.mentor = mentor;
+        this.firstMember = firstMember;
+        this.secondMember = secondMember;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
