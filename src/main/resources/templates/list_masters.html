@@ -6,21 +6,18 @@
   <form class="my-4" th:action="@{/admin/list-masters}" method="get">
     <div class="row gx-2 d-flex justify-content-center align-items-center">
       <div class="col-2 d-flex justify-content-center align-items-center">
-        <label for="index"></label>
         <input placeholder="Индекс" class="form-control" id="index" type="text"
                name="text" th:value="${param.index}"/>
       </div>
       <div class="col-2 d-flex justify-content-center align-items-center">
-        <label for="title"></label>
         <input placeholder="Наслов" class="form-control" id="title" type="text"
                name="text" th:value="${param.title}"/>
       </div>
       <div class="col-2 d-flex justify-content-center align-items-center">
-        <label for="status"></label>
         <select class="form-select" aria-label="Default select example" id="status" name="status">
           <option value="">Статус</option>
           <option th:each="status : ${master_status}"
-                  th:value="${status}" th:text="#{${status.getDisplayName()}}"
+                  th:value="${status}" th:text="${status.getDisplayName()}"
                   th:selected="${status == selectedStatus}"></option>
         </select>
       </div>
@@ -35,7 +32,6 @@
         </select>
       </div>
       <div class="col-2 d-flex justify-content-center align-items-center">
-        <label for="member"></label>
         <select class="form-select" aria-label="Default select example" id="member" name="member">
           <option value="">Член</option>
           <option th:each="member : ${master_members}"
@@ -46,7 +42,7 @@
       </div>
       <div class="col-1 btn-group" role="group" aria-label="Search And Clear">
         <button type="submit" class="btn btn-success form-control">
-          <i class="fa-solid fa-magnifying-glass"></i> Пребарувај!
+          <i class="fa-solid fa-magnifying-glass"></i> Пребарувај
         </button>
 
       </div>
