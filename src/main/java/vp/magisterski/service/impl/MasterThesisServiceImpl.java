@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import vp.magisterski.model.exceptions.ProfessorDoesNotExistException;
 import vp.magisterski.model.exceptions.StudentDoesNotExistException;
 import vp.magisterski.model.magister.MasterThesis;
+import vp.magisterski.model.magister.MasterThesisPresentation;
 import vp.magisterski.model.magister.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
@@ -16,6 +17,10 @@ import vp.magisterski.repository.ProfessorRepository;
 import vp.magisterski.repository.StudentRepository;
 import vp.magisterski.service.MasterThesisService;
 
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +39,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
-    public MasterThesis save(String studentIndex, String title, String area, String description, String mentorId, String firstMemberId, String secondMemberId) {
+    public MasterThesis save(String studentIndex, LocalDateTime dateTime, String title, String area, String description, String mentorId, String firstMemberId, String secondMemberId) {
         Student student = this.studentRepository.findById(studentIndex)
                 .orElseThrow(() -> new StudentDoesNotExistException(studentIndex));
         Professor mentor = this.professorRepository.findById(mentorId)
@@ -43,7 +48,8 @@ public class MasterThesisServiceImpl implements MasterThesisService {
                 .orElseThrow(() -> new ProfessorDoesNotExistException(firstMemberId));
         Professor secondMember = this.professorRepository.findById(secondMemberId)
                 .orElseThrow(() -> new ProfessorDoesNotExistException(secondMemberId));
-        MasterThesis masterThesis = new MasterThesis(MasterThesisStatus.PROFESSOR_THESIS_REGISTRATION,
+        MasterThesisPresentation presentation = new MasterThesisPresentation("", dateTime);
+        MasterThesis masterThesis = new MasterThesis(MasterThesisStatus.PROFESSOR_THESIS_REGISTRATION, presentation,
                 student, title, area, description, mentor, firstMember, secondMember);
         return this.masterThesisRepository.save(masterThesis);
     }

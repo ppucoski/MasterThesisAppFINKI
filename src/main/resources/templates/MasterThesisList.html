@@ -40,7 +40,7 @@
             </tr>
             <tr>
                 <td>Датум на пријавување</td>
-                <td><span th:if="${masterThesis.getPresentation()} != null" th:text="${masterThesis.getPresentation().getPresentationStartTime()}"></span></td>
+                <td><span th:if="${masterThesis.getPresentation()} != null" th:text="${#temporals.format(masterThesis.getPresentation().getPresentationStartTime(), 'dd.MM.yyy')}"></span></td>
             </tr>
             <tr>
                 <td>Статус</td>
