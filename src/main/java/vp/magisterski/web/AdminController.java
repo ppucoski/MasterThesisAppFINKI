@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vp.magisterski.model.magister.MasterThesis;
@@ -71,5 +72,29 @@ public class AdminController {
 
 
         return "list_masters";
+    }
+
+    @GetMapping("/newMasterThesis")
+    public String newMasterThesis(Model model) {
+        model.addAttribute("professors", professorService.findAllByProfessorStatus(true, false));
+        model.addAttribute("members", professorService.findAllByProfessorStatus(true, true));
+        return "newMasterThesis";
+    }
+
+    @PostMapping("/newMasterThesis")
+    public String saveNewMasterThesis(@RequestParam String index,
+                                      @RequestParam String title,
+                                      @RequestParam String area,
+                                      @RequestParam String description,
+                                      @RequestParam String mentor,
+                                      @RequestParam String firstMember,
+                                      @RequestParam String secondMember) {
+        try {
+            masterThesisService.save(index, title, area, description, mentor, firstMember, secondMember);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return "index";
     }
 }
