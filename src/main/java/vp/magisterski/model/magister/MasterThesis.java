@@ -54,8 +54,9 @@ public class MasterThesis {
     // 5 - 10
     private Integer grade;
 
-    public MasterThesis(MasterThesisStatus status, Student student, String title, String area, String description, Professor mentor, Professor firstMember, Professor secondMember) {
+    public MasterThesis(MasterThesisStatus status, MasterThesisPresentation presentation, Student student, String title, String area, String description, Professor mentor, Professor firstMember, Professor secondMember) {
         this.status = status;
+        this.presentation = presentation;
         this.student = student;
         this.title = title;
         this.area = area;

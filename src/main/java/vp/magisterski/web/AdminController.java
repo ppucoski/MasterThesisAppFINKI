@@ -18,6 +18,8 @@ import vp.magisterski.service.MasterThesisService;
 import vp.magisterski.service.ProfessorService;
 import vp.magisterski.service.StudentService;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -90,7 +92,7 @@ public class AdminController {
                                       @RequestParam String firstMember,
                                       @RequestParam String secondMember) {
         try {
-            masterThesisService.save(index, title, area, description, mentor, firstMember, secondMember);
+            masterThesisService.save(index, LocalDateTime.now(), title, area, description, mentor, firstMember, secondMember);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

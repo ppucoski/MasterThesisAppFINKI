@@ -4,11 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import vp.magisterski.model.magister.MasterThesis;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 public interface MasterThesisService {
-    MasterThesis save(String studentIndex, String title, String area,
+    MasterThesis save(String studentIndex, LocalDateTime dateTime, String title, String area,
                       String description, String mentorId, String firstMemberId,
                       String secondMemberId);
 
