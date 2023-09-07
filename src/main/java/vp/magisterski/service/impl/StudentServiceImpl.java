@@ -18,6 +18,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Optional<Student> findStudentById(String studentId) {
-        return studentRepository.findById(studentId);
+        if (studentId == null) {
+            return Optional.empty();
+        } else
+            return studentRepository.findById(studentId);
     }
 }

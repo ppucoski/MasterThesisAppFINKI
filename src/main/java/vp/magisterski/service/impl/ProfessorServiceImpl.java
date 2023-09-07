@@ -36,7 +36,11 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public Optional<Professor> findProfessorById(String id) {
-        return this.professorRepository.findById(id);
+        if(id == null){
+            return Optional.empty();
+        }
+        else
+            return this.professorRepository.findById(id);
     }
 
 

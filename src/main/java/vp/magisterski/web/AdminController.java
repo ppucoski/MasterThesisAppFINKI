@@ -35,7 +35,7 @@ public class AdminController {
     }
 
 
-    @GetMapping("/list")
+    @GetMapping("/list-masters")
     public String masterList(@RequestParam(required = false) String index,
             @RequestParam(required = false) String title,
             @RequestParam(required = false) MasterThesisStatus status,
@@ -45,7 +45,7 @@ public class AdminController {
             @RequestParam(defaultValue = "10") int size, Model model)
     {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
+        //Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
 
         Student student = this.studentService.findStudentById(index).orElse(null);
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
@@ -55,18 +55,21 @@ public class AdminController {
         List<MasterThesis> masterThesisList = this.masterThesisService.filterMasterThesis(masterThesis);
 
         //TODO:Paging
-        //Page<MasterThesis> master_page = diplomaThesisService.findAll(specification, pageable);
+        //Page<MasterThesis> master_page = diplomaThesisService.findAll(masterThesisList, pageable);
 
 
 
-       // model.addAttribute("master_page", diplomaThesisPage);
+       // model.addAttribute("master_page", master_page);
         model.addAttribute("master_status", MasterThesisStatus.values());
         model.addAttribute("master_mentors", this.professorService.findAll());
         model.addAttribute("master_members", professorService.findAll());
-        /*model.addAttribute("selectedStatus", status != null ? status : "");
-        model.addAttribute("selectedMentor", mentor != null ? mentor : "");
-        model.addAttribute("selectedMember", member != null ? member : "");*/
 
-        return "admin/list";
+
+        model.addAttribute("selectedMentor", mentor != null ? mentor : "");
+        model.addAttribute("selectedStatus", status != null ? status : "");
+        model.addAttribute("selectedMember", member != null ? member : "");
+
+
+        return "list_masters";
     }
 }
