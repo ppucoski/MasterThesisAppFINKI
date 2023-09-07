@@ -72,6 +72,9 @@ public class MasterThesis {
         this.mentor = mentor;
         this.firstMember = firstMember;
     }
+    public MasterThesis(Professor secondMember) {
+        this.secondMember = secondMember;
+    }
 
     @Override
     public boolean equals(Object o) {

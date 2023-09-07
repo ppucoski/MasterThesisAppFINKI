@@ -2,6 +2,7 @@ package vp.magisterski.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import vp.magisterski.model.magister.MasterThesis;
 
 import java.util.List;
@@ -16,5 +17,8 @@ public interface MasterThesisService {
 
     Page<MasterThesis> findAll(Pageable pageable);
 
-    List<MasterThesis> filterMasterThesis(MasterThesis masterThesis);
+    Specification<MasterThesis> filterMasterThesis(MasterThesis masterThesis);
+    //Page<MasterThesis> findAll(List<MasterThesis> masterThesisList, Pageable pageable);
+    Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable);
+    List<MasterThesis> findAll();
 }

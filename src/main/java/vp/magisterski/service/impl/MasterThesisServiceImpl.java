@@ -16,7 +16,6 @@ import vp.magisterski.repository.ProfessorRepository;
 import vp.magisterski.repository.StudentRepository;
 import vp.magisterski.service.MasterThesisService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,35 +59,51 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
-    public List<MasterThesis> filterMasterThesis(MasterThesis masterThesis) {
-        return masterThesisRepository.findAll((Specification<MasterThesis>) (root, query, criteriaBuilder) -> {
-            List<Predicate> predicates = new ArrayList<>();
+    public Specification<MasterThesis> filterMasterThesis(MasterThesis masterThesis) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
 
             if (masterThesis.getStudent() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("student"), masterThesis.getStudent()));
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("student"), masterThesis.getStudent()));
             }
 
             if (masterThesis.getStatus() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("status"), masterThesis.getStatus()));
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("status"), masterThesis.getStatus()));
             }
 
             if (masterThesis.getMentor() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("mentor"), masterThesis.getMentor()));
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("mentor"), masterThesis.getMentor()));
             }
 
             if (masterThesis.getFirstMember() != null) {
-                predicates.add( criteriaBuilder.equal(root.get("firstMember"), masterThesis.getFirstMember()));
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("firstMember"), masterThesis.getFirstMember()));
             }
 
             if (masterThesis.getSecondMember() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("secondMember"), masterThesis.getSecondMember()));
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("secondMember"), masterThesis.getSecondMember()));
             }
 
             if (masterThesis.getTitle() != null && !masterThesis.getTitle().isEmpty()) {
-                predicates.add(criteriaBuilder.like(root.get("title"), "%" + masterThesis.getTitle() + "%"));
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.like(root.get("title"), "%" + masterThesis.getTitle() + "%"));
             }
 
-            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        });
+            return predicate;
+        };
+    }
+
+    @Override
+    public Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable) {
+        return this.masterThesisRepository.findAll(specification, pageable);
+    }
+
+    @Override
+    public List<MasterThesis> findAll() {
+        return this.masterThesisRepository.findAll();
     }
 }
