@@ -66,17 +66,6 @@ public class MasterThesis {
         this.secondMember = secondMember;
     }
 
-    public MasterThesis(MasterThesisStatus status, Student student, String title, Professor mentor, Professor firstMember) {
-        this.status = status;
-        this.student = student;
-        this.title = title;
-        this.mentor = mentor;
-        this.firstMember = firstMember;
-    }
-    public MasterThesis(Professor secondMember) {
-        this.secondMember = secondMember;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

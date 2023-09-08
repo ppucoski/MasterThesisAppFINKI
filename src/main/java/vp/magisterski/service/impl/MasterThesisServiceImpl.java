@@ -17,10 +17,7 @@ import vp.magisterski.repository.ProfessorRepository;
 import vp.magisterski.repository.StudentRepository;
 import vp.magisterski.service.MasterThesisService;
 
-
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,6 +62,44 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
+    public Specification<MasterThesis> filterMasterThesis(Student student, String title, MasterThesisStatus status,
+                                                          Professor mentor, Professor member) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
+
+            if (student != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("student"), student));
+            }
+
+            if (status != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("status"), status));
+            }
+
+            if (mentor != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("mentor"), mentor));
+            }
+
+            if (member != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.or(
+                                criteriaBuilder.equal(root.get("firstMember"), member),
+                                criteriaBuilder.equal(root.get("secondMember"), member)
+                        ));
+            }
+
+            if (title != null && !title.isEmpty()) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.like(root.get("title"), "%" + title + "%"));
+            }
+
+            return predicate;
+        };
+    }
+
+    @Override
     public Specification<MasterThesis> filterMasterThesis(MasterThesis masterThesis) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
@@ -84,14 +119,12 @@ public class MasterThesisServiceImpl implements MasterThesisService {
                         criteriaBuilder.equal(root.get("mentor"), masterThesis.getMentor()));
             }
 
-            if (masterThesis.getFirstMember() != null) {
+            if (masterThesis.getFirstMember() != null || masterThesis.getSecondMember() != null) {
                 predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.equal(root.get("firstMember"), masterThesis.getFirstMember()));
-            }
-
-            if (masterThesis.getSecondMember() != null) {
-                predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.equal(root.get("secondMember"), masterThesis.getSecondMember()));
+                        criteriaBuilder.or(
+                                criteriaBuilder.equal(root.get("firstMember"), masterThesis.getFirstMember()),
+                                criteriaBuilder.equal(root.get("secondMember"), masterThesis.getSecondMember())
+                        ));
             }
 
             if (masterThesis.getTitle() != null && !masterThesis.getTitle().isEmpty()) {
@@ -103,6 +136,8 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         };
     }
 
+
+
     @Override
     public Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable) {
         return this.masterThesisRepository.findAll(specification, pageable);
@@ -112,4 +147,6 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     public List<MasterThesis> findAll() {
         return this.masterThesisRepository.findAll();
     }
+
+
 }

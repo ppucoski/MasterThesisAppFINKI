@@ -1,9 +1,12 @@
 package vp.magisterski.web;
 
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,11 +19,7 @@ import vp.magisterski.service.MasterThesisService;
 import vp.magisterski.service.ProfessorService;
 import vp.magisterski.service.StudentService;
 
-import java.util.Collections;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 
 @Controller
@@ -44,25 +43,22 @@ public class AdminController {
                                  @RequestParam(required = false) String mentor,
                                  @RequestParam(required = false) String member,
                                  @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "5") int size, Model model)
+                                 @RequestParam(defaultValue = "10") int size,
+                                 Model model)
     {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
 
         Student student = this.studentService.findStudentById(index).orElse(null);
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
         Professor member1 = this.professorService.findProfessorById(member).orElse(null);
-        MasterThesis masterThesis = new MasterThesis(status, student, title, mentor1, member1);
-        Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesis(masterThesis);
+        Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesis(student, title, status, mentor1, member1);
 
         Page<MasterThesis> master_page = this.masterThesisService.findAll(specification, pageable);
-
-
 
         model.addAttribute("master_page", master_page);
         model.addAttribute("master_status", MasterThesisStatus.values());
         model.addAttribute("master_mentors", this.professorService.findAll());
         model.addAttribute("master_members", professorService.findAll());
-
 
         model.addAttribute("selectedMentor", mentor != null ? mentor : "");
         model.addAttribute("selectedStatus", status != null ? status : "");
@@ -71,36 +67,35 @@ public class AdminController {
 
         return "list_masters";
     }
+
+
     @PostMapping("/list-masters")
     public String filterMasterList(@RequestParam(required = false) String index,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) MasterThesisStatus status,
-            @RequestParam(required = false) String mentor,
-            @RequestParam(required = false) String member,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size, Model model)
-    {
-
+                                   @RequestParam(required = false) String title,
+                                   @RequestParam(required = false) MasterThesisStatus status,
+                                   @RequestParam(required = false) String mentor,
+                                   @RequestParam(required = false) String member,
+                                   @RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "10") int size, Model model) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
 
         Student student = this.studentService.findStudentById(index).orElse(null);
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
         Professor member1 = this.professorService.findProfessorById(member).orElse(null);
 
-        if((student == null && index.isEmpty()) || (student != null && !index.isEmpty()))
-        {
-            MasterThesis masterThesis = new MasterThesis(status, student, title, mentor1, member1);
-            Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesis(masterThesis);
+        if((student == null && index.isEmpty()) || (student != null && !index.isEmpty())) {
 
-            Page<MasterThesis> master_page = this.masterThesisService.findAll(specification, pageable);
+            Specification<MasterThesis> specification = masterThesisService.filterMasterThesis(student, title, status, mentor1, member1);
 
-            model.addAttribute("master_page", master_page);
-            model.addAttribute("master_page_total_elements", master_page.getTotalElements());
+            Page<MasterThesis> masterFilteredPage = this.masterThesisService.findAll(specification, pageable);
+
+            model.addAttribute("master_page", masterFilteredPage);
+            model.addAttribute("master_page_total_elements", masterFilteredPage.getTotalElements());
         }
         else
         {
             MasterThesis empty = new MasterThesis();
-            Specification<MasterThesis> emptySpec = this.masterThesisService.filterMasterThesis(empty);
+            Specification<MasterThesis> emptySpec = this.masterThesisService.filterMasterThesis(empty );
             Page<MasterThesis> emptyPage = this.masterThesisService.findAll(emptySpec, pageable);
             model.addAttribute("master_page", emptyPage);
             model.addAttribute("master_page_total_elements", 0);
@@ -109,14 +104,13 @@ public class AdminController {
         model.addAttribute("master_mentors", this.professorService.findAll());
         model.addAttribute("master_members", professorService.findAll());
 
-
         model.addAttribute("selectedMentor", mentor != null ? mentor : "");
         model.addAttribute("selectedStatus", status != null ? status : "");
         model.addAttribute("selectedMember", member != null ? member : "");
 
-
         return "list_masters";
     }
+
 
     @GetMapping("/newMasterThesis")
     public String newMasterThesis(Model model) {

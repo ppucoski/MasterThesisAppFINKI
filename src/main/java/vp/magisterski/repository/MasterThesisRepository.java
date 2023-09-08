@@ -12,4 +12,5 @@ public interface MasterThesisRepository extends JpaRepository<MasterThesis, Long
     List<MasterThesis> findAll(Specification<MasterThesis> specification);
 
     Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable);
+
 }

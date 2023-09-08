@@ -4,6 +4,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import vp.magisterski.model.magister.MasterThesis;
+import vp.magisterski.model.magister.MasterThesisStatus;
+import vp.magisterski.model.shared.Professor;
+import vp.magisterski.model.shared.Student;
+import vp.magisterski.repository.MasterThesisRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,8 +22,11 @@ public interface MasterThesisService {
 
     Page<MasterThesis> findAll(Pageable pageable);
 
+    Specification<MasterThesis> filterMasterThesis(Student student, String title, MasterThesisStatus status,
+                                                   Professor mentor, Professor member);
     Specification<MasterThesis> filterMasterThesis(MasterThesis masterThesis);
     //Page<MasterThesis> findAll(List<MasterThesis> masterThesisList, Pageable pageable);
     Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable);
     List<MasterThesis> findAll();
+
 }
