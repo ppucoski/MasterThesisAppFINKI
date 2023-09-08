@@ -133,6 +133,6 @@ public class AdminController {
             System.out.println(e.getMessage());
         }
 
-        return "index";
+        return "redirect:/index";
     }
 }
