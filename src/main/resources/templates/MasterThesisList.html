@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
-
+<head>
+    <title>Masters list</title>
+</head>
 <body>
 
 <div layout:fragment="content">
@@ -63,8 +65,9 @@
 
                     </tr>
                     <tr>
-                        <td>Датотека</td>
-                        <td>не постои</td> <!--TODO: da se napravi backend za fajlovi-->
+                        <td> Датотека </td>
+                        <td><a th:href="@{/admin/download/{thesisId}(thesisId=${masterThesis.id})}"
+                                                    class="btn btn-outline-secondary">Download</a></td>
                     </tr>
                     <tr>
                         <td>Краток опис</td>

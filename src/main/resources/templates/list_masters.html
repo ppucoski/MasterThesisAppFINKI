@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="mk" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
+<head>
+    <title>Masters list</title>
+</head>
 <body>
 <div layout:fragment="content">
     <div class="container-lg">
@@ -94,8 +97,7 @@
                         <td class="text-nowrap, text-center text-dark fw-bold"><i class='fas fa-graduation-cap'></i>
                             Презиме на студент
                         </td>
-                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-scroll"></i> Теза
-                        </td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-scroll"></i>Теза</td>
                         <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-regular fa-thumbs-up"></i>
                             Статус
                         </td>
@@ -106,6 +108,12 @@
                         </td>
                         <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-user-plus"></i>
                             Член 2
+                        </td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-download"></i>
+                            Датотека
+                        </td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-bolt"></i>
+                            Прикачи
                         </td>
                     </tr>
                     </thead>
@@ -121,6 +129,15 @@
                             <td class="text-center text-dark" th:text="${master.getMentor().getName()}"></td>
                             <td class="text-center text-dark" th:text="${master.getFirstMember().getName()}"></td>
                             <td class="text-center text-dark" th:text="${master.getSecondMember().getName()}"></td>
+                            <td class="align-middle"><a th:href="@{download/{thesisId}(thesisId=${master.id})}"
+                                                        class="btn btn-outline-primary">Download</a></td>
+                            <td class="align-middle">
+                                <div class="d-flex justify-content-center">
+                                    <a th:href="@{upload(thesisId=${master.id})}" class="btn btn-outline-success">Upload</a>
+                                </div>
+                            </td>
+
+
                         </tr>
                     </th:block>
                 </table>

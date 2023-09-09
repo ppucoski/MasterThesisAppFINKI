@@ -1,13 +1,17 @@
 package vp.magisterski.web;
 
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
@@ -16,6 +20,7 @@ import vp.magisterski.service.MasterThesisService;
 import vp.magisterski.service.ProfessorService;
 import vp.magisterski.service.StudentService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 
@@ -131,5 +136,30 @@ public class AdminController {
         }
 
         return "redirect:list-masters";
+    }
+
+    @GetMapping("/upload")
+    public String uploadThesisFile(Model model, @RequestParam Long thesisId) {
+        model.addAttribute("thesisId", thesisId);
+        return "upload";
+    }
+
+    @PostMapping("/upload")
+    public String uploadThesisFile(@RequestParam Long thesisId, @RequestParam("file") MultipartFile file) throws IOException {
+        masterThesisService.saveFile(thesisId, file);
+        return "redirect:list-masters";
+    }
+
+    @GetMapping("/download/{thesisId}")
+    public ResponseEntity<ByteArrayResource> downloadThesis(@PathVariable Long thesisId) {
+        MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", "MasterThesis.pdf");
+        ByteArrayResource resource = new ByteArrayResource(masterThesis.getThesisText());
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(masterThesis.getThesisText().length)
+                .body(resource);
     }
 }

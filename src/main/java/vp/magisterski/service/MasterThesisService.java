@@ -3,12 +3,14 @@ package vp.magisterski.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.multipart.MultipartFile;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
 import vp.magisterski.repository.MasterThesisRepository;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -29,4 +31,7 @@ public interface MasterThesisService {
     Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable);
     List<MasterThesis> findAll();
 
+    void cancelMasterThesis(Long id);
+
+    void saveFile(Long id, MultipartFile file) throws IOException;
 }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import vp.magisterski.model.exceptions.ProfessorDoesNotExistException;
 import vp.magisterski.model.exceptions.StudentDoesNotExistException;
 import vp.magisterski.model.magister.MasterThesis;
@@ -17,6 +18,7 @@ import vp.magisterski.repository.ProfessorRepository;
 import vp.magisterski.repository.StudentRepository;
 import vp.magisterski.service.MasterThesisService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -148,5 +150,18 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         return this.masterThesisRepository.findAll();
     }
 
+    @Override
+    public void cancelMasterThesis(Long id) {
+        MasterThesis masterThesis = this.findThesisById(id).get();
+        masterThesis.setStatus(MasterThesisStatus.CANCELLED);
+        this.masterThesisRepository.save(masterThesis);
+    }
+
+    @Override
+    public void saveFile(Long id, MultipartFile file) throws IOException {
+        MasterThesis masterThesis = this.findThesisById(id).get();
+        masterThesis.setThesisText(file.getBytes());
+        this.masterThesisRepository.save(masterThesis);
+    }
 
 }
