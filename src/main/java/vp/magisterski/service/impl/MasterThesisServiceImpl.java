@@ -46,7 +46,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         Professor secondMember = this.professorRepository.findById(secondMemberId)
                 .orElseThrow(() -> new ProfessorDoesNotExistException(secondMemberId));
         MasterThesisPresentation presentation = new MasterThesisPresentation("", dateTime);
-        MasterThesis masterThesis = new MasterThesis(MasterThesisStatus.PROFESSOR_THESIS_REGISTRATION, presentation,
+        MasterThesis masterThesis = new MasterThesis(MasterThesisStatus.STUDENT_THESIS_REGISTRATION, presentation,
                 student, title, area, description, mentor, firstMember, secondMember);
         return this.masterThesisRepository.save(masterThesis);
     }
