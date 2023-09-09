@@ -137,11 +137,11 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
 
-
     @Override
     public Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable) {
         return this.masterThesisRepository.findAll(specification, pageable);
     }
+
 
     @Override
     public List<MasterThesis> findAll() {

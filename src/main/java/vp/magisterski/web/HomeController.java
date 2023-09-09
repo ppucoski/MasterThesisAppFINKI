@@ -26,10 +26,12 @@ public class HomeController {
 
     @GetMapping("/list-MasterThesis")
     public String findAllThesis(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "3") int size,
                                 Model model) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
+        int total = masterThesisService.findAll().size();
         model.addAttribute("MasterThesis", masterThesisService.findAll(pageable));
+        model.addAttribute("total", total);
         return "MasterThesisList";
     }
 

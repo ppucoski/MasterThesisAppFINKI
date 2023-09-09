@@ -7,10 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
@@ -43,11 +40,10 @@ public class AdminController {
                                  @RequestParam(required = false) String mentor,
                                  @RequestParam(required = false) String member,
                                  @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "10") int size,
+                                 @RequestParam(defaultValue = "2") int size,
                                  Model model)
     {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-
+        Pageable pageable = PageRequest.of(page, size);
         Student student = this.studentService.findStudentById(index).orElse(null);
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
         Professor member1 = this.professorService.findProfessorById(member).orElse(null);
@@ -77,7 +73,7 @@ public class AdminController {
                                    @RequestParam(required = false) String member,
                                    @RequestParam(defaultValue = "0") int page,
                                    @RequestParam(defaultValue = "10") int size, Model model) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
+        Pageable pageable = PageRequest.of(page, size);
 
         Student student = this.studentService.findStudentById(index).orElse(null);
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
@@ -88,6 +84,7 @@ public class AdminController {
             Specification<MasterThesis> specification = masterThesisService.filterMasterThesis(student, title, status, mentor1, member1);
 
             Page<MasterThesis> masterFilteredPage = this.masterThesisService.findAll(specification, pageable);
+
 
             model.addAttribute("master_page", masterFilteredPage);
             model.addAttribute("master_page_total_elements", masterFilteredPage.getTotalElements());
@@ -133,6 +130,6 @@ public class AdminController {
             System.out.println(e.getMessage());
         }
 
-        return "redirect:/index";
+        return "redirect:list-masters";
     }
 }
