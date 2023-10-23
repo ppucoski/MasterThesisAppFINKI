@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="mk" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
+<head>
+    <title>Masters list</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container-lg">
+        <form class="my-4" th:action="@{/admin/list-masters}" method="POST">
+            <div class="row gx-2 d-flex justify-content-center align-items-center">
+                <div class="col d-flex">
+                    <input placeholder="Индекс" class="form-control" id="index" type="text" name="index"/>
+                </div>
+                <div class="col d-flex">
+                    <input placeholder="Наслов" class="form-control" id="title" type="text" name="title"/>
+                </div>
+                <div class="col d-flex">
+                    <select class="form-select" aria-label="Default select example" id="status" name="status">
+                        <option value="">Статус</option>
+                        <option th:each="status : ${master_status}"
+                                th:value="${status}" th:text="${status.getDisplayName()}"
+                                th:selected="${status == selectedStatus}"></option>
+                    </select>
+                </div>
+                <div class="col d-flex justify-content-center align-items-center">
+                    <label for="mentor"></label>
+                    <select class="form-select" aria-label="Default select example" id="mentor" name="mentor">
+                        <option value="">Ментор</option>
+                        <option th:each="mentor : ${master_mentors}"
+                                th:value="${mentor.getId()}" th:text="${mentor.name}"
+                                th:selected="${mentor.getName().equals(selectedMentor)}"
+                        ></option>
+                    </select>
+                </div>
+                <div class="col d-flex justify-content-center align-items-center">
+                    <select class="form-select" aria-label="Default select example" id="member" name="member">
+                        <option value="">Член</option>
+                        <option th:each="member : ${master_members}"
+                                th:value="${member.getId()}" th:text="${member.name}"
+                                th:selected="${member.getName().equals(selectedMember)}"
+                        ></option>
+                    </select>
+                </div>
+                <div class="col btn-group" role="group" aria-label="Search And Clear">
+                    <button type="submit" class="col-2 btn btn-success form-control">
+                        <i class="fa-solid fa-magnifying-glass"></i> Пребарувај
+                    </button>
+
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <a th:href="@{/admin/newMasterThesis}" class="btn btn-light text-secondary border mt-4">Нова
+                        Пријава</a>
+                </div>
+            </div>
+            <div class="row" th:if="${master_page_total_elements !=null}">
+                <div class="col-4">
+                    <a th:href="@{/admin/list-masters}" class="btn btn-success text-white border mt-4">Ресетирај
+                        Филтер</a>
+                </div>
+            </div>
+        </form>
+
+        <div class="dropdown mb-3" th:if="${master_page_total_elements ==null}">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                Прикажи по:
+            </button>
+
+            <ul class="dropdown-menu">
+                <a class="dropdown-item" href="list-masters?size=2">2</a>
+                <a class="dropdown-item" href="list-masters?size=3">3</a>
+                <a class="dropdown-item" href="list-masters?size=5">5</a>
+            </ul>
+        </div>
+
+
+        <h5 th:if="${master_page_total_elements !=null}">Вкупно <span th:text="${master_page_total_elements}"></span>
+            пронајдени резултати</h5>
+        <div th:if="${master_page_total_elements != 0}">
+
+            <div class="table-responsive justify-content-center align-items-center">
+                <table class="table table-striped table-success table-bordered mb-4">
+                    <thead>
+                    <tr>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-hashtag"></i> Ид
+                        </td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class='fas fa-graduation-cap'></i>
+                            Индекс на студент
+                        </td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class='fas fa-graduation-cap'></i> Име
+                            на студент
+                        </td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class='fas fa-graduation-cap'></i>
+                            Презиме на студент
+                        </td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-scroll"></i>Теза</td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-regular fa-thumbs-up"></i>
+                            Статус
+                        </td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-user"></i> Ментор
+                        </td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-user-plus"></i>
+                            Член 1
+                        </td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-user-plus"></i>
+                            Член 2
+                        </td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-download"></i>
+                            Датотека
+                        </td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-bolt"></i>
+                            Прикачи
+                        </td>
+                    </tr>
+                    </thead>
+
+                    <th:block th:each="master : ${master_page.content}">
+                        <tr>
+                            <td class="text-center text-dark" th:text="${master.getId()}"></td>
+                            <td class="text-center text-dark" th:text="${master.getStudent().getIndex()}"></td>
+                            <td class="text-center text-dark" th:text="${master.getStudent().getName()}"></td>
+                            <td class="text-center text-dark" th:text="${master.getStudent().getLastName()}"></td>
+                            <td class="text-center text-dark" th:text="${master.getTitle()}"></td>
+                            <td class="text-center text-dark" th:text="${master.getStatus().getDisplayName()}"></td>
+                            <td class="text-center text-dark" th:text="${master.getMentor().getName()}"></td>
+                            <td class="text-center text-dark" th:text="${master.getFirstMember().getName()}"></td>
+                            <td class="text-center text-dark" th:text="${master.getSecondMember().getName()}"></td>
+                            <td class="align-middle"><a th:href="@{download/{thesisId}(thesisId=${master.id})}"
+                                                        class="btn btn-outline-primary">Download</a></td>
+                            <td class="align-middle">
+                                <div class="d-flex justify-content-center">
+                                    <a th:href="@{upload(thesisId=${master.id})}" class="btn btn-outline-success">Upload</a>
+                                </div>
+                            </td>
+
+
+                        </tr>
+                    </th:block>
+                </table>
+
+
+                <nav aria-label="Page navigation" th:if="${master_page_total_elements ==null}">
+                    <ul class="pagination justify-content-center">
+                        <li th:if="${master_page.hasPrevious}" class="page-item">
+                            <a class="page-link text-secondary bg-light rounded-circle m-1"
+                               th:href="@{/admin/list-masters(page=${master_page.previousPageable?.pageNumber}, size=${param.size})}"
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(0, master_page.totalPages - 1)}" class="page-item"
+                            th:class="${i == master_page.number ? 'active' : ''}">
+                            <a class="page-link text-secondary bg-light rounded-circle m-1"
+                               th:href="@{/admin/list-masters(page=${i}, size=${param.size})}"
+                               th:text="${i + 1}"></a>
+                        </li>
+                        <li th:if="${master_page.hasNext}" class="page-item">
+                            <a class="page-link text-secondary bg-light rounded-circle m-1"
+                               th:href="@{/admin/list-masters(page=${master_page.nextPageable?.pageNumber}, size=${param.size})}"
+                               aria-label="Next">
+                                <span aria-disabled="true">&raquo;</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </nav>
+            </div>
+
+
+        </div>
+    </div>
+
+
+    <div th:if="${master_page_total_elements == 0}">
+        <div class="container mt-5 col-5">
+            <div class="alert alert-danger align-items-center justify-content-center text-center" role="alert">
+                <h4 class="alert-heading"><strong>Нема Резултати!</strong></h4> Нема резултати од пребарувањето.
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</body>
+</html>
