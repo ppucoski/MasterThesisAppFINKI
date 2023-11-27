@@ -12,7 +12,7 @@ public enum MasterThesisStatus {
     ADMINISTRATION_VALIDATION(3, "Студентската служба проверува и валидира."),
     COMMISSION_VALIDATION(4, "Наставно научна комисија валидира."),
     SECRETARY_VALIDATION(5, "Секретарот валидира."),
-    STUDENT_DRAFT(6, "Студентот подготвува и прикачува драфт документ."),
+    STUDENT_DRAFT(6, "Студентот подготвува и менторот го прикачува драфт документ."),
     MENTOR_COMMISSION_CHOICE(7, "Менторот избира членови на комисија и валидира."),
     SECOND_SECRETARY_VALIDATION(8, "Секретарот валидира по изборот на комисија."),
     COMMISSION_CHECK(9, "Проверка од ННК."),
