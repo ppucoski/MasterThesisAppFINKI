@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .drop-zone {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .drag-over {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .file-label {
+            margin-top: 10px;
+        }
+
+        .file-input {
+            display: none;
+        }
+        .labelClass{
+            cursor: pointer;
+            transition: color 0.3s ease;
+
+        }
+        .labelClass:hover strong {
+            color: #0bb4e7;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="container-lg">
+        <h2 class="my-5">Пријава на магистарска работа</h2>
+
+        <form id="uploadForm" enctype="multipart/form-data">
+
+            <div class="form-group m-2">
+                <label for="name">Име:</label>
+                <input class="form-control" type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group m-2">
+                <label for="surname">Презиме:</label>
+                <input class="form-control" type="text" id="surname" name="surname" required>
+            </div>
+
+            <div class="form-group m-2">
+                <label for="phone">Телефонски број:</label>
+                <input class="form-control" type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}"
+                       required>
+                <small>Формат: 078-233-322</small>
+            </div>
+
+            <div class="form-group m-2">
+                <label for="dropZone1">Прикачи документ 1:</label>
+                <div class="drop-zone" id="dropZone1">
+                    <label class="labelClass lead" for="fileInput1"><strong>Choose a file</strong><span> or drag it here</span>.</label>
+                    <input type="file" id="fileInput1" class="file-input" name="fileInput1" accept=".pdf">
+                    <p class="file-label" id="fileLabel1"></p>
+                </div>
+            </div>
+
+            <div class="form-group m-2">
+                <label for="dropZone2">Прикачи документ 2:</label>
+                <div class="drop-zone" id="dropZone2">
+                    <label class="labelClass lead" for="fileInput2"><strong>Choose a file</strong><span> or drag it here</span>.</label>
+                    <input type="file" id="fileInput2" class="file-input" name="fileInput2" accept=".pdf">
+                    <p class="file-label" id="fileLabel2"></p>
+                </div>
+            </div>
+
+            <div class="form-group m-2">
+                <label for="dropZone3">Прикачи документ 3:</label>
+                <div class="drop-zone" id="dropZone3">
+                    <label class="labelClass lead" for="fileInput3"><strong>Choose a file</strong><span> or drag it here</span>.</label>
+                    <input type="file" id="fileInput3" class="file-input" name="fileInput3" accept=".pdf">
+                    <p class="file-label" id="fileLabel3"></p>
+                </div>
+            </div>
+            <!-- Submit Button -->
+            <button class="btn btn-success m-2" type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        const dropZones = document.querySelectorAll('.drop-zone');
+        const fileInputs = document.querySelectorAll('.file-input');
+
+        dropZones.forEach((dropZone, index) => {
+            const fileInput = fileInputs[index];
+            const fileLabel = dropZone.querySelector('.file-label');
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('drag-over');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('drag-over');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drag-over');
+                const files = e.dataTransfer.files;
+                if (files.length > 1) {
+                    fileInput.value = '';
+                    fileLabel.textContent = 'Only one file is allowed';
+                }else{
+                    console.log('Files dropped:', files);
+                    fileInput.files = files;
+                    displayFileName(fileInput.files[0], fileInput, fileLabel);
+                }
+
+            });
+
+            fileInput.addEventListener('change', () => {
+                console.log('File input changed');
+                console.log(fileInput.files);
+                displayFileName(fileInput.files[0], fileInput, fileLabel);
+            });
+        });
+
+        function displayFileName(file, fileInput, fileLabel) {
+            const validFileType = 'application/pdf';
+            if (file.type === validFileType) {
+                fileLabel.textContent = `File: ${file.name}`;
+            } else {
+                fileInput.value = ''; // Clear the file input
+                fileLabel.textContent = 'Only PDF files are allowed';
+            }
+        }
+
+    </script>
+</div>
+</body>
+</html>
