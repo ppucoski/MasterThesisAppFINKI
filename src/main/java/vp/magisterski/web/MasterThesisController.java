@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import vp.magisterski.service.UserService;
 
 @Controller
-@RequestMapping(  "/applicationForm")
-public class MasterThesisApplicationController {
-
+@RequestMapping(  "/masterThesis")
+public class MasterThesisController {
     private final UserService userService;
 
-    public MasterThesisApplicationController(UserService userService) {
+    public MasterThesisController(UserService userService) {
         this.userService = userService;
     }
+
 
     @ModelAttribute
     public void trackUsername(Model model){
@@ -24,8 +24,9 @@ public class MasterThesisApplicationController {
         model.addAttribute("user", username);
     }
 
-    @GetMapping("/newMasterThesisApplicationForm")
-    public String getHomePage(){
-        return "masterThesisApplication";
+
+    @GetMapping("/masterThesisInfo")
+    public String getMasterThesisInfo(){
+        return "masterThesisInfo";
     }
 }
