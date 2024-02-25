@@ -1,42 +1,26 @@
 package vp.magisterski.config;
-
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import vp.magisterski.model.enumerations.AppRole;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
-
+import static org.springframework.security.config.Customizer.withDefaults;
+@Configuration
+@EnableWebSecurity
 public class AuthConfig {
-
-    public HttpSecurity authorize(HttpSecurity http) throws Exception {
-        return http
+    @Bean
+    public SecurityFilterChain authorize(HttpSecurity http) throws Exception {
+        http.formLogin(withDefaults())
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                        .requestMatchers("/admin/*").hasAnyRole(
+                        .requestMatchers("/admin/**").hasAnyRole(
                                 AppRole.PROFESSOR.name(),
                                 AppRole.ADMIN.name()
                         )
-//                        .requestMatchers("/admin/subject-requests/{professorId}/**").access(
-//                                new WebExpressionAuthorizationManager("#professorId == authentication.name or hasRole('ROLE_ADMIN')")
-//                        )
-//                        .requestMatchers("/engagement/{professorId}/**").access(
-//                                new WebExpressionAuthorizationManager("#professorId == authentication.name or hasRole('ROLE_ADMIN')")
-//                        )
-//                        .requestMatchers("/admin/**", "/api/**", "/build/**", "/engagement/init").hasAnyRole(
-//                                AppRole.ADMIN.name()
-//                        )
-//                        .requestMatchers("/active-subjects", "io.png", "/allocation/*").permitAll()
-                        .anyRequest().permitAll() //testing purposes
-//                        .anyRequest().authenticated() //ACTUAL
-                )
-                .logout((logout) -> logout
-                        .logoutUrl("/logout")
-                        .invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .logoutSuccessUrl("/")
-                        .permitAll());
-//                .logout(LogoutConfigurer::permitAll);
+                        .anyRequest().permitAll()
+                );
+        return http.build();
     }
 }
