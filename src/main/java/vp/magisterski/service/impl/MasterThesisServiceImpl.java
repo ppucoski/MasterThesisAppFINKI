@@ -65,7 +65,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
 
     @Override
     public Specification<MasterThesis> filterMasterThesis(Student student, String title, MasterThesisStatus status,
-                                                          Professor mentor, Professor member) {
+                                                          Professor mentor, Professor member, String isValidation) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
@@ -97,12 +97,17 @@ public class MasterThesisServiceImpl implements MasterThesisService {
                         criteriaBuilder.like(root.get("title"), "%" + title + "%"));
             }
 
+            if ("VALIDATION".equals(isValidation)) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.like(criteriaBuilder.lower(root.get("status")), "%validation%"));
+            }
+
             return predicate;
         };
     }
 
     @Override
-    public Specification<MasterThesis> filterMasterThesis(MasterThesis masterThesis) {
+    public Specification<MasterThesis> filterMasterThesis(MasterThesis masterThesis, String isValidation) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
@@ -132,6 +137,11 @@ public class MasterThesisServiceImpl implements MasterThesisService {
             if (masterThesis.getTitle() != null && !masterThesis.getTitle().isEmpty()) {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.like(root.get("title"), "%" + masterThesis.getTitle() + "%"));
+            }
+
+            if ("VALIDATION".equals(isValidation)) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.like(criteriaBuilder.lower(root.get("status")), "%validation%"));
             }
 
             return predicate;
