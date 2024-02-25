@@ -8,20 +8,25 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import vp.magisterski.config.FacultyUserDetails;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
+import vp.magisterski.model.shared.User;
 import vp.magisterski.service.MasterThesisService;
 import vp.magisterski.service.ProfessorService;
 import vp.magisterski.service.StudentService;
+import vp.magisterski.service.UserService;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 @Controller
@@ -31,12 +36,20 @@ public class AdminController {
     private final StudentService studentService;
     private final ProfessorService professorService;
     private final MasterThesisService masterThesisService;
+    private final UserService userService;
 
-    public AdminController(StudentService studentService, ProfessorService professorService, MasterThesisService masterThesisService) {
+    public AdminController(StudentService studentService, ProfessorService professorService, MasterThesisService masterThesisService, UserService userService) {
         this.studentService = studentService;
         this.professorService = professorService;
         this.masterThesisService = masterThesisService;
+        this.userService = userService;
     }
+
+    public void user(Model model){
+        String username = userService.getUsernameFromUser();
+        model.addAttribute("user", username);
+    }
+
 
     @GetMapping("/list-masters")
     public String showMasterList(@RequestParam(required = false) String index,
@@ -53,6 +66,7 @@ public class AdminController {
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
         Professor member1 = this.professorService.findProfessorById(member).orElse(null);
         Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesis(student, title, status, mentor1, member1);
+        user(model);
 
         Page<MasterThesis> master_page = this.masterThesisService.findAll(specification, pageable);
 
@@ -83,6 +97,7 @@ public class AdminController {
         Student student = this.studentService.findStudentById(index).orElse(null);
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
         Professor member1 = this.professorService.findProfessorById(member).orElse(null);
+        user(model);
 
         if((student == null && index.isEmpty()) || (student != null && !index.isEmpty())) {
 
@@ -116,6 +131,7 @@ public class AdminController {
 
     @GetMapping("/newMasterThesis")
     public String newMasterThesis(Model model) {
+        user(model);
         model.addAttribute("professors", professorService.findAllByProfessorStatus(true, false));
         model.addAttribute("members", professorService.findAllByProfessorStatus(true, true));
         return "newMasterThesis";
@@ -140,6 +156,7 @@ public class AdminController {
 
     @GetMapping("/upload")
     public String uploadThesisFile(Model model, @RequestParam Long thesisId) {
+        user(model);
         model.addAttribute("thesisId", thesisId);
         return "upload";
     }
