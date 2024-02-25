@@ -45,11 +45,11 @@ public class AdminController {
         this.userService = userService;
     }
 
-    public void user(Model model){
+    @ModelAttribute
+    public void trackUsername(Model model){
         String username = userService.getUsernameFromUser();
         model.addAttribute("user", username);
     }
-
 
     @GetMapping("/list-masters")
     public String showMasterList(@RequestParam(required = false) String index,
@@ -66,7 +66,6 @@ public class AdminController {
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
         Professor member1 = this.professorService.findProfessorById(member).orElse(null);
         Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesis(student, title, status, mentor1, member1);
-        user(model);
 
         Page<MasterThesis> master_page = this.masterThesisService.findAll(specification, pageable);
 
@@ -97,7 +96,6 @@ public class AdminController {
         Student student = this.studentService.findStudentById(index).orElse(null);
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
         Professor member1 = this.professorService.findProfessorById(member).orElse(null);
-        user(model);
 
         if((student == null && index.isEmpty()) || (student != null && !index.isEmpty())) {
 
@@ -131,7 +129,6 @@ public class AdminController {
 
     @GetMapping("/newMasterThesis")
     public String newMasterThesis(Model model) {
-        user(model);
         model.addAttribute("professors", professorService.findAllByProfessorStatus(true, false));
         model.addAttribute("members", professorService.findAllByProfessorStatus(true, true));
         return "newMasterThesis";
@@ -156,7 +153,6 @@ public class AdminController {
 
     @GetMapping("/upload")
     public String uploadThesisFile(Model model, @RequestParam Long thesisId) {
-        user(model);
         model.addAttribute("thesisId", thesisId);
         return "upload";
     }

@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vp.magisterski.config.FacultyUserDetails;
@@ -27,7 +28,8 @@ public class HomeController {
         this.userService = userService;
     }
 
-    public void user(Model model){
+    @ModelAttribute
+    public void trackUsername(Model model){
         String username = userService.getUsernameFromUser();
         model.addAttribute("user", username);
     }
@@ -35,7 +37,6 @@ public class HomeController {
 
     @GetMapping
     public String getHomePage(Model model){
-        user(model);
         return "index";
     }
 
@@ -43,7 +44,6 @@ public class HomeController {
     public String findAllThesis(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "3") int size,
                                 Model model) {
-        user(model);
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
         int total = masterThesisService.findAll().size();
         model.addAttribute("MasterThesis", masterThesisService.findAll(pageable));
