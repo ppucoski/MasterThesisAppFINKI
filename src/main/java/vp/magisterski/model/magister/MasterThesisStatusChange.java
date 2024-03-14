@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 import vp.magisterski.model.shared.User;
-
 import java.time.LocalDate;
 import java.util.Objects;
 
