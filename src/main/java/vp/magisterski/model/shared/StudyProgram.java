@@ -7,8 +7,6 @@ import org.hibernate.Hibernate;
 
 import java.util.Objects;
 
-
-
 @Getter
 @Setter
 @ToString
@@ -35,7 +33,5 @@ public class StudyProgram {
         return getClass().hashCode();
     }
 }
-
-
 
 

@@ -21,7 +21,7 @@ public class MasterThesisStatusChange {
     private Long id;
 
     @ManyToOne
-    private MasterThesis diplomaThesis;
+    private MasterThesis thesis;
 
     private LocalDate statusChangeDate;
 
@@ -30,6 +30,9 @@ public class MasterThesisStatusChange {
 
     @ManyToOne
     private User statusChangedBy;
+
+    @Column(length = 5_000)
+    private String note;
 
     @Override
     public boolean equals(Object o) {
@@ -44,4 +47,3 @@ public class MasterThesisStatusChange {
         return getClass().hashCode();
     }
 }
-

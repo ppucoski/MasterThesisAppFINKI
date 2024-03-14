@@ -27,6 +27,8 @@ public class Professor {
     @Enumerated(EnumType.STRING)
     private ProfessorTitle title;
 
+    private Short orderingRank;
+
 
     @Override
     public boolean equals(Object o) {
@@ -41,4 +43,3 @@ public class Professor {
         return getClass().hashCode();
     }
 }
-
