@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vp.magisterski.model.magister.MasterThesis;
+import vp.magisterski.model.magister.MasterThesisDocument;
 import vp.magisterski.model.magister.MasterThesisStatus;
 import vp.magisterski.model.magister.MasterThesisStatusChange;
 import vp.magisterski.model.shared.Professor;
@@ -21,6 +22,7 @@ import vp.magisterski.service.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -33,13 +35,15 @@ public class AdminController {
     private final MasterThesisService masterThesisService;
     private final UserService userService;
     private final MasterThesisStatusChangeService masterThesisStatusChangeService;
+    private final MasterThesisDocumentService masterThesisDocumentService;
 
-    public AdminController(StudentService studentService, ProfessorService professorService, MasterThesisService masterThesisService, UserService userService, MasterThesisStatusChangeService masterThesisStatusChangeService) {
+    public AdminController(StudentService studentService, ProfessorService professorService, MasterThesisService masterThesisService, UserService userService, MasterThesisStatusChangeService masterThesisStatusChangeService, MasterThesisDocumentService masterThesisDocumentService) {
         this.studentService = studentService;
         this.professorService = professorService;
         this.masterThesisService = masterThesisService;
         this.userService = userService;
         this.masterThesisStatusChangeService = masterThesisStatusChangeService;
+        this.masterThesisDocumentService = masterThesisDocumentService;
     }
 
     @ModelAttribute
@@ -180,9 +184,11 @@ public class AdminController {
     @GetMapping("/details/{thesisId}")
     public String details(Model model, @PathVariable Long thesisId) {
         MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
+        List<MasterThesisDocument> associatedDocuments = masterThesisDocumentService.findAllByThesis(masterThesis);
         Optional<MasterThesisStatusChange> masterThesisStatusChange = masterThesisStatusChangeService.getStatusChange(masterThesis);
-        model.addAttribute("masterThesis", masterThesis);
+        model.addAttribute("thesis", masterThesis);
         model.addAttribute("masterThesisStatusChange", masterThesisStatusChange);
+        model.addAttribute("associatedDocuments", associatedDocuments);
         return "masterThesisDetails";
     }
 }

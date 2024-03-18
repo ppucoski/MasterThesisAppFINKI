@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div th:fragment="downloadFragment" class="col m-2">
+    <div class="col m-2" style="height: 200px;">
+        <div class="d-flex justify-content-center align-items-center">
+            <ul class="list-unstyled">
+                <li th:each="document : ${associatedDocuments}">
+                    <a th:href="@{/masterThesis/download/{documentId}(documentId=${document.id})}"
+                       class="btn btn-secondary btn-sm mb-2 mt-3">
+                        <span th:text="${document.type}"></span>
+                        <span class="ms-2">-&nbsp&nbspDownload</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
