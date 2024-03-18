@@ -38,4 +38,17 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    @Override
+    public User getUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal().equals("anonymousUser")) {
+            String username = authentication.getName();
+            User user = userRepository.findById(username).orElse(null);
+            if (user != null) {
+                return user;
+            }
+        }
+        return null;
+    }
 }

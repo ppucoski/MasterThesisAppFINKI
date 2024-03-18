@@ -1,6 +1,5 @@
 package vp.magisterski.web;
 
-import org.springframework.boot.Banner;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,21 +8,16 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import vp.magisterski.config.FacultyUserDetails;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisStatus;
+import vp.magisterski.model.magister.MasterThesisStatusChange;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
-import vp.magisterski.model.shared.User;
-import vp.magisterski.service.MasterThesisService;
-import vp.magisterski.service.ProfessorService;
-import vp.magisterski.service.StudentService;
-import vp.magisterski.service.UserService;
+import vp.magisterski.service.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -38,12 +32,14 @@ public class AdminController {
     private final ProfessorService professorService;
     private final MasterThesisService masterThesisService;
     private final UserService userService;
+    private final MasterThesisStatusChangeService masterThesisStatusChangeService;
 
-    public AdminController(StudentService studentService, ProfessorService professorService, MasterThesisService masterThesisService, UserService userService) {
+    public AdminController(StudentService studentService, ProfessorService professorService, MasterThesisService masterThesisService, UserService userService, MasterThesisStatusChangeService masterThesisStatusChangeService) {
         this.studentService = studentService;
         this.professorService = professorService;
         this.masterThesisService = masterThesisService;
         this.userService = userService;
+        this.masterThesisStatusChangeService = masterThesisStatusChangeService;
     }
 
     @ModelAttribute
@@ -184,7 +180,9 @@ public class AdminController {
     @GetMapping("/details/{thesisId}")
     public String details(Model model, @PathVariable Long thesisId) {
         MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
-        model.addAttribute("thesisId", thesisId);
+        Optional<MasterThesisStatusChange> masterThesisStatusChange = masterThesisStatusChangeService.getStatusChange(masterThesis);
+        model.addAttribute("masterThesis", masterThesis);
+        model.addAttribute("masterThesisStatusChange", masterThesisStatusChange);
         return "masterThesisDetails";
     }
 }

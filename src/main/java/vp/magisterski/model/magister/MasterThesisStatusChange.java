@@ -45,4 +45,24 @@ public class MasterThesisStatusChange {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    public MasterThesisStatusChange(MasterThesis thesis, LocalDate statusChangeDate, MasterThesisStatus nextStatus, User statusChangedBy, String note) {
+        this.thesis = thesis;
+        this.statusChangeDate = statusChangeDate;
+        this.nextStatus = nextStatus;
+        this.statusChangedBy = statusChangedBy;
+        this.note = note;
+    }
+
+    public MasterThesisStatusChange(MasterThesis thesis, LocalDate statusChangeDate, MasterThesisStatus nextStatus, User statusChangedBy) {
+        this.thesis = thesis;
+        this.statusChangeDate = statusChangeDate;
+        this.nextStatus = nextStatus;
+        this.statusChangedBy = statusChangedBy;
+    }
+
+    public MasterThesisStatusChange(MasterThesis thesis, MasterThesisStatus nextStatus) {
+        this.thesis = thesis;
+        this.nextStatus = nextStatus;
+    }
 }

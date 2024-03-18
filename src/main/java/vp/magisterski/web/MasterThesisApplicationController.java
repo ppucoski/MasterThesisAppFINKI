@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisDocumentType;
-import vp.magisterski.service.MasterThesisDocumentService;
-import vp.magisterski.service.MasterThesisService;
-import vp.magisterski.service.ProfessorService;
-import vp.magisterski.service.UserService;
+import vp.magisterski.model.magister.MasterThesisStatus;
+import vp.magisterski.model.magister.MasterThesisStatusChange;
+import vp.magisterski.service.*;
+
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping(  "/applicationForm")
@@ -20,12 +21,14 @@ public class MasterThesisApplicationController {
     private final ProfessorService professorService;
     private final MasterThesisService masterThesisService;
     private final MasterThesisDocumentService masterThesisDocumentService;
+    private final MasterThesisStatusChangeService masterThesisStatusChangeService;
 
-    public MasterThesisApplicationController(UserService userService, ProfessorService professorService, MasterThesisService masterThesisService, MasterThesisDocumentService masterThesisDocumentService) {
+    public MasterThesisApplicationController(UserService userService, ProfessorService professorService, MasterThesisService masterThesisService, MasterThesisDocumentService masterThesisDocumentService, MasterThesisStatusChangeService masterThesisStatusChangeService) {
         this.userService = userService;
         this.professorService = professorService;
         this.masterThesisService = masterThesisService;
         this.masterThesisDocumentService = masterThesisDocumentService;
+        this.masterThesisStatusChangeService = masterThesisStatusChangeService;
     }
 
     @ModelAttribute
@@ -52,6 +55,7 @@ public class MasterThesisApplicationController {
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.THESIS_JUSTIFICATION, fileInput1);
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.PLAN_AND_LITERATURE_REVIEW, fileInput2);
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.STUDENT_BIOGRAPHY, fileInput3);
+            masterThesisStatusChangeService.addStatus(thesis, MasterThesisStatus.MENTOR_VALIDATION);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
