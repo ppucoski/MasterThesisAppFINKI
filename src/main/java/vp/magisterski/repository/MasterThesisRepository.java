@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface MasterThesisRepository extends JpaRepository<MasterThesis, Long> {
     List<MasterThesis> findAll(Specification<MasterThesis> specification);
-
     Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable);
+    List<MasterThesis> findByStudentIndex(String studentIndex);
+    Page<MasterThesis> findByStatus(MasterThesisStatus status, Pageable pageable);
 }

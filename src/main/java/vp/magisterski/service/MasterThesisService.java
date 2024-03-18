@@ -20,16 +20,22 @@ public interface MasterThesisService {
                       String description, String mentorId, String firstMemberId,
                       String secondMemberId);
 
-    Optional<MasterThesis> findThesisById(Long id);
+    MasterThesis newThesis(String studentIndex, String title, String mentorId);
 
+    Optional<MasterThesis> findThesisById(Long id);
+    List<MasterThesis>findByStudentIndex(String id);
     Page<MasterThesis> findAll(Pageable pageable);
 
     Specification<MasterThesis> filterMasterThesis(Student student, String title, MasterThesisStatus status,
                                                    Professor mentor, Professor member, String isValidation);
+
     Specification<MasterThesis> filterMasterThesis(MasterThesis masterThesis, String isValidation);
+
     //Page<MasterThesis> findAll(List<MasterThesis> masterThesisList, Pageable pageable);
     Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable);
+
     List<MasterThesis> findAll();
+    Page<MasterThesis> findAllByStatus(MasterThesisStatus status, Pageable pageable);
 
     void cancelMasterThesis(Long id);
 

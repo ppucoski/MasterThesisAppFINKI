@@ -42,7 +42,8 @@
                     </select>
                 </div>
                 <div class="col d-flex justify-content-center align-items-center">
-                    <select class="form-select" aria-label="Default select example" id="isValidation" name="isValidation">
+                    <select class="form-select" aria-label="Default select example" id="isValidation"
+                            name="isValidation">
                         <option value="">Валидација</option>
                         <option value="NO_VALIDATION">Сите</option>
                         <option value="VALIDATION">За валидација</option>
@@ -104,7 +105,8 @@
                         <td class="text-nowrap, text-center text-dark fw-bold"><i class='fas fa-graduation-cap'></i>
                             Презиме на студент
                         </td>
-                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-scroll"></i>Теза</td>
+                        <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-scroll"></i>Теза
+                        </td>
                         <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-regular fa-thumbs-up"></i>
                             Статус
                         </td>
@@ -120,7 +122,7 @@
                             Датотека
                         </td>
                         <td class="text-nowrap, text-center text-dark fw-bold"><i class="fa-solid fa-bolt"></i>
-                            Прикачи
+                            Акции
                         </td>
                     </tr>
                     </thead>
@@ -134,13 +136,21 @@
                             <td class="text-center text-dark" th:text="${master.getTitle()}"></td>
                             <td class="text-center text-dark" th:text="${master.getStatus().getDisplayName()}"></td>
                             <td class="text-center text-dark" th:text="${master.getMentor().getName()}"></td>
-                            <td class="text-center text-dark" th:text="${master.getFirstMember().getName()}"></td>
-                            <td class="text-center text-dark" th:text="${master.getSecondMember().getName()}"></td>
-                            <td class="align-middle"><a th:href="@{download/{thesisId}(thesisId=${master.id})}"
-                                                        class="btn btn-outline-primary">Download</a></td>
+                            <td class="text-center text-dark" th:if="${master.getFirstMember() != null}"
+                                th:text="${master.getFirstMember().getName()}"></td>
+                            <td th:unless="${master.getFirstMember() != null}">No member assigned</td>
+                            <td class="text-center text-dark" th:if="${master.getSecondMember() != null}"
+                                th:text="${master.getSecondMember().getName()}"></td>
+                            <td th:unless="${master.getSecondMember() != null}">No member assigned</td>
+                            <td th:if="${master.thesisText != null}" class="align-middle">
+                                <a th:href="@{download/{thesisId}(thesisId=${master.id})}"
+                                   class="btn btn-outline-primary">Download</a>
+                            </td>
+                            <td th:unless="${master.thesisText != null}">Нема датотека</td>
                             <td class="align-middle">
                                 <div class="d-flex justify-content-center">
-                                    <a th:href="@{upload(thesisId=${master.id})}" class="btn btn-outline-success">Upload</a>
+                                    <a th:href="@{details/{thesisId}(thesisId=${master.id})}"
+                                       class="btn btn-outline-success">Акции</a>
                                 </div>
                             </td>
 

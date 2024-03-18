@@ -54,9 +54,25 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
+    public MasterThesis newThesis(String studentIndex , String title, String mentorId) {
+        Student student = this.studentRepository.findById(studentIndex)
+                .orElseThrow(() -> new StudentDoesNotExistException(studentIndex));
+        Professor mentor = this.professorRepository.findById(mentorId)
+                .orElseThrow(() -> new ProfessorDoesNotExistException(mentorId));
+        MasterThesis masterThesis = new MasterThesis(MasterThesisStatus.STUDENT_THESIS_REGISTRATION, student, title,mentor);
+        return this.masterThesisRepository.save(masterThesis);
+    }
+
+    @Override
     public Optional<MasterThesis> findThesisById(Long id) {
         return this.masterThesisRepository.findById(id);
     }
+
+    @Override
+    public List<MasterThesis> findByStudentIndex(String id) {
+        return this.masterThesisRepository.findByStudentIndex(id);
+    }
+
 
     @Override
     public Page<MasterThesis> findAll(Pageable pageable) {
@@ -161,6 +177,11 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
+    public Page<MasterThesis> findAllByStatus(MasterThesisStatus status, Pageable pageable) {
+        return this.masterThesisRepository.findByStatus(status, pageable);
+    }
+
+    @Override
     public void cancelMasterThesis(Long id) {
         MasterThesis masterThesis = this.findThesisById(id).get();
         masterThesis.setStatus(MasterThesisStatus.CANCELLED);
@@ -173,5 +194,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         masterThesis.setThesisText(file.getBytes());
         this.masterThesisRepository.save(masterThesis);
     }
+
+
 
 }

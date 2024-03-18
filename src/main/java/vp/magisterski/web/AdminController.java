@@ -1,5 +1,6 @@
 package vp.magisterski.web;
 
+import org.springframework.boot.Banner;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -178,5 +179,12 @@ public class AdminController {
                 .headers(headers)
                 .contentLength(masterThesis.getThesisText().length)
                 .body(resource);
+    }
+
+    @GetMapping("/details/{thesisId}")
+    public String details(Model model, @PathVariable Long thesisId) {
+        MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
+        model.addAttribute("thesisId", thesisId);
+        return "masterThesisDetails";
     }
 }

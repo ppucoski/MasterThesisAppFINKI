@@ -1,10 +1,12 @@
 package vp.magisterski.model.magister;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
+@NoArgsConstructor
 public class MasterThesisDocument {
 
     @Id
@@ -22,4 +24,12 @@ public class MasterThesisDocument {
 
 
     private LocalDate createdDate;
+
+    public MasterThesisDocument(MasterThesis thesis, MasterThesisDocumentType type, byte[] document, LocalDate createdDate) {
+        this.thesis = thesis;
+        this.type = type;
+        this.document = document;
+        this.createdDate = createdDate;
+    }
+
 }

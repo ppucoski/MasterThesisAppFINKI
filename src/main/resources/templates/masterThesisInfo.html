@@ -6,9 +6,38 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="container text-center">
-        <h1>Детали за нашите магистарски работи</h1>
+    <div class="container">
+        <h3>Детали за нашите магистарски работи</h3>
+        <div class="row">
+            <div >
+                <h1 ></h1>
+            </div>
+        </div>
+
+        <table class="table table-hover" th:if="${thesis != null}">
+            <thead>
+                <tr>
+                    <th scope="col">#id</th>
+                    <th scope="col">Наслов</th>
+                    <th scope="col">Ментор</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr th:each="thesisItem : ${thesis}">
+                <th scope="row" th:text="${thesisItem.id}">1</th>
+                <td th:text="${thesisItem.getTitle()}"></td>
+                <td th:text="${thesisItem.getMentor().getName()}"></td>
+                <td th:text="${thesisItem.getStatus().getDisplayName()}"></td>
+                <td><a class="btn btn-info" th:href="@{details/{thesisId}(thesisId=${thesisItem.id})}">Види повќе детали</a></td>
+            </tr>
+
+            </tbody>
+        </table>
+        <p th:unless="${thesis != null}">Немате пријавено магистерски работи</p>
     </div>
+
 
 </div>
 </body>

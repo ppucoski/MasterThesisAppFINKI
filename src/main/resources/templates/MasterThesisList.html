@@ -7,7 +7,7 @@
 
 <div layout:fragment="content">
     <div class="container-xl">
-        <h5 class="m-4">Вкупно: <span th:text="${total}"></span> магистерски работи</h5>
+        <h5 class="m-4">Вкупно: <span th:text="${MasterThesis.totalElements}"></span> магистерски работи</h5>
         <div class="dropdown m-4">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
@@ -33,8 +33,8 @@
                     <tr>
                         <td style="width: 25%">Студент</td>
                         <td>
-                            <span th:text="${masterThesis.getStudent().getIndex()}"></span> - <span
-                                th:text="${masterThesis.getStudent().getName()}"></span>
+                            <span th:text="${masterThesis.getStudent().getIndex()}"></span> -
+                            <span th:text="${masterThesis.getStudent().getName()}"></span>
                             <span th:text="${masterThesis.getStudent().getLastName()}"></span>
                         </td>
 
@@ -44,14 +44,13 @@
                         <td th:text="${masterThesis.getMentor().getName()}"></td>
                     </tr>
                     <tr>
+
                         <td>Член 1</td>
                         <td th:text="${masterThesis.getFirstMember().getName()}"></td>
-
                     </tr>
                     <tr>
                         <td>Член 2</td>
                         <td th:text="${masterThesis.getSecondMember().getName()}"></td>
-
                     </tr>
                     <tr>
                         <td>Датум на пријавување</td>
@@ -65,9 +64,9 @@
 
                     </tr>
                     <tr>
-                        <td> Датотека </td>
+                        <td> Датотека</td>
                         <td><a th:href="@{/admin/download/{thesisId}(thesisId=${masterThesis.id})}"
-                                                    class="btn btn-outline-secondary">Download</a></td>
+                               class="btn btn-outline-secondary">Download</a></td>
                     </tr>
                     <tr>
                         <td>Краток опис</td>

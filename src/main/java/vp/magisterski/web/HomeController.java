@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import vp.magisterski.config.FacultyUserDetails;
+import vp.magisterski.model.magister.MasterThesisStatus;
 import vp.magisterski.model.shared.User;
 import vp.magisterski.service.MasterThesisService;
 import vp.magisterski.service.UserService;
@@ -45,9 +46,7 @@ public class HomeController {
                                 @RequestParam(defaultValue = "3") int size,
                                 Model model) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-        int total = masterThesisService.findAll().size();
-        model.addAttribute("MasterThesis", masterThesisService.findAll(pageable));
-        model.addAttribute("total", total);
+        model.addAttribute("MasterThesis", masterThesisService.findAllByStatus(MasterThesisStatus.PROCESS_FINISHED, pageable));
         return "MasterThesisList";
     }
 
