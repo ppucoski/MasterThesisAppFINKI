@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div th:fragment="detailsFragment" class="col m-2">
+<div style="height: 800px;">
+    <p><strong>ID на магистерска: </strong><td class="text-center text-dark" th:text="${thesis.id}"></td></p>
+    <p><strong>Студент: </strong><td class="text-center text-dark" th:text="${thesis.getStudent().getIndex()}"></td>
+    <td class="text-center text-dark" th:text="${thesis.getStudent().getName()}"></td>
+    <td class="text-center text-dark" th:text="${thesis.getStudent().getLastName()}"></td></p>
+    <p><strong>Наслов: </strong><td class="text-center text-dark" th:text="${thesis.getTitle()}"></td></p>
+    <p><strong>Област: </strong><td class="text-center text-dark" th:text="${thesis.getArea()}"></td></p>
+    <p><strong>Кратка содржина: </strong><td class="text-center text-dark" th:text="${thesis.getDescription}"></td></p>
+    <p><strong>Ментор: </strong><td class="text-center text-dark" th:text="${thesis.getMentor().getName()}"></td></p>
+    <p><strong>Член 1: </strong><td class="text-center text-dark" th:if="${thesis.getFirstMember() != null}"
+                                    th:text="${thesis.getFirstMember().getName()}"></td>
+    <td th:unless="${thesis.getFirstMember() != null}">No member assigned</td></p>
+    <p><strong>Член 2: </strong><td class="text-center text-dark" th:if="${thesis.getSecondMember() != null}"
+                                    th:text="${thesis.getSecondMember().getName()}"></td>
+    <td th:unless="${thesis.getSecondMember() != null}">No member assigned</td></p>
+    <p><strong>Датум на оддржување: </strong><td class="text-center text-dark" th:if="${thesis.getPresentation()} != null"
+                                                 th:text="${#temporals.format(thesis.getPresentation().getPresentationStartTime(), 'dd.MM.yyy')}"></td></p>
+    <p><strong>Статус: </strong><td class="text-center text-dark" th:text="${thesis.getStatus().getDisplayName()}"></td></p>
+</div>
+</div>
+</body>
+</html>

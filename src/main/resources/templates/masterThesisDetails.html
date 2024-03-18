@@ -24,16 +24,24 @@
             </div>
         </div>
         <div class="row">
-            <div class="col m-2" style="height: 800px; background-color: #3c763d">
-                Сите детали за магистерската
-            </div>
+            <div th:replace="~{detailsFragment :: detailsFragment}"></div>
             <div class="col m-2" style="height: 800px; background-color: cadetblue">
                 КАРТИЧКИ од прва до последна најдолу првиот статус најгоре моменталниот со приказ на коментарите
             </div>
         </div>
         <div class="row">
-            <div class="col m-2" style="height: 200px; background-color: #0bb4e7">
-                 СИТЕ ПРИКАЧЕНИ ДОКУМЕНТИ
+            <div class="col m-2" style="height: 200px;">
+                <div class="d-flex justify-content-center align-items-center">
+                    <ul class="list-unstyled">
+                        <li th:each="document : ${associatedDocuments}">
+                            <a th:href="@{/masterThesis/download/{documentId}(documentId=${document.id})}"
+                               class="btn btn-secondary btn-sm mb-2 mt-3">
+                                <span th:text="${document.type}"></span>
+                                <span class="ms-2">-&nbsp&nbspDownload</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

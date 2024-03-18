@@ -15,7 +15,6 @@ public class AuthConfig {
 
     public HttpSecurity authorize(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .requestMatchers(

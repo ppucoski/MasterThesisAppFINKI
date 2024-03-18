@@ -28,7 +28,7 @@ public class MasterThesis {
 
     private String title;
 
-    private String area;
+    private String area; //Oblast
 
     @Column(length = 5000)
     private String description;

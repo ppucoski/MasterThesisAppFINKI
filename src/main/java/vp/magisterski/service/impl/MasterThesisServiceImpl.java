@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import vp.magisterski.model.exceptions.ProfessorDoesNotExistException;
 import vp.magisterski.model.exceptions.StudentDoesNotExistException;
@@ -19,6 +20,7 @@ import vp.magisterski.repository.StudentRepository;
 import vp.magisterski.service.MasterThesisService;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -188,11 +190,26 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         this.masterThesisRepository.save(masterThesis);
     }
 
+//    @Override
+//    public void saveFile(Long id, MultipartFile file) throws IOException {
+//        MasterThesis masterThesis = this.findThesisById(id).get();
+//        masterThesis.setThesisText(file.getBytes());
+//        this.masterThesisRepository.save(masterThesis);
+//    }
+
     @Override
+    @Transactional
     public void saveFile(Long id, MultipartFile file) throws IOException {
-        MasterThesis masterThesis = this.findThesisById(id).get();
-        masterThesis.setThesisText(file.getBytes());
-        this.masterThesisRepository.save(masterThesis);
+        Optional<MasterThesis> optionalMasterThesis = masterThesisRepository.findById(id);
+        if (optionalMasterThesis.isPresent()) {
+            MasterThesis masterThesis = optionalMasterThesis.get();
+            try (InputStream inputStream = file.getInputStream()) {
+                masterThesis.setThesisText(inputStream.readAllBytes());
+            }
+            masterThesisRepository.save(masterThesis);
+        } else {
+            throw new IllegalArgumentException("Master thesis not found with ID: " + id);
+        }
     }
 
 
