@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <body>
-<div th:fragment="statusHistoryFragment" class="col m-2">
+<div th:fragment="statusHistoryFragment" class="col mb-2">
     <div th:each="change : ${allChanges}" class="border rounded m-4">
-      <div class="border p-2" style="background-color: #c8e7c9; color: #1b441b">
-        <h6 th:text="${change.nextStatus.getDisplayName()}"></h6>
+      <div class="border p-2" style="background-color: #c8e7c9; color: #509150">
+        <div class="row">
+          <div class="col-auto">
+            <img src="/images/checkmark.png" alt="checkmark" style="height: 30px">
+          </div>
+          <div class="col p-1">
+            <h6 th:text="${change.nextStatus.getDisplayName()}"></h6>
+          </div>
+        </div>
       </div>
       <div class="row">
         <div class="col-4 m-1 text-end p-3">
