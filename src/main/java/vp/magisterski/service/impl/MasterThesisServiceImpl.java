@@ -212,6 +212,14 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         }
     }
 
+    @Override
+    public void updateStatus(Long thesisId, MasterThesisStatus status) {
+        MasterThesis thesis = masterThesisRepository.findById(thesisId).orElse(null);
+        if(thesis != null){
+            thesis.setStatus(status);
+            masterThesisRepository.save(thesis);
+        }
+    }
 
 
 }

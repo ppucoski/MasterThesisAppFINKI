@@ -38,8 +38,6 @@ public class AdminController {
     private final MasterThesisStatusChangeService masterThesisStatusChangeService;
     private final MasterThesisDocumentService masterThesisDocumentService;
 
-    public List<MasterThesisStatusChange> history = new ArrayList<>();
-
     public AdminController(StudentService studentService, ProfessorService professorService, MasterThesisService masterThesisService, UserService userService, MasterThesisStatusChangeService masterThesisStatusChangeService, MasterThesisDocumentService masterThesisDocumentService) {
         this.studentService = studentService;
         this.professorService = professorService;
@@ -192,16 +190,18 @@ public class AdminController {
         model.addAttribute("thesis", masterThesis);
         model.addAttribute("masterThesisStatusChange", masterThesisStatusChange);
         model.addAttribute("associatedDocuments", associatedDocuments);
-        Comparator<MasterThesisStatusChange> comparator = Comparator.comparingDouble(i -> i.getNextStatus().getOrder());
-        List<MasterThesisStatusChange> temp = history.stream().sorted(comparator.reversed()).toList();
+        List<MasterThesisStatusChange> temp = masterThesisStatusChangeService.getAllByThesis(masterThesis);
         model.addAttribute("allChanges", temp);
         model.addAttribute("admin", true);
         return "masterThesisDetails";
     }
 
-    @PostMapping("/details/{thesisId}")
-    public String updateDetails(@RequestParam String note, @PathVariable Long thesisId) {
-        history.add(masterThesisStatusChangeService.updateStatus(thesisId,note, userService.getUser()));
+    @PostMapping("/details/{statusId}")
+    public String updateDetails(@RequestParam String note, @PathVariable Long statusId,
+                                @RequestParam Long thesisId) {
+        MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
+        masterThesisStatusChangeService.updateStatus(statusId, masterThesis,note, userService.getUser());
+        masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
         return String.format("redirect:/admin/details/%d", thesisId);
     }
 }

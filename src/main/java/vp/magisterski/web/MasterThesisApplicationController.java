@@ -55,6 +55,7 @@ public class MasterThesisApplicationController {
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.THESIS_JUSTIFICATION, fileInput1);
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.PLAN_AND_LITERATURE_REVIEW, fileInput2);
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.STUDENT_BIOGRAPHY, fileInput3);
+            masterThesisStatusChangeService.addStatus(thesis, MasterThesisStatus.STUDENT_THESIS_REGISTRATION, LocalDate.now());
             masterThesisStatusChangeService.addStatus(thesis, MasterThesisStatus.MENTOR_VALIDATION);
         } catch (Exception e) {
             System.out.println(e.getMessage());

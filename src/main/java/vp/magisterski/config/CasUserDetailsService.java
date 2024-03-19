@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import vp.magisterski.repository.StudentRepository;
 import vp.magisterski.repository.UserRepository;
 import vp.magisterski.service.ProfessorService;
 
@@ -17,8 +18,9 @@ public class CasUserDetailsService extends FacultyUserDetailsService implements 
 
     public CasUserDetailsService(UserRepository userRepository,
                                  ProfessorService professorService,
-                                 PasswordEncoder passwordEncoder) {
-        super(userRepository, professorService, passwordEncoder);
+                                 PasswordEncoder passwordEncoder,
+                                 StudentRepository studentRepository) {
+        super(userRepository, professorService, passwordEncoder, studentRepository);
     }
 
     @Override

@@ -40,4 +40,5 @@ public interface MasterThesisService {
     void cancelMasterThesis(Long id);
 
     void saveFile(Long id, MultipartFile file) throws IOException;
+    void updateStatus(Long thesisId, MasterThesisStatus status);
 }

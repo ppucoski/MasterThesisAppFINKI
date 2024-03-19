@@ -19,20 +19,20 @@ import java.util.Optional;
 @Service
 public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusChangeService {
     private final MasterThesisStatusChangeRepository masterThesisStatusChangeRepository;
-    private final MasterThesisService masterThesisService;
-    private final UserService userService;
-
 
     public MasterThesisStatusChangeServiceImpl(MasterThesisStatusChangeRepository masterThesisStatusChangeRepository, MasterThesisService masterThesisService, UserService userService) {
         this.masterThesisStatusChangeRepository = masterThesisStatusChangeRepository;
-
-        this.masterThesisService = masterThesisService;
-        this.userService = userService;
     }
 
     @Override
     public void addStatus(MasterThesis thesis, MasterThesisStatus status) {
         MasterThesisStatusChange masterThesisStatusChange = new MasterThesisStatusChange(thesis, status);
+        masterThesisStatusChangeRepository.save(masterThesisStatusChange);
+    }
+
+    @Override
+    public void addStatus(MasterThesis thesis, MasterThesisStatus status, LocalDate date) {
+        MasterThesisStatusChange masterThesisStatusChange = new MasterThesisStatusChange(thesis,date, status);
         masterThesisStatusChangeRepository.save(masterThesisStatusChange);
     }
 
@@ -60,26 +60,17 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
 
 
     @Override
-    public MasterThesisStatusChange updateStatus(Long thesisId, String note, User user) {
-        MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
-        MasterThesisStatusChange masterThesisStatusChange = this.masterThesisStatusChangeRepository.findByThesis(masterThesis).get();
-        masterThesisStatusChange.setNote(note);
-        masterThesisStatusChange.setStatusChangeDate(LocalDate.now());
-        masterThesisStatusChange.setStatusChangedBy(user);
-        masterThesis.setStatus(masterThesisStatusChange.getNextStatus());
-
-
-        if(masterThesisStatusChange.getNextStatus().getOrder() <= 15){
-            double order = masterThesisStatusChange.getNextStatus().getOrder();
-            MasterThesisStatus nextStatus = Arrays.stream(MasterThesisStatus.values())
-                    .filter(status -> status.getOrder() == order + 1)
-                    .findFirst()
-                    .orElse(masterThesisStatusChange.getNextStatus());
-
-            masterThesisStatusChange.setNextStatus(nextStatus);
+    public MasterThesisStatusChange updateStatus(Long statusId, MasterThesis thesis, String note, User user) {
+        MasterThesisStatusChange masterThesisStatusChange = this.masterThesisStatusChangeRepository.findById(statusId).orElse(null);
+        if(masterThesisStatusChange !=null){
+            masterThesisStatusChange.setNote(note);
+            masterThesisStatusChange.setStatusChangeDate(LocalDate.now());
+            masterThesisStatusChange.setStatusChangedBy(user);
+            masterThesisStatusChangeRepository.save(masterThesisStatusChange);
+            MasterThesisStatus status = masterThesisStatusChange.getNextStatus().getNextStatusFromCurrent();
+            this.addStatus(thesis, status);
         }
-
-        return masterThesisStatusChangeRepository.save(masterThesisStatusChange);
+        return masterThesisStatusChange;
     }
 
 

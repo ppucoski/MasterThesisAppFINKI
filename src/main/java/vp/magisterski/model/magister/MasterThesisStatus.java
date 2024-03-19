@@ -30,4 +30,14 @@ public enum MasterThesisStatus {
     public String getDisplayName() {
         return displayName;
     }
+
+    public MasterThesisStatus getNextStatusFromCurrent() {
+        MasterThesisStatus[] statuses = MasterThesisStatus.values();
+        for (int i = 0; i < statuses.length - 1; i++) {
+            if (statuses[i].order == this.order) {
+                return statuses[i + 1];
+            }
+        }
+        return null;
+    }
 }

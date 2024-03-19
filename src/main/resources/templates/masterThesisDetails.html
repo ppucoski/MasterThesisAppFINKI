@@ -9,6 +9,7 @@
     <div class="container-lg">
         <div class="row border p-4 mt-4 mb-4" th:if="${admin == true}">
             <div th:replace="~{statusNoteFragment :: statusNoteFragment}"></div>
+        </div>
         <div class="row">
             <div th:replace="~{detailsFragment :: detailsFragment}"></div>
             <div th:replace="~{statusHistoryFragment :: statusHistoryFragment}"></div>
