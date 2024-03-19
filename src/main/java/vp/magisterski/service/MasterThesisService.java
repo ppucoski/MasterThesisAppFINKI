@@ -41,4 +41,5 @@ public interface MasterThesisService {
 
     void saveFile(Long id, MultipartFile file) throws IOException;
     void updateStatus(Long thesisId, MasterThesisStatus status);
+    void setCommission(Long thesisId, String firstMember, String secondMember);
 }

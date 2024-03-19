@@ -56,12 +56,12 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
-    public MasterThesis newThesis(String studentIndex , String title, String mentorId) {
+    public MasterThesis newThesis(String studentIndex, String title, String mentorId) {
         Student student = this.studentRepository.findById(studentIndex)
                 .orElseThrow(() -> new StudentDoesNotExistException(studentIndex));
         Professor mentor = this.professorRepository.findById(mentorId)
                 .orElseThrow(() -> new ProfessorDoesNotExistException(mentorId));
-        MasterThesis masterThesis = new MasterThesis(MasterThesisStatus.STUDENT_THESIS_REGISTRATION, student, title,mentor);
+        MasterThesis masterThesis = new MasterThesis(MasterThesisStatus.STUDENT_THESIS_REGISTRATION, student, title, mentor);
         return this.masterThesisRepository.save(masterThesis);
     }
 
@@ -215,9 +215,24 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     @Override
     public void updateStatus(Long thesisId, MasterThesisStatus status) {
         MasterThesis thesis = masterThesisRepository.findById(thesisId).orElse(null);
-        if(thesis != null){
+        if (thesis != null) {
             thesis.setStatus(status);
             masterThesisRepository.save(thesis);
+        }
+    }
+
+    @Override
+    public void setCommission(Long thesisId, String firstMember, String secondMember) {
+        MasterThesis thesis = masterThesisRepository.findById(thesisId).orElse(null);
+        if (thesis != null) {
+            Professor mentor1 = this.professorRepository.findById(firstMember)
+                    .orElseThrow(() -> new ProfessorDoesNotExistException(firstMember));
+            Professor mentor2 = this.professorRepository.findById(secondMember)
+                    .orElseThrow(() -> new ProfessorDoesNotExistException(secondMember));
+            thesis.setFirstMember(mentor1);
+            thesis.setSecondMember(mentor2);
+            masterThesisRepository.save(thesis);
+
         }
     }
 

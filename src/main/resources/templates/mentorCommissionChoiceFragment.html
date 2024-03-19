@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div th:fragment="mentorCommissionChoiceFragment">
+    <form th:action="@{/admin/commissionUpdate/{statusId}(statusId=${masterThesisStatusChange.get().id})}" method="POST">
+        <h4>Изберете членови во комисија</h4>
+        <input type="hidden" name="thesisId" th:value="${thesisId}">
+        <div class="mb-3">
+            <label for="firstMember" class="form-label">Член 1</label>
+            <select id="firstMember" name="firstMember" class="form-select" required>
+                <option value="" disabled selected>Изберете</option>
+                <option th:each="member : ${members}"
+                        th:value="${member.getId()}" th:text="${member.getName()}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="secondMember" class="form-label">Член 2</label>
+            <select id="secondMember" name="secondMember" class="form-select" required>
+                <option value="" disabled selected>Изберете</option>
+                <option th:each="member : ${members}"
+                        th:value="${member.getId()}" th:text="${member.getName()}"></option>
+            </select>
+        </div>
+
+        <div class="form-group m-2">
+            <label for="note">Забелешка</label>
+            <input type="text" class="form-control" id="note" name="note">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Внеси</button>
+    </form>
+</div>
+</body>
+</html>

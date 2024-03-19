@@ -193,6 +193,9 @@ public class AdminController {
         List<MasterThesisStatusChange> temp = masterThesisStatusChangeService.getAllByThesis(masterThesis);
         model.addAttribute("allChanges", temp);
         model.addAttribute("admin", true);
+        if(masterThesis.getStatus().getNextStatusFromCurrent() == MasterThesisStatus.MENTOR_COMMISSION_CHOICE){
+            model.addAttribute("members", professorService.findAllByProfessorStatus(true, true));
+        }
         return "masterThesisDetails";
     }
 
@@ -202,6 +205,25 @@ public class AdminController {
         MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
         masterThesisStatusChangeService.updateStatus(statusId, masterThesis,note, userService.getUser());
         masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
+        return String.format("redirect:/admin/details/%d", thesisId);
+    }
+
+
+    @PostMapping("/commissionUpdate/{statusId}")
+    public String commissionUpdate(@PathVariable Long statusId,
+                                   @RequestParam String firstMember,
+                                   @RequestParam String secondMember,
+                                   @RequestParam Long thesisId,
+                                   @RequestParam String note) {
+        try {
+            MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
+            masterThesisService.setCommission(thesisId, firstMember, secondMember);
+            masterThesisStatusChangeService.updateStatus(statusId, masterThesis,note, userService.getUser());
+            masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         return String.format("redirect:/admin/details/%d", thesisId);
     }
 }
