@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div th:fragment="statusHistoryFragment" class="col m-2">
+    <div th:each="change : ${allChanges}" class="border rounded m-4">
+      <div class="border p-2" style="background-color: #c8e7c9; color: #1b441b">
+        <h6 th:text="${change.nextStatus.getDisplayName()}"></h6>
+      </div>
+      <div class="row">
+        <div class="col-4 m-1 text-end p-3">
+          <p style="font-weight: bold">датум</p>
+          <p style="font-weight: bold">валидација</p>
+          <p style="font-weight: bold">статус</p>
+          <p style="font-weight: bold" th:if="${change.getNote() != null}">забелешка</p>
+        </div>
+        <div class="col m-1 p-3">
+          <p style="font-weight: bold" th:if="${change.getStatusChangeDate() != null}" th:text="${change.getStatusChangeDate()}"></p>
+          <p th:if="${change.getStatusChangeDate() == null}">&nbsp;</p>
+
+          <p th:if="${change.getStatusChangedBy() != null}" th:text="${change.getStatusChangedBy().getName()}"></p>
+          <p th:if="${change.getStatusChangedBy() == null}">&nbsp;</p>
+
+          <p>Одобрено</p>
+
+          <p th:if="${change.getNote() != null}" th:text="${change.getNote().toString()}"></p>
+          <p th:if="${change.getNote() == null}">&nbsp;</p>
+        </div>
+    </div>
+    </div>
+</div>
+</body>
+</html>

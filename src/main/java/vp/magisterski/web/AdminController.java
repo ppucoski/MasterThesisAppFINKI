@@ -189,6 +189,7 @@ public class AdminController {
         model.addAttribute("thesis", masterThesis);
         model.addAttribute("masterThesisStatusChange", masterThesisStatusChange);
         model.addAttribute("associatedDocuments", associatedDocuments);
+        model.addAttribute("allChanges", this.masterThesisStatusChangeService.getAllByThesis(masterThesis));
         return "masterThesisDetails";
     }
 }

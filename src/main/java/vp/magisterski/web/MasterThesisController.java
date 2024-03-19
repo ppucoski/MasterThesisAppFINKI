@@ -57,6 +57,7 @@ public class MasterThesisController {
         MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
         List<MasterThesisDocument> associatedDocuments = masterThesisDocumentService.findAllByThesis(masterThesis);
         Optional<MasterThesisStatusChange> masterThesisStatusChange = masterThesisStatusChangeService.getStatusChange(masterThesis);
+        model.addAttribute("allChanges", this.masterThesisStatusChangeService.getAllByThesis(masterThesis));
         model.addAttribute("thesis", masterThesis);
         model.addAttribute("masterThesisStatusChange", masterThesisStatusChange);
         model.addAttribute("associatedDocuments", associatedDocuments);

@@ -10,6 +10,7 @@ import vp.magisterski.service.MasterThesisStatusChangeService;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -35,5 +36,11 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
     public Optional<MasterThesisStatusChange> getStatusChange(MasterThesis thesis) {
         Comparator<MasterThesisStatusChange> comparator = Comparator.comparingDouble(i -> i.getNextStatus().getOrder());
         return masterThesisStatusChangeRepository.findAllByThesis(thesis).stream().sorted(comparator.reversed()).findFirst();
+    }
+
+    @Override
+    public List<MasterThesisStatusChange> getAllByThesis(MasterThesis thesis) {
+        Comparator<MasterThesisStatusChange> comparator = Comparator.comparingDouble(i -> i.getNextStatus().getOrder());
+        return masterThesisStatusChangeRepository.findAllByThesis(thesis).stream().sorted(comparator.reversed()).toList();
     }
 }
