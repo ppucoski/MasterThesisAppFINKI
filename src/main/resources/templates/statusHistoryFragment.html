@@ -3,15 +3,14 @@
 <body>
 <div th:fragment="statusHistoryFragment" class="col mb-2">
 
-    <div th:each="change : ${allChanges}" class="border rounded m-4">
-      <div style="margin-bottom: 30px;">Историја на магистерскиот труд</div>
-      <div class="border p-2" style="background-color: #c8e7c9; color: #509150">
+    <div th:each="change : ${allChanges}" class="m-4">
+      <div class="border rounded p-2" style="background-color: #c8e7c9; color: #509150">
         <div class="row">
           <div class="col-auto">
             <img src="/images/checkmark.png" alt="checkmark" style="height: 30px">
           </div>
           <div class="col p-1">
-            <h6 th:text="${change.nextStatus.getDisplayName()}"></h6>
+            <h6 th:text="${change.thesis.getStatus().getDisplayName()}"></h6>
           </div>
         </div>
       </div>
@@ -20,7 +19,7 @@
           <p style="font-weight: bold">датум</p>
           <p style="font-weight: bold">валидација</p>
           <p style="font-weight: bold">статус</p>
-          <p style="font-weight: bold" th:if="${change.getNote() != null}">забелешка</p>
+          <p style="font-weight: bold" th:if="${change.getNote() != null && change.getNote().isEmpty()}">забелешка</p>
         </div>
         <div class="col m-1 p-3">
           <p style="font-weight: bold" th:if="${change.getStatusChangeDate() != null}" th:text="${change.getStatusChangeDate()}"></p>

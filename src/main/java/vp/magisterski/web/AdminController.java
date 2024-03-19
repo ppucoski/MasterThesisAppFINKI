@@ -22,9 +22,9 @@ import vp.magisterski.model.shared.User;
 import vp.magisterski.service.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Controller
@@ -37,6 +37,8 @@ public class AdminController {
     private final UserService userService;
     private final MasterThesisStatusChangeService masterThesisStatusChangeService;
     private final MasterThesisDocumentService masterThesisDocumentService;
+
+    public List<MasterThesisStatusChange> history = new ArrayList<>();
 
     public AdminController(StudentService studentService, ProfessorService professorService, MasterThesisService masterThesisService, UserService userService, MasterThesisStatusChangeService masterThesisStatusChangeService, MasterThesisDocumentService masterThesisDocumentService) {
         this.studentService = studentService;
@@ -190,15 +192,16 @@ public class AdminController {
         model.addAttribute("thesis", masterThesis);
         model.addAttribute("masterThesisStatusChange", masterThesisStatusChange);
         model.addAttribute("associatedDocuments", associatedDocuments);
-        model.addAttribute("allChanges", this.masterThesisStatusChangeService.getAllByThesis(masterThesis));
+        Comparator<MasterThesisStatusChange> comparator = Comparator.comparingDouble(i -> i.getNextStatus().getOrder());
+        List<MasterThesisStatusChange> temp = history.stream().sorted(comparator.reversed()).toList();
+        model.addAttribute("allChanges", temp);
         model.addAttribute("admin", true);
         return "masterThesisDetails";
     }
 
     @PostMapping("/details/{thesisId}")
     public String updateDetails(@RequestParam String note, @PathVariable Long thesisId) {
-        String username = userService.getUsernameFromUser();
-        masterThesisStatusChangeService.updateStatus(thesisId,note, userService.getUser());
+        history.add(masterThesisStatusChangeService.updateStatus(thesisId,note, userService.getUser()));
         return String.format("redirect:/admin/details/%d", thesisId);
     }
 }

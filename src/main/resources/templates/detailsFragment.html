@@ -20,6 +20,7 @@
     <p><strong>Датум на оддржување: </strong><td class="text-center text-dark" th:if="${thesis.getPresentation()} != null"
                                                  th:text="${#temporals.format(thesis.getPresentation().getPresentationStartTime(), 'dd.MM.yyy')}"></td></p>
     <p><strong>Статус: </strong><td class="text-center text-dark" th:text="${thesis.getStatus().getDisplayName()}"></td></p>
+    <p><strong>Следен статус: </strong><td class="text-center text-dark" th:text="${masterThesisStatusChange.get().getNextStatus().getDisplayName()}"></td></p>
 </div>
 </div>
 </body>

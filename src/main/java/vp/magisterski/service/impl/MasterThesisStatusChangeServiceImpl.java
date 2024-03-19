@@ -37,6 +37,11 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
     }
 
     @Override
+    public void addStatus(MasterThesis thesis, LocalDate statusChangeDate, MasterThesisStatus nextStatus, User statusChangedBy, String note) {
+        this.masterThesisStatusChangeRepository.save(new MasterThesisStatusChange(thesis, statusChangeDate, nextStatus, statusChangedBy, note));
+    }
+
+    @Override
     public void updateStatus(MasterThesis thesis, LocalDate date, MasterThesisStatus status, User user, String note) {
 
     }
@@ -55,7 +60,7 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
 
 
     @Override
-    public void updateStatus(Long thesisId, String note, User user) {
+    public MasterThesisStatusChange updateStatus(Long thesisId, String note, User user) {
         MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
         MasterThesisStatusChange masterThesisStatusChange = this.masterThesisStatusChangeRepository.findByThesis(masterThesis).get();
         masterThesisStatusChange.setNote(note);
@@ -74,7 +79,7 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
             masterThesisStatusChange.setNextStatus(nextStatus);
         }
 
-        masterThesisStatusChangeRepository.save(masterThesisStatusChange);
+        return masterThesisStatusChangeRepository.save(masterThesisStatusChange);
     }
 
 
