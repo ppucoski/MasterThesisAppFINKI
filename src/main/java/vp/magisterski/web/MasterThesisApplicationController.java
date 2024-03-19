@@ -62,4 +62,5 @@ public class MasterThesisApplicationController {
 
         return "redirect:/";
     }
+
 }

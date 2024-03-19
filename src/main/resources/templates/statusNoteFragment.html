@@ -4,7 +4,7 @@
 <div th:fragment="statusNoteFragment" class="col m-2">
 
     <p th:text="${masterThesisStatusChange.get().nextStatus.getDisplayName()}"></p>
-    <form>
+    <form th:action="@{/admin/details/{thesisId}(thesisId=${thesisId})}" method="POST">
         <div class="form-group m-2">
             <label for="note">Забелешка</label>
             <input type="text" class="form-control" id="note" name="note">

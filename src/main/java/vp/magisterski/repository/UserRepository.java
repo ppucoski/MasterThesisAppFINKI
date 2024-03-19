@@ -5,5 +5,6 @@ import vp.magisterski.model.shared.User;
 
 
 public interface UserRepository extends JpaRepository<User, String> {
+
     //TODO: func
 }

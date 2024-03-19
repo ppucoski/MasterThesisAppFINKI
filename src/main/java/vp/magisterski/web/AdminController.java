@@ -18,6 +18,7 @@ import vp.magisterski.model.magister.MasterThesisStatus;
 import vp.magisterski.model.magister.MasterThesisStatusChange;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
+import vp.magisterski.model.shared.User;
 import vp.magisterski.service.*;
 
 import java.io.IOException;
@@ -192,5 +193,12 @@ public class AdminController {
         model.addAttribute("allChanges", this.masterThesisStatusChangeService.getAllByThesis(masterThesis));
         model.addAttribute("admin", true);
         return "masterThesisDetails";
+    }
+
+    @PostMapping("/details/{thesisId}")
+    public String updateDetails(@RequestParam String note, @PathVariable Long thesisId) {
+        String username = userService.getUsernameFromUser();
+        masterThesisStatusChangeService.updateStatus(thesisId,note, userService.getUser());
+        return String.format("redirect:/admin/details/%d", thesisId);
     }
 }

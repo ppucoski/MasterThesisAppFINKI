@@ -1,19 +1,19 @@
 package vp.magisterski.web;
 
 
+import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisDocument;
+import vp.magisterski.model.magister.MasterThesisStatus;
 import vp.magisterski.model.magister.MasterThesisStatusChange;
+import vp.magisterski.model.shared.User;
 import vp.magisterski.service.MasterThesisDocumentService;
 import vp.magisterski.service.MasterThesisService;
 import vp.magisterski.service.MasterThesisStatusChangeService;
@@ -93,4 +93,8 @@ public class MasterThesisController {
                 .contentLength(document.getDocument().length)
                 .body(resource);
     }
+
+
+
+
 }

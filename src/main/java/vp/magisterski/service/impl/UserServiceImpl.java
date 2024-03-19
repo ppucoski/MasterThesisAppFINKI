@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+
     @Override
     public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

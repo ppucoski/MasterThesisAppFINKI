@@ -15,4 +15,9 @@ public interface MasterThesisStatusChangeService {
     Optional<MasterThesisStatusChange> getStatusChange(MasterThesis thesis);
 
     List<MasterThesisStatusChange> getAllByThesis(MasterThesis thesis);
+
+    void updateStatus(Long thesisId,String note, User user);
+    Optional<MasterThesisStatusChange> findByThesis(MasterThesis thesis);
+
+
 }
