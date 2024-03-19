@@ -84,7 +84,7 @@ public class MasterThesisController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.setContentDispositionFormData("attachment", "document_" + documentId + ".pdf");
+        headers.setContentDispositionFormData("attachment", "document_" + document.getType().name() + ".pdf");
 
         ByteArrayResource resource = new ByteArrayResource(document.getDocument());
 
