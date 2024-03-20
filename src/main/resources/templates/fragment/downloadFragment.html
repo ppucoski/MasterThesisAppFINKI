@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div th:fragment="downloadFragment" class="col m-2">
+    <div class="col m-2" style="height: 250px; border: black; width: auto;">
+        <div class="d-flex justify-content-center align-items-center">
+            <table class="table">
+                <thead>
+                <th>Document Type</th>
+                <th></th>
+                </thead>
+                <tbody>
+                <tr th:each="document : ${associatedDocuments}">
+
+                    <td th:text="${document.type}"></td>
+                    <td>
+                        <a th:href="@{/masterThesis/download/{documentId}(documentId=${document.id})}"
+                           class="btn btn-secondary btn-sm mb-2 mt-3">
+                            Download
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

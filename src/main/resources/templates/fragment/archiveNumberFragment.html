@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div th:fragment="archiveNumberFragment">
+    <form th:action="@{/admin/details/{statusId}(statusId=${masterThesisStatusChange.get().id})}" method="POST">
+        <input type="hidden" name="thesisId" th:value="${thesisId}">
+        <div class="form-group m-2">
+            <label for="note">Внесете архивски број:</label>
+            <input type="text" class="form-control" id="note" name="note">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Валидирај</button>
+    </form>
+</div>
+</body>
+</html>
