@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div th:fragment="studentDraftFragment" class="col m-2">
+    <p th:text="${masterThesisStatusChange.get().nextStatus.getDisplayName()}"></p>
+    <form th:action="@{/admin/details/{statusId}(statusId=${masterThesisStatusChange.get().id})}" method="POST">
+
+        <div class="form-group m-2">
+            <label for="dropZone1" style="font-size: large">Поле за внес:</label>
+            <div class="drop-zone" id="dropZone1">
+                <label class="labelClass lead" for="fileInput1"><strong>Choose a file</strong><span> or drag it here</span>.</label>
+                <input type="file" id="fileInput1" class="file-input" name="fileInput1" accept=".pdf">
+                <p class="file-label" id="fileLabel1"></p>
+            </div>
+            <span class="form-text ">Максималната дозволена големина на датотека изнесува 30MB.</span>
+            <span class="form-text">Дозволено e само .pdf формат на датотека.</span>
+        </div>
+
+        <input type="hidden" name="thesisId" th:value="${thesisId}">
+
+        <div class="form-group m-2">
+            <label for="note">Забелешка</label>
+            <input type="text" class="form-control" id="note" name="note">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Внеси</button>
+
+    </form>
+</div>
+</body>
+</html>

@@ -12,8 +12,14 @@
             <div th:replace="~{mentorCommissionChoiceFragment :: mentorCommissionChoiceFragment}"></div>
         </div>
         <div class="row border p-4 mt-4 mb-4"
-             th:unless="${admin == true and masterThesisStatusChange.get().getNextStatus().toString() == 'MENTOR_COMMISSION_CHOICE'}">
+             th:if="${admin == true and (masterThesisStatusChange.get().getNextStatus().toString() != 'MENTOR_COMMISSION_CHOICE'
+             and masterThesisStatusChange.get().getNextStatus().toString() != 'STUDENT_DRAFT')}">
             <div th:replace="~{statusNoteFragment :: statusNoteFragment}"></div>
+        </div>
+
+        <div class="row border p-4 mt-4 mb-4"
+             th:if="${admin == true and masterThesisStatusChange.get().getNextStatus().toString() == 'STUDENT_DRAFT'}">
+            <div th:replace="~{studentDraftFragment :: studentDraftFragment}"></div>
         </div>
 
 
