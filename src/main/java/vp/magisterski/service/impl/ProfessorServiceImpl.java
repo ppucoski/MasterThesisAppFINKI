@@ -17,10 +17,8 @@ public class ProfessorServiceImpl implements ProfessorService {
         this.professorRepository = professorRepository;
     }
 
-
     @Override
-    public List<Professor> findAll()
-    {
+    public List<Professor> findAll() {
         return this.professorRepository.findAll();
     }
 
@@ -36,12 +34,10 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public Optional<Professor> findProfessorById(String id) {
-        if(id == null){
+        if (id == null) {
             return Optional.empty();
-        }
-        else
+        } else
             return this.professorRepository.findById(id);
     }
-
 
 }

@@ -10,7 +10,7 @@ public enum ProfessorTitle {
     ELECTED_ASSISTANT_PROFESSOR(true), ELECTED_ASSOCIATE_PROFESSOR(true), ELECTED_PROFESSOR(true),
     EXTERNAL_EXPERT(false);
 
-    private boolean isProfessor;
+    private final boolean isProfessor;
 
     ProfessorTitle(boolean isProfessor) {
         this.isProfessor = isProfessor;

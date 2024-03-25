@@ -18,11 +18,9 @@ import vp.magisterski.model.magister.MasterThesisStatus;
 import vp.magisterski.model.magister.MasterThesisStatusChange;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
-import vp.magisterski.model.shared.User;
 import vp.magisterski.service.*;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -48,7 +46,7 @@ public class AdminController {
     }
 
     @ModelAttribute
-    public void trackUsername(Model model){
+    public void trackUsername(Model model) {
         String username = userService.getUsernameFromUser();
         model.addAttribute("user", username);
     }
@@ -62,8 +60,7 @@ public class AdminController {
                                  @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "2") int size,
                                  @RequestParam(required = false) String isValidation,
-                                 Model model)
-    {
+                                 Model model) {
         Pageable pageable = PageRequest.of(page, size);
         Student student = this.studentService.findStudentById(index).orElse(null);
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
@@ -103,7 +100,7 @@ public class AdminController {
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
         Professor member1 = this.professorService.findProfessorById(member).orElse(null);
 
-        if((student == null && index.isEmpty()) || (student != null && !index.isEmpty())) {
+        if ((student == null && index.isEmpty()) || (student != null && !index.isEmpty())) {
 
             Specification<MasterThesis> specification = masterThesisService.filterMasterThesis(student, title, status, mentor1, member1, isValidation);
 
@@ -112,9 +109,7 @@ public class AdminController {
 
             model.addAttribute("master_page", masterFilteredPage);
             model.addAttribute("master_page_total_elements", masterFilteredPage.getTotalElements());
-        }
-        else
-        {
+        } else {
             MasterThesis empty = new MasterThesis();
             Specification<MasterThesis> emptySpec = this.masterThesisService.filterMasterThesis(empty, "");
             Page<MasterThesis> emptyPage = this.masterThesisService.findAll(emptySpec, pageable);
@@ -193,7 +188,7 @@ public class AdminController {
         List<MasterThesisStatusChange> temp = masterThesisStatusChangeService.getAllByThesis(masterThesis);
         model.addAttribute("allChanges", temp);
         model.addAttribute("admin", true);
-        if(masterThesis.getStatus().getNextStatusFromCurrent() == MasterThesisStatus.MENTOR_COMMISSION_CHOICE){
+        if (masterThesis.getStatus().getNextStatusFromCurrent() == MasterThesisStatus.MENTOR_COMMISSION_CHOICE) {
             model.addAttribute("members", professorService.findAllByProfessorStatus(true, true));
         }
         return "masterThesisDetails";
@@ -201,13 +196,16 @@ public class AdminController {
 
     @PostMapping("/details/{statusId}")
     public String updateDetails(@RequestParam String note, @PathVariable Long statusId,
-                                @RequestParam Long thesisId) {
+                                @RequestParam Long thesisId, @RequestParam(required = false) MultipartFile fileInput1 ) throws IOException {
         MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
-        masterThesisStatusChangeService.updateStatus(statusId, masterThesis,note, userService.getUser());
+        masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser());
         masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
+        if(fileInput1!= null){
+            masterThesisService.saveFile(thesisId, fileInput1);
+        }
+
         return String.format("redirect:/admin/details/%d", thesisId);
     }
-
 
     @PostMapping("/commissionUpdate/{statusId}")
     public String commissionUpdate(@PathVariable Long statusId,
@@ -218,7 +216,7 @@ public class AdminController {
         try {
             MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
             masterThesisService.setCommission(thesisId, firstMember, secondMember);
-            masterThesisStatusChangeService.updateStatus(statusId, masterThesis,note, userService.getUser());
+            masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser());
             masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
         } catch (Exception e) {
             System.out.println(e.getMessage());

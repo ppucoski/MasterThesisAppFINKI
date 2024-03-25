@@ -11,7 +11,6 @@ import vp.magisterski.service.MasterThesisStatusChangeService;
 import vp.magisterski.service.UserService;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +31,7 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
 
     @Override
     public void addStatus(MasterThesis thesis, MasterThesisStatus status, LocalDate date) {
-        MasterThesisStatusChange masterThesisStatusChange = new MasterThesisStatusChange(thesis,date, status);
+        MasterThesisStatusChange masterThesisStatusChange = new MasterThesisStatusChange(thesis, date, status);
         masterThesisStatusChangeRepository.save(masterThesisStatusChange);
     }
 
@@ -49,7 +48,7 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
     @Override
     public Optional<MasterThesisStatusChange> getStatusChange(MasterThesis thesis) {
         Comparator<MasterThesisStatusChange> comparator = Comparator.comparingDouble(i -> i.getNextStatus().getOrder());
-        return masterThesisStatusChangeRepository.findAllByThesis(thesis).stream().sorted(comparator.reversed()).findFirst();
+        return masterThesisStatusChangeRepository.findAllByThesis(thesis).stream().max(comparator);
     }
 
     @Override
@@ -62,7 +61,7 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
     @Override
     public MasterThesisStatusChange updateStatus(Long statusId, MasterThesis thesis, String note, User user) {
         MasterThesisStatusChange masterThesisStatusChange = this.masterThesisStatusChangeRepository.findById(statusId).orElse(null);
-        if(masterThesisStatusChange !=null){
+        if (masterThesisStatusChange != null) {
             masterThesisStatusChange.setNote(note);
             masterThesisStatusChange.setStatusChangeDate(LocalDate.now());
             masterThesisStatusChange.setStatusChangedBy(user);
@@ -78,8 +77,5 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
     public Optional<MasterThesisStatusChange> findByThesis(MasterThesis thesis) {
         return masterThesisStatusChangeRepository.findByThesis(thesis);
     }
-
-
-
 
 }

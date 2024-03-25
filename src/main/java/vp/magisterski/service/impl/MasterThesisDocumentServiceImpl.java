@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisDocument;
-import vp.magisterski.model.magister.MasterThesisDocumentType;
+import vp.magisterski.model.enumerations.MasterThesisDocumentType;
 import vp.magisterski.repository.MasterThesisDocumentRepository;
 import vp.magisterski.service.MasterThesisDocumentService;
 

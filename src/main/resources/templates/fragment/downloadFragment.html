@@ -6,12 +6,13 @@
         <div class="d-flex justify-content-center align-items-center">
             <table class="table">
                 <thead>
-                <th>Document Type</th>
-                <th></th>
+                <tr>
+                    <th>Document Type</th>
+                    <th></th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr th:each="document : ${associatedDocuments}">
-
                     <td th:text="${document.type}"></td>
                     <td>
                         <a th:href="@{/masterThesis/download/{documentId}(documentId=${document.id})}"

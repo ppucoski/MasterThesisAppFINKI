@@ -42,8 +42,6 @@ public class CasAuthenticationConfigurer extends AbstractHttpConfigurer<CasAuthe
                 .addFilterBefore(requestCasGlobalLogoutFilter(), LogoutFilter.class)
                 .exceptionHandling(handler -> handler.authenticationEntryPoint(casAuthenticationEntryPoint()))
                 .logout(logout -> logout.logoutSuccessUrl(casUrlPrefix + "/logout?service=" + casClientHostUrl));
-
-
     }
 
 
@@ -68,8 +66,7 @@ public class CasAuthenticationConfigurer extends AbstractHttpConfigurer<CasAuthe
 
     @Bean
     public SessionAuthenticationStrategy sessionStrategy() {
-        SessionAuthenticationStrategy sessionStrategy = new SessionFixationProtectionStrategy();
-        return sessionStrategy;
+        return new SessionFixationProtectionStrategy();
     }
 
     @Bean
@@ -77,7 +74,7 @@ public class CasAuthenticationConfigurer extends AbstractHttpConfigurer<CasAuthe
         return new Cas20ServiceTicketValidator(casUrlPrefix);
     }
 
-    public CasAuthenticationFilter casAuthenticationFilter(AuthenticationManager authenticationManager) throws Exception {
+    public CasAuthenticationFilter casAuthenticationFilter(AuthenticationManager authenticationManager){
         CasAuthenticationFilter casAuthenticationFilter = new CasAuthenticationFilter();
         casAuthenticationFilter.setAuthenticationManager(authenticationManager);
         casAuthenticationFilter.setSessionAuthenticationStrategy(sessionStrategy());

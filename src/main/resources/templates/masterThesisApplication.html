@@ -11,10 +11,6 @@
             text-align: center;
         }
 
-        .drag-over {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-
         .file-label {
             margin-top: 10px;
         }
@@ -22,11 +18,13 @@
         .file-input {
             display: none;
         }
-        .labelClass{
+
+        .labelClass {
             cursor: pointer;
             transition: color 0.3s ease;
 
         }
+
         .labelClass:hover strong {
             color: #0bb4e7;
         }
@@ -36,7 +34,7 @@
 <div layout:fragment="content">
 
     <div class="container-lg">
-        <h2 class="my-5">Пријава на магистарска работа</h2>
+        <h2 class="my-5">Пријава на магистерска работа</h2>
 
         <form id="uploadForm" method="POST" enctype="multipart/form-data" th:action="@{newMasterThesisApplicationForm}">
             <div class="form-group m-2">
@@ -56,7 +54,8 @@
             <div class="form-group m-2">
                 <label for="dropZone1">Образложение за научната и стручната оправданост на темата:</label>
                 <div class="drop-zone" id="dropZone1">
-                    <label class="labelClass lead" for="fileInput1"><strong>Choose a file</strong><span> or drag it here</span>.</label>
+                    <label class="labelClass lead" for="fileInput1"><strong>Choose a
+                        file</strong><span> or drag it here</span>.</label>
                     <input type="file" id="fileInput1" class="file-input" name="fileInput1" accept=".pdf">
                     <p class="file-label" id="fileLabel1"></p>
                 </div>
@@ -67,7 +66,8 @@
             <div class="form-group m-2">
                 <label for="dropZone2">План за работа и преглед на литературата:</label>
                 <div class="drop-zone" id="dropZone2">
-                    <label class="labelClass lead" for="fileInput2"><strong>Choose a file</strong><span> or drag it here</span>.</label>
+                    <label class="labelClass lead" for="fileInput2"><strong>Choose a
+                        file</strong><span> or drag it here</span>.</label>
                     <input type="file" id="fileInput2" class="file-input" name="fileInput2" accept=".pdf">
                     <p class="file-label" id="fileLabel2"></p>
                 </div>
@@ -78,7 +78,8 @@
             <div class="form-group m-2">
                 <label for="dropZone3">Биографија на кандидатот:</label>
                 <div class="drop-zone" id="dropZone3">
-                    <label class="labelClass lead" for="fileInput3"><strong>Choose a file</strong><span> or drag it here</span>.</label>
+                    <label class="labelClass lead" for="fileInput3"><strong>Choose a
+                        file</strong><span> or drag it here</span>.</label>
                     <input type="file" id="fileInput3" class="file-input" name="fileInput3" accept=".pdf">
                     <p class="file-label" id="fileLabel3"></p>
                 </div>
@@ -86,10 +87,6 @@
                 <span class="form-text">Дозволено e само .pdf формат на датотека.</span>
             </div>
 
-
-
-
-            <!-- Submit Button -->
             <button class="btn btn-success m-2" type="submit">Submit</button>
         </form>
     </div>
@@ -118,7 +115,7 @@
                 if (files.length > 1) {
                     fileInput.value = '';
                     fileLabel.textContent = 'Only one file is allowed';
-                }else{
+                } else {
                     console.log('Files dropped:', files);
                     fileInput.files = files;
                     displayFileName(fileInput.files[0], fileInput, fileLabel);
@@ -138,7 +135,7 @@
             if (file.type === validFileType) {
                 fileLabel.textContent = `File: ${file.name}`;
             } else {
-                fileInput.value = ''; // Clear the file input
+                fileInput.value = '';
                 fileLabel.textContent = 'Only PDF files are allowed';
             }
         }

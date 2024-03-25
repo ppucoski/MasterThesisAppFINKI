@@ -1,7 +1,5 @@
 package vp.magisterski.web;
 
-
-import org.bouncycastle.cert.ocsp.Req;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -11,9 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisDocument;
-import vp.magisterski.model.magister.MasterThesisStatus;
 import vp.magisterski.model.magister.MasterThesisStatusChange;
-import vp.magisterski.model.shared.User;
 import vp.magisterski.service.MasterThesisDocumentService;
 import vp.magisterski.service.MasterThesisService;
 import vp.magisterski.service.MasterThesisStatusChangeService;
@@ -23,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(  "/masterThesis")
+@RequestMapping("/masterThesis")
 public class MasterThesisController {
     private final UserService userService;
     private final MasterThesisService masterThesisService;
@@ -39,21 +35,21 @@ public class MasterThesisController {
 
 
     @ModelAttribute
-    public void trackUsername(Model model){
+    public void trackUsername(Model model) {
         String username = userService.getUsernameFromUser();
         model.addAttribute("user", username);
     }
 
 
     @GetMapping("/masterThesisInfo")
-    public String getMasterThesisInfo(Model model){
+    public String getMasterThesisInfo(Model model) {
         List<MasterThesis> thesis = masterThesisService.findByStudentIndex("201163");
         model.addAttribute("thesis", thesis);
         return "masterThesisInfo";
     }
 
     @GetMapping("/details/{thesisId}")
-    public String details(Model model, @PathVariable Long thesisId){
+    public String details(Model model, @PathVariable Long thesisId) {
         MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
         List<MasterThesisDocument> associatedDocuments = masterThesisDocumentService.findAllByThesis(masterThesis);
         Optional<MasterThesisStatusChange> masterThesisStatusChange = masterThesisStatusChangeService.getStatusChange(masterThesis);
@@ -63,19 +59,6 @@ public class MasterThesisController {
         model.addAttribute("associatedDocuments", associatedDocuments);
         return "masterThesisDetails";
     }
-
-//    @GetMapping("/download/{thesisId}")
-//    public ResponseEntity<ByteArrayResource> downloadThesis(@PathVariable Long thesisId) {
-//        MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//        headers.setContentDispositionFormData("attachment", "MasterThesis.pdf");
-//        ByteArrayResource resource = new ByteArrayResource(masterThesis.getThesisText());
-//        return ResponseEntity.ok()
-//                .headers(headers)
-//                .contentLength(masterThesis.getThesisText().length)
-//                .body(resource);
-//    }
 
     @GetMapping("/download/{documentId}")
     public ResponseEntity<ByteArrayResource> downloadAssociatedDocument(@PathVariable Long documentId) {
@@ -93,8 +76,6 @@ public class MasterThesisController {
                 .contentLength(document.getDocument().length)
                 .body(resource);
     }
-
-
 
 
 }

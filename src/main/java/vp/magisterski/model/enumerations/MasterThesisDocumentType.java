@@ -1,4 +1,4 @@
-package vp.magisterski.model.magister;
+package vp.magisterski.model.enumerations;
 
 public enum MasterThesisDocumentType {
 

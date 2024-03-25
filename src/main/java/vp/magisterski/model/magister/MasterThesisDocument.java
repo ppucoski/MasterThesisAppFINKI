@@ -3,6 +3,7 @@ package vp.magisterski.model.magister;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import vp.magisterski.model.enumerations.MasterThesisDocumentType;
 
 import java.time.LocalDate;
 

@@ -3,7 +3,7 @@ package vp.magisterski.service;
 import org.springframework.web.multipart.MultipartFile;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisDocument;
-import vp.magisterski.model.magister.MasterThesisDocumentType;
+import vp.magisterski.model.enumerations.MasterThesisDocumentType;
 
 import java.io.IOException;
 import java.util.List;

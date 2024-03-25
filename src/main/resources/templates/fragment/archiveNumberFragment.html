@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <body>
+
 <div th:fragment="archiveNumberFragment">
+    <p th:text="${masterThesisStatusChange.get().nextStatus.getDisplayName()}"></p>
     <form th:action="@{/admin/details/{statusId}(statusId=${masterThesisStatusChange.get().id})}" method="POST">
         <input type="hidden" name="thesisId" th:value="${thesisId}">
         <div class="form-group m-2">

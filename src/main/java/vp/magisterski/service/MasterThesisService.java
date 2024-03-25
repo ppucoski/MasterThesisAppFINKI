@@ -8,7 +8,6 @@ import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
-import vp.magisterski.repository.MasterThesisRepository;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -23,7 +22,9 @@ public interface MasterThesisService {
     MasterThesis newThesis(String studentIndex, String title, String mentorId);
 
     Optional<MasterThesis> findThesisById(Long id);
-    List<MasterThesis>findByStudentIndex(String id);
+
+    List<MasterThesis> findByStudentIndex(String id);
+
     Page<MasterThesis> findAll(Pageable pageable);
 
     Specification<MasterThesis> filterMasterThesis(Student student, String title, MasterThesisStatus status,
@@ -31,15 +32,17 @@ public interface MasterThesisService {
 
     Specification<MasterThesis> filterMasterThesis(MasterThesis masterThesis, String isValidation);
 
-    //Page<MasterThesis> findAll(List<MasterThesis> masterThesisList, Pageable pageable);
     Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable);
 
     List<MasterThesis> findAll();
+
     Page<MasterThesis> findAllByStatus(MasterThesisStatus status, Pageable pageable);
 
     void cancelMasterThesis(Long id);
 
     void saveFile(Long id, MultipartFile file) throws IOException;
+
     void updateStatus(Long thesisId, MasterThesisStatus status);
+
     void setCommission(Long thesisId, String firstMember, String secondMember);
 }

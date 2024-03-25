@@ -3,23 +3,18 @@ package vp.magisterski.web;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import vp.magisterski.config.FacultyUserDetails;
 import vp.magisterski.model.magister.MasterThesisStatus;
-import vp.magisterski.model.shared.User;
 import vp.magisterski.service.MasterThesisService;
 import vp.magisterski.service.UserService;
 
-import java.util.Optional;
-
 @Controller
-@RequestMapping({"/",  "/index"})
+@RequestMapping({"/", "/index"})
 public class HomeController {
     private final MasterThesisService masterThesisService;
     private final UserService userService;
@@ -30,14 +25,14 @@ public class HomeController {
     }
 
     @ModelAttribute
-    public void trackUsername(Model model){
+    public void trackUsername(Model model) {
         String username = userService.getUsernameFromUser();
         model.addAttribute("user", username);
     }
 
 
     @GetMapping
-    public String getHomePage(Model model){
+    public String getHomePage() {
         return "index";
     }
 

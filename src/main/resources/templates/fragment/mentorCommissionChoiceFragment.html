@@ -2,7 +2,8 @@
 <html lang="en">
 <body>
 <div th:fragment="mentorCommissionChoiceFragment">
-    <form th:action="@{/admin/commissionUpdate/{statusId}(statusId=${masterThesisStatusChange.get().id})}" method="POST">
+    <form th:action="@{/admin/commissionUpdate/{statusId}(statusId=${masterThesisStatusChange.get().id})}"
+          method="POST">
         <h4>Изберете членови во комисија</h4>
         <input type="hidden" name="thesisId" th:value="${thesisId}">
         <div class="mb-3">

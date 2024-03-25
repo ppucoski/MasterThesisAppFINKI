@@ -6,8 +6,11 @@
 <header class="header" th:fragment="navbar">
     <nav class="navbar bg-dark navbar-expand-xl bg-body-tertiary" data-bs-theme="dark">
         <div class="container-xl">
-            <img src="http://diplomski.finki.ukim.mk/Images/finki_mk.png" alt="Finki Logo" style="height: 40px; width: auto; margin-left: 10px">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <img src="http://diplomski.finki.ukim.mk/Images/finki_mk.png" alt="Finki Logo"
+                 style="height: 40px; width: auto; margin-left: 10px">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -18,22 +21,24 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/list-masters" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
+                        <a class="nav-link" href="/admin/list-masters"
+                           sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR')">
                             Магистерска
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/applicationForm/newMasterThesisApplicationForm" >
+                        <a class="nav-link" href="/applicationForm/newMasterThesisApplicationForm">
                             Нова Пријава
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/masterThesis/masterThesisInfo" >
+                        <a class="nav-link" href="/masterThesis/masterThesisInfo">
                             Моја Магистерска
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="https://www.finki.ukim.mk/mk/enrollment/magisterski-studii" target="_blank">
+                        <a class="nav-link" href="https://www.finki.ukim.mk/mk/enrollment/magisterski-studii"
+                           target="_blank">
                             Информации за магистерска
                         </a>
                     </li>

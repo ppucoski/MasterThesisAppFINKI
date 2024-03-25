@@ -190,13 +190,6 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         this.masterThesisRepository.save(masterThesis);
     }
 
-//    @Override
-//    public void saveFile(Long id, MultipartFile file) throws IOException {
-//        MasterThesis masterThesis = this.findThesisById(id).get();
-//        masterThesis.setThesisText(file.getBytes());
-//        this.masterThesisRepository.save(masterThesis);
-//    }
-
     @Override
     @Transactional
     public void saveFile(Long id, MultipartFile file) throws IOException {
