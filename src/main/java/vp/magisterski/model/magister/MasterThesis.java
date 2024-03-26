@@ -3,6 +3,7 @@ package vp.magisterski.model.magister;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
 

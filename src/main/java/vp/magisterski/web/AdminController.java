@@ -12,9 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import vp.magisterski.model.enumerations.MasterThesisDocumentType;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisDocument;
-import vp.magisterski.model.magister.MasterThesisStatus;
+import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.model.magister.MasterThesisStatusChange;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
@@ -201,7 +202,7 @@ public class AdminController {
         masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser());
         masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
         if(fileInput1!= null){
-            masterThesisService.saveFile(thesisId, fileInput1);
+            masterThesisDocumentService.saveFile(masterThesis, MasterThesisDocumentType.THESIS_TEXT, fileInput1);
         }
 
         return String.format("redirect:/admin/details/%d", thesisId);

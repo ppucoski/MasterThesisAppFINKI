@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import vp.magisterski.model.magister.MasterThesis;
-import vp.magisterski.model.magister.MasterThesisStatus;
+import vp.magisterski.model.enumerations.MasterThesisStatus;
 
 import java.util.List;
 

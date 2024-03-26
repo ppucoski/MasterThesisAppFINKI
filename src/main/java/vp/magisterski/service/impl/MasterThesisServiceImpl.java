@@ -11,7 +11,7 @@ import vp.magisterski.model.exceptions.ProfessorDoesNotExistException;
 import vp.magisterski.model.exceptions.StudentDoesNotExistException;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisPresentation;
-import vp.magisterski.model.magister.MasterThesisStatus;
+import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
 import vp.magisterski.repository.MasterThesisRepository;

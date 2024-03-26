@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.enumerations.MasterThesisDocumentType;
-import vp.magisterski.model.magister.MasterThesisStatus;
+import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.service.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/applicationForm")
@@ -54,7 +54,7 @@ public class MasterThesisApplicationController {
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.THESIS_JUSTIFICATION, fileInput1);
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.PLAN_AND_LITERATURE_REVIEW, fileInput2);
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.STUDENT_BIOGRAPHY, fileInput3);
-            masterThesisStatusChangeService.addStatus(thesis, MasterThesisStatus.STUDENT_THESIS_REGISTRATION, LocalDate.now());
+            masterThesisStatusChangeService.addStatus(thesis, MasterThesisStatus.STUDENT_THESIS_REGISTRATION, LocalDateTime.now());
             masterThesisStatusChangeService.addStatus(thesis, MasterThesisStatus.MENTOR_VALIDATION);
         } catch (Exception e) {
             System.out.println(e.getMessage());

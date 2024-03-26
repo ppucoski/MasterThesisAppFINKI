@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.multipart.MultipartFile;
 import vp.magisterski.model.magister.MasterThesis;
-import vp.magisterski.model.magister.MasterThesisStatus;
+import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
 

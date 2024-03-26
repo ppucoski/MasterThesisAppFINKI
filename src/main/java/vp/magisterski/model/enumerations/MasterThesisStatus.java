@@ -1,4 +1,4 @@
-package vp.magisterski.model.magister;
+package vp.magisterski.model.enumerations;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

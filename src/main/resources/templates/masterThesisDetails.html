@@ -3,6 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .drop-zone {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .file-label {
+            margin-top: 10px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .labelClass {
+            cursor: pointer;
+            transition: color 0.3s ease;
+
+        }
+
+        .labelClass:hover strong {
+            color: #0bb4e7;
+        }
+    </style>
 </head>
 <body>
 <div layout:fragment="content">
@@ -38,6 +64,58 @@
             <div th:replace="~{fragment/downloadFragment :: downloadFragment}"></div>
         </div>
     </div>
+
+    <script>
+        const dropZones = document.querySelectorAll('.drop-zone');
+        const fileInputs = document.querySelectorAll('.file-input');
+
+        dropZones.forEach((dropZone, index) => {
+            const fileInput = fileInputs[index];
+            const fileLabel = dropZone.querySelector('.file-label');
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('drag-over');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('drag-over');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drag-over');
+                const files = e.dataTransfer.files;
+                if (files.length > 1) {
+                    fileInput.value = '';
+                    fileLabel.textContent = 'Only one file is allowed';
+                } else {
+                    console.log('Files dropped:', files);
+                    fileInput.files = files;
+                    displayFileName(fileInput.files[0], fileInput, fileLabel);
+                }
+
+            });
+
+            fileInput.addEventListener('change', () => {
+                console.log('File input changed');
+                console.log(fileInput.files);
+                displayFileName(fileInput.files[0], fileInput, fileLabel);
+            });
+        });
+
+        function displayFileName(file, fileInput, fileLabel) {
+            const validFileType = 'application/pdf';
+            if (file.type === validFileType) {
+                fileLabel.textContent = `File: ${file.name}`;
+            } else {
+                fileInput.value = '';
+                fileLabel.textContent = 'Only PDF files are allowed';
+            }
+        }
+
+    </script>
+
 </div>
 </div>
 </body>

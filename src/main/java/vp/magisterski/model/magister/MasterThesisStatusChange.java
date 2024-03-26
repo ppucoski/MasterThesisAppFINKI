@@ -3,8 +3,9 @@ package vp.magisterski.model.magister;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.model.shared.User;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -22,7 +23,7 @@ public class MasterThesisStatusChange {
     @ManyToOne
     private MasterThesis thesis;
 
-    private LocalDate statusChangeDate;
+    private LocalDateTime statusChangeDate;
 
     @Enumerated(EnumType.STRING)
     private MasterThesisStatus nextStatus;
@@ -32,6 +33,8 @@ public class MasterThesisStatusChange {
 
     @Column(length = 5_000)
     private String note;
+
+    private Boolean approved;
 
     @Override
     public boolean equals(Object o) {
@@ -46,7 +49,7 @@ public class MasterThesisStatusChange {
         return getClass().hashCode();
     }
 
-    public MasterThesisStatusChange(MasterThesis thesis, LocalDate statusChangeDate, MasterThesisStatus nextStatus, User statusChangedBy, String note) {
+    public MasterThesisStatusChange(MasterThesis thesis, LocalDateTime statusChangeDate, MasterThesisStatus nextStatus, User statusChangedBy, String note) {
         this.thesis = thesis;
         this.statusChangeDate = statusChangeDate;
         this.nextStatus = nextStatus;
@@ -54,7 +57,7 @@ public class MasterThesisStatusChange {
         this.note = note;
     }
 
-    public MasterThesisStatusChange(MasterThesis thesis, LocalDate statusChangeDate, MasterThesisStatus nextStatus) {
+    public MasterThesisStatusChange(MasterThesis thesis, LocalDateTime statusChangeDate, MasterThesisStatus nextStatus) {
         this.thesis = thesis;
         this.statusChangeDate = statusChangeDate;
         this.nextStatus = nextStatus;

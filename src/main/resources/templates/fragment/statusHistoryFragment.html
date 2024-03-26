@@ -4,6 +4,37 @@
 <div th:fragment="statusHistoryFragment" class="col mb-2">
 
     <div th:each="change : ${allChanges}" class="m-4">
+        <!--<div th:each="change : ${allChanges}" class="m-4">
+        <div th:if="${change.getApproved() == null}" class="border rounded p-2" style="background-color: #fff6c9; color: #fa9600">
+            <div class="row">
+                <div class="col-auto">
+                    <img src="/images/inprocess.png" alt="checkmark" style="height: 30px">
+                </div>
+                <div class="col p-1">
+                    <h6 th:text="${change.getNextStatus().getDisplayName()}"></h6>
+                </div>
+            </div>
+        </div>
+        <div th:if="${change.getApproved() == true}" class="border rounded p-2" style="background-color: #c8e7c9; color: #509150">
+            <div class="row">
+                <div class="col-auto">
+                    <img src="/images/checkmark.png" alt="checkmark" style="height: 30px">
+                </div>
+                <div class="col p-1">
+                    <h6 th:text="${change.getNextStatus().getDisplayName()}"></h6>
+                </div>
+            </div>
+        </div>
+        <div th:if="${change.getApproved() == false}" class="border rounded p-2" style="background-color: #ffb4b4; color: #ff0000">
+            <div class="row">
+                <div class="col-auto">
+                    <img src="/images/rejected.png" alt="checkmark" style="height: 30px">
+                </div>
+                <div class="col p-1">
+                    <h6 th:text="${change.getNextStatus().getDisplayName()}"></h6>
+                </div>
+            </div>
+        </div>-->
         <div class="border rounded p-2" style="background-color: #c8e7c9; color: #509150">
             <div class="row">
                 <div class="col-auto">
@@ -16,25 +47,25 @@
         </div>
         <div class="row">
             <div class="col-4 m-1 text-end p-3">
-                <p style="font-weight: bold">датум</p>
-                <p style="font-weight: bold">валидација</p>
+                <p style="font-weight: bold" th:if="${change.getStatusChangeDate() != null}">датум</p>
+                <p style="font-weight: bold" th:if="${change.getStatusChangedBy() != null}">валидација</p>
                 <p style="font-weight: bold">статус</p>
-                <p style="font-weight: bold" th:if="${change.getNote() != null && change.getNote().isEmpty()}">
+                <p style="font-weight: bold" th:if="${change.getNote() != null && !change.getNote().isEmpty()}">
                     забелешка</p>
             </div>
             <div class="col m-1 p-3">
                 <p style="font-weight: bold" th:if="${change.getStatusChangeDate() != null}"
-                   th:text="${change.getStatusChangeDate()}"></p>
-                <p th:if="${change.getStatusChangeDate() == null}">&nbsp;</p>
+                   th:text="${#temporals.format(change.getStatusChangeDate(), 'dd.MM.yyyy HH:mm')}"></p>
 
                 <p th:if="${change.getStatusChangedBy() != null}"
                    th:text="${change.getStatusChangedBy().getName()}"></p>
-                <p th:if="${change.getStatusChangedBy() == null}">&nbsp;</p>
 
+                <!--<p th:if="${change.getApproved() == true}">Одобрено</p>
+                <p th:if="${change.getApproved() == false}">Одбиено</p>
+                <p th:if="${change.getApproved() == null}">Во процес</p>-->
                 <p>Одобрено</p>
 
-                <p th:if="${change.getNote() != null}" th:text="${change.getNote().toString()}"></p>
-                <p th:if="${change.getNote() == null}">&nbsp;</p>
+                <p th:if="${change.getNote() != null && !change.getNote().isEmpty()}" th:text="${change.getNote().toString()}"></p>
             </div>
         </div>
     </div>
