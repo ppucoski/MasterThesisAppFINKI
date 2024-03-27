@@ -48,7 +48,6 @@ public class FacultyUserDetailsService implements UserDetailsService {
             Student student = studentRepository.findById(username).orElseThrow(InvalidUsernameException::new);
             User user1 = new User();
             user1.setId(username);
-            user1.setName(username);
             user1.setRole(UserRole.STUDENT);
             return new FacultyUserDetails(user1, student, passwordEncoder.encode(systemAuthenticationPassword));
         } else if (user.getRole().isProfessor()) {

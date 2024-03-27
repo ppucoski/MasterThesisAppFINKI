@@ -197,7 +197,11 @@ public class AdminController {
 
     @PostMapping("/details/{statusId}")
     public String updateDetails(@RequestParam String note, @PathVariable Long statusId,
-                                @RequestParam Long thesisId, @RequestParam(required = false) MultipartFile fileInput1 ) throws IOException {
+                                @RequestParam Long thesisId, @RequestParam(required = false) MultipartFile fileInput1,
+                                @RequestParam String action) throws IOException {
+        if (action.equals("reject")){
+            return String.format("redirect:/index", thesisId);
+        }
         MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
         masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser());
         masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
