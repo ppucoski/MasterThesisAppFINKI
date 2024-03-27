@@ -209,8 +209,6 @@ public class AdminController {
 
         if (action!= null && action.equals("reject")){
             masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), false);
-            masterThesisService.updateStatus(thesisId, masterThesis.getStatus());
-
         }
         if(action!= null && action.equals("approve"))
         {

@@ -47,13 +47,15 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
 
     @Override
     public Optional<MasterThesisStatusChange> getStatusChange(MasterThesis thesis) {
-        Comparator<MasterThesisStatusChange> comparator = Comparator.comparingDouble(i -> i.getNextStatus().getOrder());
+        Comparator<MasterThesisStatusChange> comparator = Comparator.comparing(MasterThesisStatusChange::getStatusChangeDate,
+                Comparator.nullsLast(Comparator.naturalOrder()));
         return masterThesisStatusChangeRepository.findAllByThesis(thesis).stream().max(comparator);
     }
 
     @Override
     public List<MasterThesisStatusChange> getAllByThesis(MasterThesis thesis) {
-        Comparator<MasterThesisStatusChange> comparator = Comparator.comparingDouble(i -> i.getNextStatus().getOrder());
+        Comparator<MasterThesisStatusChange> comparator = Comparator.comparing(MasterThesisStatusChange::getStatusChangeDate,
+                Comparator.nullsLast(Comparator.naturalOrder()));
         return masterThesisStatusChangeRepository.findAllByThesis(thesis).stream().sorted(comparator.reversed()).toList();
     }
 

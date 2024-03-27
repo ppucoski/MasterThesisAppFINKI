@@ -43,7 +43,8 @@ public class MasterThesisController {
 
     @GetMapping("/masterThesisInfo")
     public String getMasterThesisInfo(Model model) {
-        List<MasterThesis> thesis = masterThesisService.findByStudentIndex("201163");
+        String username = userService.getUsernameFromUser();
+        List<MasterThesis> thesis = masterThesisService.findByStudentIndex(username);
         model.addAttribute("thesis", thesis);
         return "masterThesisInfo";
     }

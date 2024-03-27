@@ -37,6 +37,13 @@
              th:if="${admin == true and masterThesisStatusChange.get().getNextStatus().toString() == 'MENTOR_COMMISSION_CHOICE'}">
             <div th:replace="~{fragment/mentorCommissionChoiceFragment :: mentorCommissionChoiceFragment}"></div>
         </div>
+
+        <div class="row border p-4 mt-4 mb-4"
+             th:if="${admin == true and masterThesisStatusChange.get().getNextStatus().toString() == 'PROCESS_FINISHED'}">
+            <div th:replace="~{fragment/mentorCommissionChoiceFragment :: mentorCommissionChoiceFragment}"></div>
+        </div>
+
+
         <div class="row border p-4 mt-4 mb-4"
              th:if="${admin == true and (masterThesisStatusChange.get().getNextStatus().toString() != 'MENTOR_COMMISSION_CHOICE'
              and masterThesisStatusChange.get().getNextStatus().toString() != 'STUDENT_DRAFT' and

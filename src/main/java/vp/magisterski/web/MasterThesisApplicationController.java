@@ -50,7 +50,8 @@ public class MasterThesisApplicationController {
                                       @RequestParam("fileInput3") MultipartFile fileInput3
     ) {
         try {
-            MasterThesis thesis = masterThesisService.newThesis("201163", title, mentor);
+            String username = userService.getUsernameFromUser();
+            MasterThesis thesis = masterThesisService.newThesis(username, title, mentor);
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.THESIS_JUSTIFICATION, fileInput1);
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.PLAN_AND_LITERATURE_REVIEW, fileInput2);
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.STUDENT_BIOGRAPHY, fileInput3);
