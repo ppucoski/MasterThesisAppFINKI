@@ -198,13 +198,26 @@ public class AdminController {
     @PostMapping("/details/{statusId}")
     public String updateDetails(@RequestParam String note, @PathVariable Long statusId,
                                 @RequestParam Long thesisId, @RequestParam(required = false) MultipartFile fileInput1,
-                                @RequestParam String action) throws IOException {
-        if (action.equals("reject")){
-            return String.format("redirect:/index", thesisId);
-        }
+                                @RequestParam(required = false) String action) throws IOException {
         MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
-        masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser());
-        masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
+
+        if(action == null)
+        {
+            masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), true);
+            masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
+        }
+
+        if (action!= null && action.equals("reject")){
+            masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), false);
+            masterThesisService.updateStatus(thesisId, masterThesis.getStatus());
+
+        }
+        if(action!= null && action.equals("approve"))
+        {
+            masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), true);
+            masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
+        }
+
         if(fileInput1!= null){
             masterThesisDocumentService.saveFile(masterThesis, MasterThesisDocumentType.THESIS_TEXT, fileInput1);
         }
@@ -221,7 +234,7 @@ public class AdminController {
         try {
             MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
             masterThesisService.setCommission(thesisId, firstMember, secondMember);
-            masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser());
+            masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), true);
             masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
         } catch (Exception e) {
             System.out.println(e.getMessage());

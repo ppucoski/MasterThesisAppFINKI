@@ -57,10 +57,11 @@ public class MasterThesisStatusChange {
         this.note = note;
     }
 
-    public MasterThesisStatusChange(MasterThesis thesis, LocalDateTime statusChangeDate, MasterThesisStatus nextStatus) {
+    public MasterThesisStatusChange(MasterThesis thesis, LocalDateTime statusChangeDate, MasterThesisStatus nextStatus, Boolean approved) {
         this.thesis = thesis;
         this.statusChangeDate = statusChangeDate;
         this.nextStatus = nextStatus;
+        this.approved = approved;
     }
 
     public MasterThesisStatusChange(MasterThesis thesis, MasterThesisStatus nextStatus) {

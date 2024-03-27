@@ -30,8 +30,8 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
     }
 
     @Override
-    public void addStatus(MasterThesis thesis, MasterThesisStatus status, LocalDateTime date) {
-        MasterThesisStatusChange masterThesisStatusChange = new MasterThesisStatusChange(thesis, date, status);
+    public void addStatus(MasterThesis thesis, MasterThesisStatus status, LocalDateTime date, Boolean approved) {
+        MasterThesisStatusChange masterThesisStatusChange = new MasterThesisStatusChange(thesis, date, status, approved);
         masterThesisStatusChangeRepository.save(masterThesisStatusChange);
     }
 
@@ -59,15 +59,25 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
 
 
     @Override
-    public MasterThesisStatusChange updateStatus(Long statusId, MasterThesis thesis, String note, User user) {
+    public MasterThesisStatusChange updateStatus(Long statusId, MasterThesis thesis, String note, User user, Boolean approved) {
         MasterThesisStatusChange masterThesisStatusChange = this.masterThesisStatusChangeRepository.findById(statusId).orElse(null);
         if (masterThesisStatusChange != null) {
             masterThesisStatusChange.setNote(note);
             masterThesisStatusChange.setStatusChangeDate(LocalDateTime.now());
             masterThesisStatusChange.setStatusChangedBy(user);
+            masterThesisStatusChange.setApproved(approved);
             masterThesisStatusChangeRepository.save(masterThesisStatusChange);
-            MasterThesisStatus status = masterThesisStatusChange.getNextStatus().getNextStatusFromCurrent();
-            this.addStatus(thesis, status);
+            if (approved)
+            {
+                MasterThesisStatus status = masterThesisStatusChange.getNextStatus().getNextStatusFromCurrent();
+                this.addStatus(thesis, status);
+            }
+            if (!approved)
+            {
+                MasterThesisStatus status = masterThesisStatusChange.getNextStatus();
+                this.addStatus(thesis, status);
+            }
+
         }
         return masterThesisStatusChange;
     }
