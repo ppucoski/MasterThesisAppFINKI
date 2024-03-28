@@ -40,14 +40,15 @@
 
         <div class="row border p-4 mt-4 mb-4"
              th:if="${admin == true and masterThesisStatusChange.get().getNextStatus().toString() == 'PROCESS_FINISHED'}">
-            <div th:replace="~{fragment/mentorCommissionChoiceFragment :: mentorCommissionChoiceFragment}"></div>
+            <div th:replace="~{fragment/presentationStartTimeAndLocationFragment :: presentationStartTimeAndLocationFragment}"></div>
         </div>
 
 
         <div class="row border p-4 mt-4 mb-4"
              th:if="${admin == true and (masterThesisStatusChange.get().getNextStatus().toString() != 'MENTOR_COMMISSION_CHOICE'
              and masterThesisStatusChange.get().getNextStatus().toString() != 'STUDENT_DRAFT' and
-             masterThesisStatusChange.get().getNextStatus().toString() != 'FOURTH_SECRETARY_VALIDATION')
+             masterThesisStatusChange.get().getNextStatus().toString() != 'FOURTH_SECRETARY_VALIDATION' and
+             masterThesisStatusChange.get().getNextStatus().toString() != 'PROCESS_FINISHED')
              }">
 
             <div th:replace="~{fragment/statusNoteFragment :: statusNoteFragment}"></div>

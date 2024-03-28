@@ -36,14 +36,16 @@ public class AdminController {
     private final UserService userService;
     private final MasterThesisStatusChangeService masterThesisStatusChangeService;
     private final MasterThesisDocumentService masterThesisDocumentService;
+    private final RoomService roomService;
 
-    public AdminController(StudentService studentService, ProfessorService professorService, MasterThesisService masterThesisService, UserService userService, MasterThesisStatusChangeService masterThesisStatusChangeService, MasterThesisDocumentService masterThesisDocumentService) {
+    public AdminController(StudentService studentService, ProfessorService professorService, MasterThesisService masterThesisService, UserService userService, MasterThesisStatusChangeService masterThesisStatusChangeService, MasterThesisDocumentService masterThesisDocumentService, RoomService roomService) {
         this.studentService = studentService;
         this.professorService = professorService;
         this.masterThesisService = masterThesisService;
         this.userService = userService;
         this.masterThesisStatusChangeService = masterThesisStatusChangeService;
         this.masterThesisDocumentService = masterThesisDocumentService;
+        this.roomService = roomService;
     }
 
     @ModelAttribute
@@ -192,6 +194,9 @@ public class AdminController {
         if (masterThesis.getStatus().getNextStatusFromCurrent() == MasterThesisStatus.MENTOR_COMMISSION_CHOICE) {
             model.addAttribute("members", professorService.findAllByProfessorStatus(true, true));
         }
+        if (masterThesis.getStatus().getNextStatusFromCurrent() == MasterThesisStatus.PROCESS_FINISHED) {
+            model.addAttribute("rooms", roomService.findAll());
+        }
         return "masterThesisDetails";
     }
 
@@ -234,6 +239,23 @@ public class AdminController {
             masterThesisService.setCommission(thesisId, firstMember, secondMember);
             masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), true);
             masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return String.format("redirect:/admin/details/%d", thesisId);
+    }
+
+    @PostMapping("/presentationDateAndLocation/{statusId}")
+    public String presentationDateAndLocation(@PathVariable Long statusId,
+                                   @RequestParam String room,
+                                   @RequestParam Long thesisId,
+                                   @RequestParam String note, @RequestParam LocalDateTime localDateTime) {
+        try {
+            MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
+            masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), true);
+            masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
+            masterThesisService.updateLocationAndDate(thesisId, room, localDateTime);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

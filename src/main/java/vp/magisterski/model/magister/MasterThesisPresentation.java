@@ -18,5 +18,6 @@ public class MasterThesisPresentation {
     private String location;
 
     private LocalDateTime presentationStartTime;
+
 }
 

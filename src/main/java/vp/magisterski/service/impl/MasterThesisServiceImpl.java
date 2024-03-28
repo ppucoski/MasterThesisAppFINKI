@@ -8,14 +8,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import vp.magisterski.model.exceptions.ProfessorDoesNotExistException;
+import vp.magisterski.model.exceptions.RoomDoesNotExistsException;
 import vp.magisterski.model.exceptions.StudentDoesNotExistException;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisPresentation;
 import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
+import vp.magisterski.model.shared.Room;
 import vp.magisterski.model.shared.Student;
 import vp.magisterski.repository.MasterThesisRepository;
 import vp.magisterski.repository.ProfessorRepository;
+import vp.magisterski.repository.RoomRepository;
 import vp.magisterski.repository.StudentRepository;
 import vp.magisterski.service.MasterThesisService;
 
@@ -32,11 +35,13 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     private final MasterThesisRepository masterThesisRepository;
     private final StudentRepository studentRepository;
     private final ProfessorRepository professorRepository;
+    private final RoomRepository roomRepository;
 
-    public MasterThesisServiceImpl(MasterThesisRepository masterThesisRepository, StudentRepository studentRepository, ProfessorRepository professorRepository) {
+    public MasterThesisServiceImpl(MasterThesisRepository masterThesisRepository, StudentRepository studentRepository, ProfessorRepository professorRepository, RoomRepository roomRepository) {
         this.masterThesisRepository = masterThesisRepository;
         this.studentRepository = studentRepository;
         this.professorRepository = professorRepository;
+        this.roomRepository = roomRepository;
     }
 
     @Override
@@ -226,6 +231,17 @@ public class MasterThesisServiceImpl implements MasterThesisService {
             thesis.setSecondMember(mentor2);
             masterThesisRepository.save(thesis);
 
+        }
+    }
+
+    @Override
+    public void updateLocationAndDate(Long thesisId, String room, LocalDateTime time) {
+        MasterThesis thesis = masterThesisRepository.findById(thesisId).orElse(null);
+        if (thesis != null) {
+            Room r = this.roomRepository.findById(room).orElseThrow(() -> new RoomDoesNotExistsException(room));
+            MasterThesisPresentation masterThesisPresentation = new MasterThesisPresentation(room, time);
+            thesis.setPresentation(masterThesisPresentation);
+            masterThesisRepository.save(thesis);
         }
     }
 

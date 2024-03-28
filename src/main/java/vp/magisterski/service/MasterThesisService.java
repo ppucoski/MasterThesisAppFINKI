@@ -45,4 +45,5 @@ public interface MasterThesisService {
     void updateStatus(Long thesisId, MasterThesisStatus status);
 
     void setCommission(Long thesisId, String firstMember, String secondMember);
+    void updateLocationAndDate(Long thesisId, String room, LocalDateTime time);
 }
