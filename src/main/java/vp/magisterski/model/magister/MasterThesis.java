@@ -21,6 +21,8 @@ public class MasterThesis {
     @GeneratedValue
     private Long id;
 
+    private String archiveNumber;
+
     @Enumerated(EnumType.STRING)
     private MasterThesisStatus status;
 
