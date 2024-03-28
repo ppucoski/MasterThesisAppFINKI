@@ -13,6 +13,9 @@ import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.service.MasterThesisService;
 import vp.magisterski.service.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping({"/", "/index"})
 public class HomeController {
@@ -36,12 +39,26 @@ public class HomeController {
         return "index";
     }
 
+    public List<MasterThesisStatus> masterThesisToShow(){
+        List<MasterThesisStatus> statusList = new ArrayList<>();
+        statusList.add(MasterThesisStatus.MENTOR_COMMISSION_CHOICE);
+        statusList.add(MasterThesisStatus.SECOND_SECRETARY_VALIDATION);
+        statusList.add(MasterThesisStatus.COMMISSION_CHECK);
+        statusList.add(MasterThesisStatus.THIRD_SECRETARY_VALIDATION);
+        statusList.add(MasterThesisStatus.DRAFT_CHECK);
+        statusList.add(MasterThesisStatus.REPORT_VALIDATION);
+        statusList.add(MasterThesisStatus.FOURTH_SECRETARY_VALIDATION);
+        statusList.add(MasterThesisStatus.ADMINISTRATION_ARCHIVING);
+        statusList.add(MasterThesisStatus.PROCESS_FINISHED);
+        return statusList;
+
+    }
     @GetMapping("/list-MasterThesis")
     public String findAllThesis(@RequestParam(defaultValue = "0") int page,
                                 @RequestParam(defaultValue = "3") int size,
                                 Model model) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-        model.addAttribute("MasterThesis", masterThesisService.findAllByStatus(MasterThesisStatus.PROCESS_FINISHED, pageable));
+        model.addAttribute("MasterThesis", masterThesisService.findAllByStatusOrderGreaterThan(masterThesisToShow(), pageable));
         return "MasterThesisList";
     }
 

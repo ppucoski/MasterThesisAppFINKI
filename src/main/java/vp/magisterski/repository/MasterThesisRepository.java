@@ -14,4 +14,5 @@ public interface MasterThesisRepository extends JpaRepository<MasterThesis, Long
     Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable);
     List<MasterThesis> findByStudentIndex(String studentIndex);
     Page<MasterThesis> findByStatus(MasterThesisStatus status, Pageable pageable);
+    Page<MasterThesis> findByStatusIn(List<MasterThesisStatus> status, Pageable pageable);
 }

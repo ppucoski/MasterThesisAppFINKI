@@ -46,4 +46,5 @@ public interface MasterThesisService {
 
     void setCommission(Long thesisId, String firstMember, String secondMember);
     void updateLocationAndDate(Long thesisId, String room, LocalDateTime time);
+    Page<MasterThesis> findAllByStatusOrderGreaterThan(List<MasterThesisStatus> statuses, Pageable pageable);
 }

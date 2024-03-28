@@ -245,5 +245,10 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         }
     }
 
+    @Override
+    public Page<MasterThesis> findAllByStatusOrderGreaterThan(List<MasterThesisStatus> statuses, Pageable pageable) {
+        return this.masterThesisRepository.findByStatusIn(statuses, pageable);
+    }
+
 
 }
