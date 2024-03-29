@@ -90,4 +90,25 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
         return masterThesisStatusChangeRepository.findByThesis(thesis);
     }
 
+
+    @Override
+    public MasterThesisStatusChange updateStatus(Long statusId, MasterThesis thesis,  User user, Boolean approved) {
+        MasterThesisStatusChange masterThesisStatusChange = this.masterThesisStatusChangeRepository.findById(statusId).orElse(null);
+        if (masterThesisStatusChange != null) {
+            masterThesisStatusChange.setStatusChangeDate(LocalDateTime.now());
+            masterThesisStatusChange.setStatusChangedBy(user);
+            masterThesisStatusChange.setApproved(approved);
+            masterThesisStatusChangeRepository.save(masterThesisStatusChange);
+            if (approved) {
+                MasterThesisStatus status = masterThesisStatusChange.getNextStatus().getNextStatusFromCurrent();
+                this.addStatus(thesis, status);
+            }
+            if (!approved) {
+                MasterThesisStatus status = masterThesisStatusChange.getNextStatus();
+                this.addStatus(thesis, status);
+            }
+
+        }
+        return masterThesisStatusChange;
+    }
 }

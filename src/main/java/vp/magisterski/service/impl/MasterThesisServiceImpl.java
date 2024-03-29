@@ -258,4 +258,15 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     public Page<MasterThesis> findAllByStatusOrderGreaterThan(List<MasterThesisStatus> statuses, Pageable pageable) {
         return this.masterThesisRepository.findByStatusIn(statuses, pageable);
     }
+
+
+    @Override
+    public void updateArchiveNumber(Long thesisId, String archiveNumber) {
+        MasterThesis thesis = masterThesisRepository.findById(thesisId).orElse(null);
+        if (thesis != null) {
+            thesis.setArchiveNumber(archiveNumber);
+            masterThesisRepository.save(thesis);
+        }
+    }
+
 }

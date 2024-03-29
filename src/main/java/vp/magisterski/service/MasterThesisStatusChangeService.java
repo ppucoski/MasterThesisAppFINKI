@@ -21,5 +21,7 @@ public interface MasterThesisStatusChangeService {
     MasterThesisStatusChange updateStatus(Long statusId,MasterThesis thesis, String note, User user, Boolean approved);
     Optional<MasterThesisStatusChange> findByThesis(MasterThesis thesis);
 
+    MasterThesisStatusChange updateStatus(Long statusId,MasterThesis thesis, User user, Boolean approved);
+
 
 }

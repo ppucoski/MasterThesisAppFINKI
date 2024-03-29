@@ -263,16 +263,34 @@ public class AdminController {
         return String.format("redirect:/admin/details/%d", thesisId);
     }
 
+
     @PostMapping("/firstStatusFragmentOblast/{statusId}")
     public String oblastUpdate(@PathVariable Long statusId,
-                                   @RequestParam Long thesisId,
-                                   @RequestParam String area,
-                                   @RequestParam String note) {
+                               @RequestParam Long thesisId,
+                               @RequestParam String area,
+                               @RequestParam String note) {
         try {
             MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
             masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), true);
             masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
             masterThesisService.updateOblast(thesisId, area);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return String.format("redirect:/admin/details/%d", thesisId);
+    }
+    @PostMapping("/archiveNumber/{statusId}")
+    public String archiveNumber(@PathVariable Long statusId,
+                                @RequestParam String archiveNumber,
+                                @RequestParam Long thesisId
+                                ){
+        try {
+            MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
+            masterThesisStatusChangeService.updateStatus(statusId, masterThesis, userService.getUser(), true);
+            masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
+            masterThesisService.updateArchiveNumber(thesisId, archiveNumber);
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
