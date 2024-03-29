@@ -25,6 +25,7 @@ import vp.magisterski.service.MasterThesisService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,6 +79,23 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     @Override
     public List<MasterThesis> findByStudentIndex(String id) {
         return this.masterThesisRepository.findByStudentIndex(id);
+    }
+
+    @Override
+    public List<MasterThesis> findByMentorIndex(String name) {
+        Professor mentor = this.professorRepository.findProfessorByName(name);
+        return this.masterThesisRepository.findByMentor(mentor);
+    }
+
+    @Override
+    public List<MasterThesis> findByMemberIndex(String name) {
+        Professor member = this.professorRepository.findProfessorByName(name);
+        List<MasterThesis> firstMember = this.masterThesisRepository.findMasterThesisByFirstMember(member);
+        List<MasterThesis> secondMember = this.masterThesisRepository.findMasterThesisBySecondMember(member);
+        List<MasterThesis> allThesis = new ArrayList<>();
+        allThesis.addAll(firstMember);
+        allThesis.addAll(secondMember);
+        return allThesis;
     }
 
 

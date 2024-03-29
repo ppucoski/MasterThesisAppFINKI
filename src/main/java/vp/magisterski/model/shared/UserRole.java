@@ -4,7 +4,7 @@ import lombok.Getter;
 import vp.magisterski.model.enumerations.AppRole;
 
 public enum UserRole {
-    STUDENT(false, true),
+    STUDENT(false, true, AppRole.STUDENT),
     // professors
     PROFESSOR(true, false, AppRole.PROFESSOR),
     ACADEMIC_AFFAIR_VICE_DEAN(true, false, AppRole.ADMIN),

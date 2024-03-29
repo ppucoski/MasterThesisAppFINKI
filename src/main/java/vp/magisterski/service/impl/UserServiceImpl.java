@@ -4,8 +4,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
 import vp.magisterski.model.shared.User;
+import vp.magisterski.repository.ProfessorRepository;
 import vp.magisterski.repository.StudentRepository;
 import vp.magisterski.repository.UserRepository;
 import vp.magisterski.service.UserService;
@@ -16,10 +18,12 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final StudentRepository studentRepository;
+    private final ProfessorRepository professorRepository;
 
-    public UserServiceImpl(UserRepository userRepository, StudentRepository studentRepository) {
+    public UserServiceImpl(UserRepository userRepository, StudentRepository studentRepository, ProfessorRepository professorRepository) {
         this.userRepository = userRepository;
         this.studentRepository = studentRepository;
+        this.professorRepository = professorRepository;
     }
 
     @Override
@@ -38,6 +42,7 @@ public class UserServiceImpl implements UserService {
                 return user.getName();
             } else {
                 Student student = studentRepository.findById(username).orElse(null);
+                //Professor mentor = professorRepository.fi
                 if (student != null) {
                     return student.getIndex();
                 }

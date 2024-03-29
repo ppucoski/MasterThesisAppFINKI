@@ -138,6 +138,39 @@ public class AdminController {
         return "newMasterThesis";
     }
 
+    @GetMapping("/masterThesisInfo")
+    public String getMasterThesisInfo(Model model) {
+        String username = userService.getUsernameFromUser();
+        List<MasterThesis> thesisMentor = masterThesisService.findByMentorIndex(username);
+        model.addAttribute("thesisMentor", thesisMentor);
+        return "masterThesisInfo";
+    }
+    @PostMapping("/masterThesisInfo")
+    public String filterThesis(@RequestParam String filter)
+    {
+        if(filter.equals("mentor"))
+        {
+            return "redirect:masterThesisMentorInfo";
+        }
+        return "redirect:masterThesisMemberInfo";
+    }
+
+    @GetMapping("/masterThesisMentorInfo")
+    public String getMasterThesisMentorInfo(Model model) {
+        String username = userService.getUsernameFromUser();
+        List<MasterThesis> thesisMentor = masterThesisService.findByMentorIndex(username);
+        model.addAttribute("thesisMentor", thesisMentor);
+        return "masterThesisMentorInfo";
+    }
+
+    @GetMapping("/masterThesisMemberInfo")
+    public String getMasterThesisMemberInfo(Model model) {
+        String username = userService.getUsernameFromUser();
+        List<MasterThesis> thesisMentor = masterThesisService.findByMemberIndex(username);
+        model.addAttribute("thesisMentor", thesisMentor);
+        return "masterThesisMemberInfo";
+    }
+
     @PostMapping("/newMasterThesis")
     public String saveNewMasterThesis(@RequestParam String index,
                                       @RequestParam String title,

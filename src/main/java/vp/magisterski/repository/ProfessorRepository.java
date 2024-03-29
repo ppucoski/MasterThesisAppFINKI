@@ -5,4 +5,5 @@ import vp.magisterski.model.shared.Professor;
 
 public interface ProfessorRepository extends JpaRepository<Professor, String> {
     //TODO: func
+    Professor findProfessorByName(String name);
 }

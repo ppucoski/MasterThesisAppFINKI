@@ -6,7 +6,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="container">
+    <div th:if="${thesisStudent != null}" class="container">
         <h3>Детали за нашите магистерски работи</h3>
         <div class="row">
             <div >
@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <table class="table table-hover" th:if="${thesis != null}">
+        <table class="table table-hover" th:if="${thesisStudent != null || thesisMentor != null}">
             <thead>
                 <tr>
                     <th scope="col">#id</th>
@@ -25,7 +25,7 @@
                 </tr>
             </thead>
             <tbody>
-            <tr th:each="thesisItem : ${thesis}">
+            <tr  th:each="thesisItem : ${thesisStudent}">
                 <th scope="row" th:text="${thesisItem.id}">1</th>
                 <td th:text="${thesisItem.getTitle()}"></td>
                 <td th:text="${thesisItem.getMentor().getName()}"></td>
@@ -33,11 +33,29 @@
                 <td><a class="btn btn-info" th:href="@{details/{thesisId}(thesisId=${thesisItem.id})}">Види повеќе детали</a></td>
             </tr>
 
+
             </tbody>
         </table>
-        <p th:unless="${thesis != null}">Немате пријавено магистерски работи</p>
+        <p th:unless="${thesisStudent != null}">Немате пријавено магистерски работи</p>
     </div>
 
+    <div th:if="${thesisMentor != null}" class="container">
+        <h4 class="mb-3 mt-3">Прикажи ги магистерските според:</h4>
+        <form th:action="@{/admin/masterThesisInfo}" method="POST" class="mt-3">
+            <div class="form-group mb-3">
+                <div class="form-check-inline mr-3">
+                    <input type="radio" class="form-check-input" value="mentor" id="mentor" name="filter">
+                    <label class="form-check-label" for="mentor">Ментор</label>
+                </div>
+                <div class="form-check-inline">
+                    <input type="radio" class="form-check-input" value="member" id="member" name="filter">
+                    <label class="form-check-label" for="member">Член</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Пребарај</button>
+            <button type="reset" class="btn btn-secondary">Откажи</button>
+        </form>
+    </div>
 
 </div>
 </body>

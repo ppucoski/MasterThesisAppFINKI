@@ -44,8 +44,8 @@ public class MasterThesisController {
     @GetMapping("/masterThesisInfo")
     public String getMasterThesisInfo(Model model) {
         String username = userService.getUsernameFromUser();
-        List<MasterThesis> thesis = masterThesisService.findByStudentIndex(username);
-        model.addAttribute("thesis", thesis);
+        List<MasterThesis> thesisStudent = masterThesisService.findByStudentIndex(username);
+        model.addAttribute("thesisStudent", thesisStudent);
         return "masterThesisInfo";
     }
 

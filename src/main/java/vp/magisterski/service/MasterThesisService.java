@@ -24,6 +24,8 @@ public interface MasterThesisService {
     Optional<MasterThesis> findThesisById(Long id);
 
     List<MasterThesis> findByStudentIndex(String id);
+    List<MasterThesis> findByMentorIndex(String id);
+    List<MasterThesis> findByMemberIndex(String name);
 
     Page<MasterThesis> findAll(Pageable pageable);
 
