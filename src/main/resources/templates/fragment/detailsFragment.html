@@ -18,7 +18,8 @@
             <span class="text-center text-dark" th:text="${thesis.getArea()}"></span>
         </p>
         <p><strong>Кратка содржина: </strong>
-            <span class="text-center text-dark" th:text="${thesis.getDescription()}"></span>
+            <div class="text-center text-dark" style="max-width: 400px; display: inline-block; word-wrap: break-word;"
+                  th:text="${thesis.getDescription()}"></div>
         </p>
         <p><strong>Ментор: </strong>
             <span class="text-center text-dark" th:text="${thesis.getMentor().getName()}"></span>

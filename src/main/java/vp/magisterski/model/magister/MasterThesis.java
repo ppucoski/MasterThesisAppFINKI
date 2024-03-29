@@ -76,6 +76,14 @@ public class MasterThesis {
         this.mentor = mentor;
     }
 
+    public MasterThesis(MasterThesisStatus status, Student student, String title, Professor mentor, String description) {
+        this.status = status;
+        this.student = student;
+        this.title = title;
+        this.mentor = mentor;
+        this.description = description;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

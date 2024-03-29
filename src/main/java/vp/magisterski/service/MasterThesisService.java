@@ -19,7 +19,7 @@ public interface MasterThesisService {
                       String description, String mentorId, String firstMemberId,
                       String secondMemberId);
 
-    MasterThesis newThesis(String studentIndex, String title, String mentorId);
+    MasterThesis newThesis(String studentIndex, String title, String mentorId, String description);
 
     Optional<MasterThesis> findThesisById(Long id);
 
@@ -46,5 +46,6 @@ public interface MasterThesisService {
 
     void setCommission(Long thesisId, String firstMember, String secondMember);
     void updateLocationAndDate(Long thesisId, String room, LocalDateTime time);
+    void updateOblast(Long thesisId, String area);
     Page<MasterThesis> findAllByStatusOrderGreaterThan(List<MasterThesisStatus> statuses, Pageable pageable);
 }

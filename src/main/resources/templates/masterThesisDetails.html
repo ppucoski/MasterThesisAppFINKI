@@ -34,6 +34,11 @@
 <div layout:fragment="content">
     <div class="container-lg">
         <div class="row border p-4 mt-4 mb-4"
+             th:if="${admin == true and masterThesisStatusChange.get().getNextStatus().toString() == 'MENTOR_VALIDATION'}">
+            <div th:replace="~{fragment/firstStatusFragmentOblast :: firstStatusFragmentOblast}"></div>
+        </div>
+
+        <div class="row border p-4 mt-4 mb-4"
              th:if="${admin == true and masterThesisStatusChange.get().getNextStatus().toString() == 'MENTOR_COMMISSION_CHOICE'}">
             <div th:replace="~{fragment/mentorCommissionChoiceFragment :: mentorCommissionChoiceFragment}"></div>
         </div>
@@ -45,7 +50,8 @@
 
 
         <div class="row border p-4 mt-4 mb-4"
-             th:if="${admin == true and (masterThesisStatusChange.get().getNextStatus().toString() != 'MENTOR_COMMISSION_CHOICE'
+             th:if="${ admin == true and (masterThesisStatusChange.get().getNextStatus().toString() != 'MENTOR_VALIDATION' and
+             masterThesisStatusChange.get().getNextStatus().toString() != 'MENTOR_COMMISSION_CHOICE'
              and masterThesisStatusChange.get().getNextStatus().toString() != 'STUDENT_DRAFT' and
              masterThesisStatusChange.get().getNextStatus().toString() != 'FOURTH_SECRETARY_VALIDATION' and
              masterThesisStatusChange.get().getNextStatus().toString() != 'PROCESS_FINISHED')

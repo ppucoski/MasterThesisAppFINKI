@@ -61,12 +61,12 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
-    public MasterThesis newThesis(String studentIndex, String title, String mentorId) {
+    public MasterThesis newThesis(String studentIndex, String title, String mentorId, String description) {
         Student student = this.studentRepository.findById(studentIndex)
                 .orElseThrow(() -> new StudentDoesNotExistException(studentIndex));
         Professor mentor = this.professorRepository.findById(mentorId)
                 .orElseThrow(() -> new ProfessorDoesNotExistException(mentorId));
-        MasterThesis masterThesis = new MasterThesis(MasterThesisStatus.STUDENT_THESIS_REGISTRATION, student, title, mentor);
+        MasterThesis masterThesis = new MasterThesis(MasterThesisStatus.STUDENT_THESIS_REGISTRATION, student, title, mentor, description);
         return this.masterThesisRepository.save(masterThesis);
     }
 
@@ -246,9 +246,16 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
+    public void updateOblast(Long thesisId, String oblast) {
+        MasterThesis thesis = masterThesisRepository.findById(thesisId).orElse(null);
+        if (thesis != null) {
+            thesis.setArea(oblast);
+            masterThesisRepository.save(thesis);
+        }
+    }
+
+    @Override
     public Page<MasterThesis> findAllByStatusOrderGreaterThan(List<MasterThesisStatus> statuses, Pageable pageable) {
         return this.masterThesisRepository.findByStatusIn(statuses, pageable);
     }
-
-
 }

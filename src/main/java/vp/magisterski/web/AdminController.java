@@ -262,4 +262,21 @@ public class AdminController {
 
         return String.format("redirect:/admin/details/%d", thesisId);
     }
+
+    @PostMapping("/firstStatusFragmentOblast/{statusId}")
+    public String oblastUpdate(@PathVariable Long statusId,
+                                   @RequestParam Long thesisId,
+                                   @RequestParam String area,
+                                   @RequestParam String note) {
+        try {
+            MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
+            masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), true);
+            masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
+            masterThesisService.updateOblast(thesisId, area);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return String.format("redirect:/admin/details/%d", thesisId);
+    }
 }
