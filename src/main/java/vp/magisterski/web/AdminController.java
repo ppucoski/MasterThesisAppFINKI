@@ -156,18 +156,28 @@ public class AdminController {
     }
 
     @GetMapping("/masterThesisMentorInfo")
-    public String getMasterThesisMentorInfo(Model model) {
+    public String getMasterThesisMentorInfo(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "1") int size,
+                                            Model model) {
+        Pageable pageable = PageRequest.of(page, size);
         String username = userService.getUsernameFromUser();
-        List<MasterThesis> thesisMentor = masterThesisService.findByMentorIndex(username);
-        model.addAttribute("thesisMentor", thesisMentor);
+        Professor mentor = professorService.findProfessorByName(username);
+        Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesisByMentor(mentor);
+        Page<MasterThesis> thesisPage = this.masterThesisService.findAll(specification, pageable);
+        model.addAttribute("master_page", thesisPage);
         return "masterThesisMentorInfo";
     }
 
     @GetMapping("/masterThesisMemberInfo")
-    public String getMasterThesisMemberInfo(Model model) {
+    public String getMasterThesisMemberInfo(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "1") int size,
+                                            Model model) {
+        Pageable pageable = PageRequest.of(page, size);
         String username = userService.getUsernameFromUser();
-        List<MasterThesis> thesisMentor = masterThesisService.findByMemberIndex(username);
-        model.addAttribute("thesisMentor", thesisMentor);
+        Professor mentor = professorService.findProfessorByName(username);
+        Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesisByMember(mentor);
+        Page<MasterThesis> thesisPage = this.masterThesisService.findAll(specification, pageable);
+        model.addAttribute("master_page", thesisPage);
         return "masterThesisMemberInfo";
     }
 

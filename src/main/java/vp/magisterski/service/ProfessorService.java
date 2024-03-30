@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface ProfessorService {
     List<Professor> findAll();
     List<Professor> findAllByProfessorStatus(Boolean isProfessor, Boolean canBeElected);
+    Professor findProfessorByName(String name);
     Optional<Professor> findProfessorById(String id);
 
 

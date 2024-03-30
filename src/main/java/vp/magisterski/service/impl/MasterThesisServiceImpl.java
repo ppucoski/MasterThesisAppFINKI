@@ -189,6 +189,39 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         };
     }
 
+    @Override
+    public Specification<MasterThesis> filterMasterThesisByMentor(Professor mentor) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
+
+            if (mentor != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("mentor"), mentor));
+            }
+
+            return predicate;
+        };
+    }
+
+    @Override
+    public Specification<MasterThesis> filterMasterThesisByMember(Professor member) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
+
+
+            if (member != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.or(
+                                criteriaBuilder.equal(root.get("firstMember"), member),
+                                criteriaBuilder.equal(root.get("secondMember"), member)
+                        ));
+            }
+
+
+            return predicate;
+        };
+    }
+
 
     @Override
     public Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable) {

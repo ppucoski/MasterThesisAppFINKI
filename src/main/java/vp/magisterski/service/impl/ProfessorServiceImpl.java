@@ -33,6 +33,11 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
+    public Professor findProfessorByName(String name) {
+        return this.professorRepository.findProfessorByName(name);
+    }
+
+    @Override
     public Optional<Professor> findProfessorById(String id) {
         if (id == null) {
             return Optional.empty();
