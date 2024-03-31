@@ -73,6 +73,7 @@ public class AdminController {
         Page<MasterThesis> master_page = this.masterThesisService.findAll(specification, pageable);
 
         model.addAttribute("master_page", master_page);
+        model.addAttribute("size", master_page.getTotalElements());
         model.addAttribute("master_status", MasterThesisStatus.values());
         model.addAttribute("master_mentors", this.professorService.findAll());
         model.addAttribute("master_members", professorService.findAll());
@@ -94,7 +95,7 @@ public class AdminController {
                                    @RequestParam(required = false) String mentor,
                                    @RequestParam(required = false) String member,
                                    @RequestParam(defaultValue = "0") int page,
-                                   @RequestParam(defaultValue = "10") int size,
+                                   @RequestParam(defaultValue = "5") int size,
                                    @RequestParam(required = false) String isValidation,
                                    Model model) {
         Pageable pageable = PageRequest.of(page, size);
@@ -111,14 +112,17 @@ public class AdminController {
 
 
             model.addAttribute("master_page", masterFilteredPage);
+            model.addAttribute("size", masterFilteredPage.getTotalElements());
             model.addAttribute("master_page_total_elements", masterFilteredPage.getTotalElements());
         } else {
             MasterThesis empty = new MasterThesis();
             Specification<MasterThesis> emptySpec = this.masterThesisService.filterMasterThesis(empty, "");
             Page<MasterThesis> emptyPage = this.masterThesisService.findAll(emptySpec, pageable);
             model.addAttribute("master_page", emptyPage);
+            model.addAttribute("size", 0);
             model.addAttribute("master_page_total_elements", 0);
         }
+
         model.addAttribute("master_status", MasterThesisStatus.values());
         model.addAttribute("master_mentors", this.professorService.findAll());
         model.addAttribute("master_members", professorService.findAll());
@@ -141,7 +145,7 @@ public class AdminController {
     @GetMapping("/masterThesisInfo")
     public String getMasterThesisInfo(Model model) {
         String username = userService.getUsernameFromUser();
-        List<MasterThesis> thesisMentor = masterThesisService.findByMentorIndex(username);
+        Professor thesisMentor = professorService.findProfessorByName(username);
         model.addAttribute("thesisMentor", thesisMentor);
         return "masterThesisInfo";
     }
@@ -157,7 +161,7 @@ public class AdminController {
 
     @GetMapping("/masterThesisMentorInfo")
     public String getMasterThesisMentorInfo(@RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "1") int size,
+                                            @RequestParam(defaultValue = "2") int size,
                                             Model model) {
         Pageable pageable = PageRequest.of(page, size);
         String username = userService.getUsernameFromUser();
@@ -165,12 +169,13 @@ public class AdminController {
         Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesisByMentor(mentor);
         Page<MasterThesis> thesisPage = this.masterThesisService.findAll(specification, pageable);
         model.addAttribute("master_page", thesisPage);
+        model.addAttribute("size", thesisPage.getTotalElements());
         return "masterThesisMentorInfo";
     }
 
     @GetMapping("/masterThesisMemberInfo")
     public String getMasterThesisMemberInfo(@RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "1") int size,
+                                            @RequestParam(defaultValue = "2") int size,
                                             Model model) {
         Pageable pageable = PageRequest.of(page, size);
         String username = userService.getUsernameFromUser();
@@ -178,6 +183,7 @@ public class AdminController {
         Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesisByMember(mentor);
         Page<MasterThesis> thesisPage = this.masterThesisService.findAll(specification, pageable);
         model.addAttribute("master_page", thesisPage);
+        model.addAttribute("size", thesisPage.getTotalElements());
         return "masterThesisMemberInfo";
     }
 

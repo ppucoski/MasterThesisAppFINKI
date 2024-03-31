@@ -1,6 +1,10 @@
 package vp.magisterski.web;
 
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisDocument;
 import vp.magisterski.model.magister.MasterThesisStatusChange;
-import vp.magisterski.service.MasterThesisDocumentService;
-import vp.magisterski.service.MasterThesisService;
-import vp.magisterski.service.MasterThesisStatusChangeService;
-import vp.magisterski.service.UserService;
+import vp.magisterski.model.shared.Student;
+import vp.magisterski.service.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,12 +27,14 @@ public class MasterThesisController {
     private final MasterThesisService masterThesisService;
     private final MasterThesisDocumentService masterThesisDocumentService;
     private final MasterThesisStatusChangeService masterThesisStatusChangeService;
+    private final StudentService studentService;
 
-    public MasterThesisController(UserService userService, MasterThesisService masterThesisService, MasterThesisDocumentService masterThesisDocumentService, MasterThesisStatusChangeService masterThesisStatusChangeService) {
+    public MasterThesisController(UserService userService, MasterThesisService masterThesisService, MasterThesisDocumentService masterThesisDocumentService, MasterThesisStatusChangeService masterThesisStatusChangeService, StudentService studentService) {
         this.userService = userService;
         this.masterThesisService = masterThesisService;
         this.masterThesisDocumentService = masterThesisDocumentService;
         this.masterThesisStatusChangeService = masterThesisStatusChangeService;
+        this.studentService = studentService;
     }
 
 
@@ -42,10 +46,17 @@ public class MasterThesisController {
 
 
     @GetMapping("/masterThesisInfo")
-    public String getMasterThesisInfo(Model model) {
+    public String getMasterThesisInfo(@RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "2") int size,
+                                      Model model) {
+        Pageable pageable = PageRequest.of(page, size);
         String username = userService.getUsernameFromUser();
-        List<MasterThesis> thesisStudent = masterThesisService.findByStudentIndex(username);
-        model.addAttribute("thesisStudent", thesisStudent);
+        Student student = this.studentService.findStudentById(username).orElse(null);
+        Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesisByStudent(student);
+        Page<MasterThesis> master_page = this.masterThesisService.findAll(specification, pageable);
+        model.addAttribute("master_page", master_page);
+        model.addAttribute("size", master_page.getTotalElements());
+
         return "masterThesisInfo";
     }
 

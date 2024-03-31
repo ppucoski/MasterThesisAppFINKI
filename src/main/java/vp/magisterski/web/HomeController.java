@@ -55,7 +55,7 @@ public class HomeController {
     }
     @GetMapping("/list-MasterThesis")
     public String findAllThesis(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "3") int size,
+                                @RequestParam(defaultValue = "2") int size,
                                 Model model) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
         model.addAttribute("MasterThesis", masterThesisService.findAllByStatusOrderGreaterThan(masterThesisToShow(), pageable));

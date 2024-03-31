@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="dropdown mb-3 mt-3" th:if="${size > 0}" th:fragment="pageSizeFragment(url, size)">
+  <label for="pageSize">Прикажи по:</label>
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+          aria-expanded="false" id="pageSize"></button>
+
+  <ul class="dropdown-menu">
+    <li>
+      <a class="dropdown-item" th:href="@{__${url}__(size=${2})}">2</a>
+    </li>
+    <li>
+      <a class="dropdown-item" th:href="@{__${url}__(size=${3})}">3</a>
+    </li>
+    <li>
+      <a class="dropdown-item" th:href="@{__${url}__(size=${5})}">5</a>
+    </li>
+    <li>
+      <a class="dropdown-item" th:href="@{__${url}__(size=${size})}">Вкупно</a>
+    </li>
+  </ul>
+
+  <script>
+    const dropdownButton = document.getElementById("pageSize");
+    const currentUrl = window.location.pathname;
+    const selectedValue = localStorage.getItem(`pageSize_${currentUrl}`) || '2';
+
+    dropdownButton.textContent = selectedValue;
+
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const selectedValue = item.textContent;
+        dropdownButton.textContent = selectedValue;
+        localStorage.setItem(`pageSize_${currentUrl}`, selectedValue);
+      });
+    });
+
+    const previousUrl = localStorage.getItem('previousUrl');
+    if (previousUrl && previousUrl !== currentUrl) {
+      localStorage.removeItem(`pageSize_${previousUrl}`);
+    }
+    localStorage.setItem('previousUrl', currentUrl);
+
+  </script>
+</div>
+
+</body>
+</html>

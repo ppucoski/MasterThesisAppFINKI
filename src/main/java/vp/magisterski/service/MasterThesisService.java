@@ -34,6 +34,7 @@ public interface MasterThesisService {
 
     Specification<MasterThesis> filterMasterThesis(MasterThesis masterThesis, String isValidation);
     Specification<MasterThesis> filterMasterThesisByMentor(Professor mentor);
+    Specification<MasterThesis> filterMasterThesisByStudent(Student student);
     Specification<MasterThesis> filterMasterThesisByMember(Professor member);
 
     Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable);

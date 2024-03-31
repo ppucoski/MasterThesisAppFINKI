@@ -14,37 +14,44 @@
       </div>
     </div>
 
-    <table class="table table-hover" th:if="${master_page != null}">
+
+    <div th:replace="~{fragment/choosePageSizeFragment :: pageSizeFragment('/admin/masterThesisMemberInfo', ${size})}"></div>
+
+    <div th:if="${size > 0}">
+    <table class="table table-hover">
       <thead>
       <tr>
-        <th scope="col">#id</th>
-        <th scope="col">Индекс на студент</th>
-        <th scope="col">Наслов</th>
-        <th scope="col">Ментор</th>
-        <th scope="col">Прв Член</th>
-        <th scope="col">Втор Член</th>
-        <th scope="col">Статус</th>
+        <th class="text-nowrap, text-center text-dark fw-bold" scope="col">#id</th>
+        <th class="text-nowrap, text-center text-dark fw-bold" scope="col">Индекс на студент</th>
+        <th class="text-nowrap, text-center text-dark fw-bold" scope="col">Наслов</th>
+        <th class="text-nowrap, text-center text-dark fw-bold" scope="col">Ментор</th>
+        <th class="text-nowrap, text-center text-dark fw-bold" scope="col">Прв Член</th>
+        <th class="text-nowrap, text-center text-dark fw-bold" scope="col">Втор Член</th>
+        <th class="text-nowrap, text-center text-dark fw-bold" scope="col">Статус</th>
         <th scope="col"></th>
       </tr>
       </thead>
       <tbody>
       <tr th:if="${master_page != null}" th:each="thesisItem : ${master_page.content}">
-        <th scope="row" th:text="${thesisItem.id}"></th>
-        <th scope="row" th:text="${thesisItem.getStudent().getIndex()}"></th>
-        <td th:text="${thesisItem.getTitle()}"></td>
-        <td th:text="${thesisItem.getMentor().getName()}"></td>
-        <td th:text="${thesisItem.getFirstMember().getName()}"></td>
-        <td th:text="${thesisItem.getSecondMember().getName()}"></td>
-        <td th:text="${thesisItem.getStatus().getDisplayName()}"></td>
+        <th class="text-nowrap, text-center text-dark fw-bold" scope="row" th:text="${thesisItem.id}"></th>
+        <td class="text-center text-dark" th:text="${thesisItem.getStudent().getIndex()}"></td>
+        <td class="text-center text-dark" th:text="${thesisItem.getTitle()}"></td>
+        <td class="text-center text-dark" th:text="${thesisItem.getMentor().getName()}"></td>
+        <td class="text-center text-dark" th:text="${thesisItem.getFirstMember().getName()}"></td>
+        <td class="text-center text-dark" th:text="${thesisItem.getSecondMember().getName()}"></td>
+        <td class="text-center text-dark" th:text="${thesisItem.getStatus().getDisplayName()}"></td>
         <td><a class="btn btn-info" th:href="@{details/{thesisId}(thesisId=${thesisItem.id})}">Види повеќе детали</a></td>
       </tr>
       </tbody>
     </table>
 
-    <div th:replace="~{fragment/paginationFragment :: pagination('/admin/masterThesisMemberInfo', ${master_page})}"></div>
+      <div th:replace="~{fragment/paginationFragment :: pagination('/admin/masterThesisMemberInfo', ${master_page})}"></div>
 
-    <p th:unless="${master_page != null}">Немате пријавено магистерски работи</p>
-  </div>
+    </div>
+    </div>
+
+  <div th:replace="~{fragment/noElementsFoundFragment :: noElementsFragment(${size})}"></div>
+
 </div>
 </body>
 </html>

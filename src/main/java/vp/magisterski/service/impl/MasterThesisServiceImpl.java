@@ -204,6 +204,22 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
+    public Specification<MasterThesis> filterMasterThesisByStudent(Student student) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
+
+
+            if (student != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("student"), student));
+            }
+
+
+            return predicate;
+        };
+    }
+
+    @Override
     public Specification<MasterThesis> filterMasterThesisByMember(Professor member) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
