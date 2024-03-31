@@ -22,9 +22,10 @@
       <a class="dropdown-item" th:href="@{__${url}__(size=${5})}">5</a>
     </li>
     <li>
-      <a class="dropdown-item" th:href="@{__${url}__(size=${size})}">Вкупно</a>
+      <a class="dropdown-item" th:href="@{__${url}__(size=${size})}">Сите</a>
     </li>
   </ul>
+
 
   <script>
     const dropdownButton = document.getElementById("pageSize");
@@ -48,6 +49,7 @@
     localStorage.setItem('previousUrl', currentUrl);
 
   </script>
+
 </div>
 
 </body>

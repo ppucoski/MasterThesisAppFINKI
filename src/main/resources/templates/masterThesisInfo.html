@@ -14,9 +14,8 @@
             </div>
         </div>
 
-        <div th:replace="~{fragment/choosePageSizeFragment :: pageSizeFragment('/masterThesis/masterThesisInfo', ${size})}"></div>
-
         <div th:if="${size > 0}">
+            <h5 class="m-4">Вкупно: <span th:text="${size}"></span> магистерски работи</h5>
         <table class="table table-hover" th:if="${master_page != null || thesisMentor != null}">
             <thead>
                 <tr>

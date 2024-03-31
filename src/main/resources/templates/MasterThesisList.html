@@ -46,10 +46,17 @@
                         <td th:text="${masterThesis.getSecondMember().getName()}"></td>
                     </tr>
                     <tr>
-                        <td>Датум на пријавување</td>
+                        <td>Датум на презентирање</td>
                         <td><span th:if="${masterThesis.getPresentation()} != null"
-                                  th:text="${#temporals.format(masterThesis.getPresentation().getPresentationStartTime(), 'dd.MM.yyy')}"></span>
+                                  th:text="${#temporals.format(masterThesis.getPresentation().getPresentationStartTime(), 'dd.MM.yyy hh:mm')}"></span>
                         </td>
+                    </tr>
+                    <tr>
+                        <td>Просторија на презентирање</td>
+                        <td><span th:if="${masterThesis.getPresentation()} != null"
+                                  th:text="${masterThesis.getPresentation().getLocation()}"></span>
+                        </td>
+
                     </tr>
                     <tr>
                         <td>Статус</td>
