@@ -1,5 +1,6 @@
 package vp.magisterski.web;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,16 +55,35 @@ public class AdminController {
         model.addAttribute("user", username);
     }
 
+    private String addAtributes(String name, Model model, HttpSession session) {
+        if (session.getAttribute(name) != null) {
+            String att = session.getAttribute(name).toString();
+            model.addAttribute(name, att);
+            return att;
+        } else {
+            model.addAttribute(name, "");
+            return "";
+        }
+    }
+
     @GetMapping("/list-masters")
-    public String showMasterList(@RequestParam(required = false) String index,
-                                 @RequestParam(required = false) String title,
-                                 @RequestParam(required = false) MasterThesisStatus status,
-                                 @RequestParam(required = false) String mentor,
-                                 @RequestParam(required = false) String member,
-                                 @RequestParam(defaultValue = "0") int page,
+    public String showMasterList(@RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "3") int size,
                                  @RequestParam(required = false) String isValidation,
-                                 Model model) {
+                                 Model model,
+                                 HttpSession session) {
+
+        String index = addAtributes("currentIndex", model, session);
+        String mentor = addAtributes("currentMentor", model, session);
+        String member = addAtributes("currentMember", model, session);
+        String title = addAtributes("currentTitle", model, session);
+        MasterThesisStatus status = null;
+        if (session.getAttribute("currentStatus") != null) {
+            status = (MasterThesisStatus) session.getAttribute("currentStatus");
+            model.addAttribute("currentStatus", session.getAttribute("currentStatus"));
+        }else { model.addAttribute("currentStatus", null);}
+
+
         Pageable pageable = PageRequest.of(page, size);
         Student student = this.studentService.findStudentById(index).orElse(null);
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
@@ -78,9 +98,6 @@ public class AdminController {
         model.addAttribute("master_mentors", this.professorService.findAll());
         model.addAttribute("master_members", professorService.findAll());
 
-        model.addAttribute("selectedMentor", mentor != null ? mentor : "");
-        model.addAttribute("selectedStatus", status != null ? status : "");
-        model.addAttribute("selectedMember", member != null ? member : "");
 
         model.addAttribute("isValidation", isValidation != null ? isValidation : "");
 
@@ -97,13 +114,26 @@ public class AdminController {
                                    @RequestParam(defaultValue = "0") int page,
                                    @RequestParam(defaultValue = "3") int size,
                                    @RequestParam(required = false) String isValidation,
-                                   Model model) {
+                                   Model model,
+                                   HttpSession session) {
         Pageable pageable = PageRequest.of(page, size);
+
+        session.setAttribute("currentIndex", index != null ? index : "");
+        session.setAttribute("currentTitle", title != null ? title : "");
+        session.setAttribute("currentStatus", status);
+        session.setAttribute("currentMentor", mentor != null ? mentor : "");
+        session.setAttribute("currentMember", member != null ? member : "");
+
+        model.addAttribute("currentIndex", session.getAttribute("currentIndex"));
+        model.addAttribute("currentTitle", session.getAttribute("currentTitle"));
+        model.addAttribute("currentStatus", session.getAttribute("currentStatus"));
+        model.addAttribute("currentMentor", session.getAttribute("currentMentor"));
+        model.addAttribute("currentMember", session.getAttribute("currentMember"));
+
 
         Student student = this.studentService.findStudentById(index).orElse(null);
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
         Professor member1 = this.professorService.findProfessorById(member).orElse(null);
-
         if ((student == null && index.isEmpty()) || (student != null && !index.isEmpty())) {
 
             Specification<MasterThesis> specification = masterThesisService.filterMasterThesis(student, title, status, mentor1, member1, isValidation);
@@ -127,11 +157,18 @@ public class AdminController {
         model.addAttribute("master_mentors", this.professorService.findAll());
         model.addAttribute("master_members", professorService.findAll());
 
-        model.addAttribute("selectedMentor", mentor != null ? mentor : "");
-        model.addAttribute("selectedStatus", status != null ? status : "");
-        model.addAttribute("selectedMember", member != null ? member : "");
 
         return "list_masters";
+    }
+
+    @GetMapping("/resetFilter")
+    public String resetFilter(HttpSession session) {
+        session.setAttribute("currentIndex", "");
+        session.setAttribute("currentTitle", "");
+        session.setAttribute("currentMember", "");
+        session.setAttribute("currentMentor", "");
+        session.setAttribute("currentStatus", null);
+        return "redirect:list-masters";
     }
 
 
@@ -149,11 +186,10 @@ public class AdminController {
         model.addAttribute("thesisMentor", thesisMentor);
         return "masterThesisInfo";
     }
+
     @PostMapping("/masterThesisInfo")
-    public String filterThesis(@RequestParam String filter)
-    {
-        if(filter.equals("mentor"))
-        {
+    public String filterThesis(@RequestParam String filter) {
+        if (filter.equals("mentor")) {
             return "redirect:masterThesisMentorInfo";
         }
         return "redirect:masterThesisMemberInfo";
@@ -255,22 +291,20 @@ public class AdminController {
                                 @RequestParam(required = false) String action) throws IOException {
         MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
 
-        if(action == null)
-        {
+        if (action == null) {
             masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), true);
             masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
         }
 
-        if (action!= null && action.equals("reject")){
+        if (action != null && action.equals("reject")) {
             masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), false);
         }
-        if(action!= null && action.equals("approve"))
-        {
+        if (action != null && action.equals("approve")) {
             masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), true);
             masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
         }
 
-        if(fileInput1!= null){
+        if (fileInput1 != null) {
             masterThesisDocumentService.saveFile(masterThesis, MasterThesisDocumentType.THESIS_TEXT, fileInput1);
         }
 
@@ -297,9 +331,9 @@ public class AdminController {
 
     @PostMapping("/presentationDateAndLocation/{statusId}")
     public String presentationDateAndLocation(@PathVariable Long statusId,
-                                   @RequestParam String room,
-                                   @RequestParam Long thesisId,
-                                   @RequestParam String note, @RequestParam LocalDateTime localDateTime) {
+                                              @RequestParam String room,
+                                              @RequestParam Long thesisId,
+                                              @RequestParam String note, @RequestParam LocalDateTime localDateTime) {
         try {
             MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
             masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), true);
@@ -329,11 +363,12 @@ public class AdminController {
 
         return String.format("redirect:/admin/details/%d", thesisId);
     }
+
     @PostMapping("/archiveNumber/{statusId}")
     public String archiveNumber(@PathVariable Long statusId,
                                 @RequestParam String archiveNumber,
                                 @RequestParam Long thesisId
-                                ){
+    ) {
         try {
             MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
             masterThesisStatusChangeService.updateStatus(statusId, masterThesis, userService.getUser(), true);
