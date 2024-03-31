@@ -367,11 +367,12 @@ public class AdminController {
     @PostMapping("/archiveNumber/{statusId}")
     public String archiveNumber(@PathVariable Long statusId,
                                 @RequestParam String archiveNumber,
-                                @RequestParam Long thesisId
-    ) {
+                                @RequestParam Long thesisId,
+                                @RequestParam (required = false) String note){
         try {
             MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
-            masterThesisStatusChangeService.updateStatus(statusId, masterThesis, userService.getUser(), true);
+
+            masterThesisStatusChangeService.updateStatus(statusId, masterThesis,note, userService.getUser(), true);
             masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
             masterThesisService.updateArchiveNumber(thesisId, archiveNumber);
 
@@ -381,4 +382,5 @@ public class AdminController {
 
         return String.format("redirect:/admin/details/%d", thesisId);
     }
+
 }
