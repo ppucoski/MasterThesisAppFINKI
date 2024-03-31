@@ -15,7 +15,10 @@
         </div>
 
         <div th:if="${size > 0}">
-            <h5 class="m-4">Вкупно: <span th:text="${size}"></span> магистерски работи</h5>
+            <h5 class="m-4" th:if="${size == 1}">Вкупно: <span th:text="${size}"></span> магистерскa работa</h5>
+            <h5 class="m-4" th:if="${size > 1}">Вкупно: <span th:text="${size}"></span> магистерски работи</h5>
+
+            <div th:replace="~{fragment/choosePageSizeFragment :: pageSizeFragment('/masterThesis/masterThesisInfo', ${size}, 3)}"></div>
         <table class="table table-hover" th:if="${master_page != null || thesisMentor != null}">
             <thead>
                 <tr>
@@ -48,7 +51,7 @@
 
     <div th:if="${thesisMentor != null}" class="container">
         <h4 class="mb-3 mt-3">Прикажи ги магистерските според:</h4>
-        <form th:action="@{/admin/masterThesisInfo}" method="POST" class="mt-3">
+        <form th:action="@{/admin/masterThesisInfo}" method="POST" class="mt-3" onsubmit="return validateForm()">
             <div class="form-group mb-3">
                 <div class="form-check-inline mr-3">
                     <input type="radio" class="form-check-input" value="mentor" id="mentor" name="filter">
@@ -64,6 +67,20 @@
         </form>
     </div>
 
+    <script>
+        function validateForm() {
+            var mentorChecked = document.getElementById("mentor").checked;
+            var memberChecked = document.getElementById("member").checked;
+
+            if (!mentorChecked && !memberChecked) {
+                alert("Ве молиме, одберете опција.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+
 </div>
+
 </body>
 </html>

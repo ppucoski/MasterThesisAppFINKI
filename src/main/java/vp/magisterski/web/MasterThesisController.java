@@ -47,7 +47,7 @@ public class MasterThesisController {
 
     @GetMapping("/masterThesisInfo")
     public String getMasterThesisInfo(@RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "2") int size,
+                                      @RequestParam(defaultValue = "3") int size,
                                       Model model) {
         Pageable pageable = PageRequest.of(page, size);
         String username = userService.getUsernameFromUser();

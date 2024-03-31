@@ -61,7 +61,7 @@ public class AdminController {
                                  @RequestParam(required = false) String mentor,
                                  @RequestParam(required = false) String member,
                                  @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "2") int size,
+                                 @RequestParam(defaultValue = "3") int size,
                                  @RequestParam(required = false) String isValidation,
                                  Model model) {
         Pageable pageable = PageRequest.of(page, size);
@@ -95,7 +95,7 @@ public class AdminController {
                                    @RequestParam(required = false) String mentor,
                                    @RequestParam(required = false) String member,
                                    @RequestParam(defaultValue = "0") int page,
-                                   @RequestParam(defaultValue = "5") int size,
+                                   @RequestParam(defaultValue = "3") int size,
                                    @RequestParam(required = false) String isValidation,
                                    Model model) {
         Pageable pageable = PageRequest.of(page, size);
@@ -161,7 +161,7 @@ public class AdminController {
 
     @GetMapping("/masterThesisMentorInfo")
     public String getMasterThesisMentorInfo(@RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "2") int size,
+                                            @RequestParam(defaultValue = "3") int size,
                                             Model model) {
         Pageable pageable = PageRequest.of(page, size);
         String username = userService.getUsernameFromUser();
@@ -175,7 +175,7 @@ public class AdminController {
 
     @GetMapping("/masterThesisMemberInfo")
     public String getMasterThesisMemberInfo(@RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "2") int size,
+                                            @RequestParam(defaultValue = "3") int size,
                                             Model model) {
         Pageable pageable = PageRequest.of(page, size);
         String username = userService.getUsernameFromUser();

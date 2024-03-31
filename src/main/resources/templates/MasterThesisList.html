@@ -7,9 +7,10 @@
 
 <div layout:fragment="content">
     <div class="container-xl">
-        <h5 class="m-4">Вкупно: <span th:text="${MasterThesis.totalElements}"></span> магистерски работи</h5>
+        <h5 class="m-4" th:if="${MasterThesis.totalElements == 1}">Вкупно: <span th:text="${MasterThesis.totalElements}"></span> магистерскa работa</h5>
+        <h5 class="m-4" th:if="${MasterThesis.totalElements > 1}">Вкупно: <span th:text="${MasterThesis.totalElements}"></span> магистерски работи</h5>
 
-        <div th:replace="~{fragment/choosePageSizeFragment :: pageSizeFragment('/list-MasterThesis', ${MasterThesis.totalElements})}"></div>
+        <div th:replace="~{fragment/choosePageSizeFragment :: pageSizeFragment('/list-MasterThesis', ${MasterThesis.totalElements}, 2)}"></div>
 
 
 

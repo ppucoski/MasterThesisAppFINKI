@@ -6,20 +6,20 @@
 </head>
 <body>
 
-<div class="dropdown mb-3 mt-3" th:if="${size > 0}" th:fragment="pageSizeFragment(url, size)">
+<div class="dropdown mb-3 mt-3" th:if="${size > 0}" th:fragment="pageSizeFragment(url, size, defaultSize)">
   <label for="pageSize">Прикажи по:</label>
   <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
           aria-expanded="false" id="pageSize"></button>
 
   <ul class="dropdown-menu">
     <li>
-      <a class="dropdown-item" th:href="@{__${url}__(size=${2})}">2</a>
-    </li>
-    <li>
-      <a class="dropdown-item" th:href="@{__${url}__(size=${3})}">3</a>
+      <a class="dropdown-item" th:href="@{__${url}__(size=${defaultSize})}" th:text="${defaultSize}"></a>
     </li>
     <li>
       <a class="dropdown-item" th:href="@{__${url}__(size=${5})}">5</a>
+    </li>
+    <li>
+      <a class="dropdown-item" th:href="@{__${url}__(size=${7})}">7</a>
     </li>
     <li>
       <a class="dropdown-item" th:href="@{__${url}__(size=${size})}">Сите</a>
@@ -30,7 +30,7 @@
   <script>
     const dropdownButton = document.getElementById("pageSize");
     const currentUrl = window.location.pathname;
-    const selectedValue = localStorage.getItem(`pageSize_${currentUrl}`) || '2';
+    const selectedValue = localStorage.getItem(`pageSize_${currentUrl}`) || [[${defaultSize}]];
 
     dropdownButton.textContent = selectedValue;
 
