@@ -7,20 +7,20 @@ public enum UserRole {
     STUDENT(false, true, AppRole.STUDENT),
     // professors
     PROFESSOR(true, false, AppRole.PROFESSOR),
-    ACADEMIC_AFFAIR_VICE_DEAN(true, false, AppRole.ADMIN),
-    SCIENCE_AND_COOPERATION_VICE_DEAN(true, false, AppRole.ADMIN),
-    FINANCES_VICE_DEAN(true, false, AppRole.ADMIN),
-    DEAN(true, false, AppRole.ADMIN),
+    ACADEMIC_AFFAIR_VICE_DEAN(true, false, AppRole.PROFESSOR),
+    SCIENCE_AND_COOPERATION_VICE_DEAN(true, false, AppRole.PROFESSOR),
+    FINANCES_VICE_DEAN(true, false, AppRole.PROFESSOR),
+    DEAN(true, false, AppRole.PROFESSOR),
     // staff
-    STUDENT_ADMINISTRATION(false, false, AppRole.ADMIN),
-    STUDENT_ADMINISTRATION_MANAGER(false, false, AppRole.ADMIN),
-    FINANCE_ADMINISTRATION(false, false),
-    FINANCE_ADMINISTRATION_MANAGER(false, false),
-    LEGAL_ADMINISTRATION(false, false),
-    ARCHIVE_ADMINISTRATION(false, false),
-    ADMINISTRATION_MANAGER(false, false, AppRole.ADMIN),
+    STUDENT_ADMINISTRATION(false, false, AppRole.STUDENT_ADMINISTRATION),
+    STUDENT_ADMINISTRATION_MANAGER(false, false, AppRole.STUDENT_ADMINISTRATION_MANAGER),
+    FINANCE_ADMINISTRATION(false, false, AppRole.FINANCE_ADMINISTRATION),
+    FINANCE_ADMINISTRATION_MANAGER(false, false, AppRole.FINANCE_ADMINISTRATION_MANAGER),
+    LEGAL_ADMINISTRATION(false, false, AppRole.LEGAL_ADMINISTRATION),
+    ARCHIVE_ADMINISTRATION(false, false, AppRole.ARCHIVE_ADMINISTRATION),
+    ADMINISTRATION_MANAGER(false, false, AppRole.ADMINISTRATION_MANAGER),
     // external professors
-    EXTERNAL(true, false);
+    EXTERNAL(true, false, AppRole.EXTERNAL);
 
     private final Boolean professor;
 
