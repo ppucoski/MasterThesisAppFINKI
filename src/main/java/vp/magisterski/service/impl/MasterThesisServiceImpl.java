@@ -13,13 +13,11 @@ import vp.magisterski.model.exceptions.StudentDoesNotExistException;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisPresentation;
 import vp.magisterski.model.enumerations.MasterThesisStatus;
+import vp.magisterski.model.magister.MasterThesisStatusChange;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Room;
 import vp.magisterski.model.shared.Student;
-import vp.magisterski.repository.MasterThesisRepository;
-import vp.magisterski.repository.ProfessorRepository;
-import vp.magisterski.repository.RoomRepository;
-import vp.magisterski.repository.StudentRepository;
+import vp.magisterski.repository.*;
 import vp.magisterski.service.MasterThesisService;
 
 import java.io.IOException;
@@ -37,12 +35,15 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     private final StudentRepository studentRepository;
     private final ProfessorRepository professorRepository;
     private final RoomRepository roomRepository;
+    private final MasterThesisStatusChangeRepository masterThesisStatusChangeRepository;
 
-    public MasterThesisServiceImpl(MasterThesisRepository masterThesisRepository, StudentRepository studentRepository, ProfessorRepository professorRepository, RoomRepository roomRepository) {
+    public MasterThesisServiceImpl(MasterThesisRepository masterThesisRepository, StudentRepository studentRepository, ProfessorRepository professorRepository, RoomRepository roomRepository,
+                                   MasterThesisStatusChangeRepository masterThesisStatusChangeRepository) {
         this.masterThesisRepository = masterThesisRepository;
         this.studentRepository = studentRepository;
         this.professorRepository = professorRepository;
         this.roomRepository = roomRepository;
+        this.masterThesisStatusChangeRepository = masterThesisStatusChangeRepository;
     }
 
     @Override
@@ -334,6 +335,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
             thesis.setArchiveNumber(archiveNumber);
             masterThesisRepository.save(thesis);
         }
+
     }
 
 }
