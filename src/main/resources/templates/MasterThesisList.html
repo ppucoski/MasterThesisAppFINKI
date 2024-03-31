@@ -84,34 +84,9 @@
             </div>
 
         </div>
-
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <li th:if="${MasterThesis.hasPrevious}" class="page-item">
-                    <a class="page-link text-secondary bg-light rounded-circle m-1"
-                       th:href="@{/list-MasterThesis(page=${MasterThesis.previousPageable?.pageNumber}, size=${param.size})}"
-                       aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li th:each="i : ${#numbers.sequence(0, MasterThesis.totalPages - 1)}" class="page-item"
-                    th:class="${i == MasterThesis.number ? 'active' : ''}">
-                    <a class="page-link text-secondary bg-light rounded-circle m-1"
-                       th:href="@{/list-MasterThesis(page=${i}, size=${param.size})}"
-                       th:text="${i + 1}"></a>
-                </li>
-                <li th:if="${MasterThesis.hasNext}" class="page-item">
-                    <a class="page-link text-secondary bg-light rounded-circle m-1"
-                       th:href="@{/list-MasterThesis(page=${MasterThesis.nextPageable?.pageNumber}, size=${param.size})}"
-                       aria-label="Next">
-                        <span aria-disabled="true">&raquo;</span>
-                    </a>
-                </li>
-
-            </ul>
-        </nav>
-
+        <div th:replace="~{fragment/paginationFragment :: pagination('/list-MasterThesis', ${MasterThesis})}"></div>
     </div>
+
 </div>
 
 </body>

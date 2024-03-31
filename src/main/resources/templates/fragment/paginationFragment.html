@@ -5,24 +5,24 @@
     <title>Title</title>
 </head>
 <body>
-<nav aria-label="Page navigation" th:if="${master_page_total_elements ==null}" th:fragment="pagination">
+<nav aria-label="Page navigation"  th:fragment="pagination(url, page)">
   <ul class="pagination justify-content-center">
-    <li th:if="${master_page.hasPrevious}" class="page-item">
+    <li th:if="${page.hasPrevious}" class="page-item">
       <a class="page-link text-secondary bg-light rounded-circle m-1"
-         th:href="@{/admin/list-masters(page=${master_page.previousPageable?.pageNumber}, size=${param.size})}"
+         th:href="@{__${url}__(page=${page.previousPageable?.pageNumber}, size=${param.size})}"
          aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
-    <li th:each="i : ${#numbers.sequence(0, master_page.totalPages - 1)}" class="page-item"
-        th:class="${i == master_page.number ? 'active' : ''}">
+    <li th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}" class="page-item"
+        th:class="${i == page.number ? 'active' : ''}">
       <a class="page-link text-secondary bg-light rounded-circle m-1"
-         th:href="@{/admin/list-masters(page=${i}, size=${param.size})}"
+         th:href="@{__${url}__(page=${i}, size=${param.size})}"
          th:text="${i + 1}"></a>
     </li>
-    <li th:if="${master_page.hasNext}" class="page-item">
+    <li th:if="${page.hasNext}" class="page-item">
       <a class="page-link text-secondary bg-light rounded-circle m-1"
-         th:href="@{/admin/list-masters(page=${master_page.nextPageable?.pageNumber}, size=${param.size})}"
+         th:href="@{__${url}__(page=${page.nextPageable?.pageNumber}, size=${param.size})}"
          aria-label="Next">
         <span aria-disabled="true">&raquo;</span>
       </a>

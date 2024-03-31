@@ -41,7 +41,7 @@
       </tbody>
     </table>
 
-    <div th:replace="~{fragment/paginationFragment :: pagination}"></div>
+    <div th:replace="~{fragment/paginationFragment :: pagination('/admin/masterThesisMemberInfo', ${master_page})}"></div>
 
     <p th:unless="${master_page != null}">Немате пријавено магистерски работи</p>
   </div>
