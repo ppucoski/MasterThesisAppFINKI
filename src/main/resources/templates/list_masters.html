@@ -6,7 +6,7 @@
 <body>
 <div layout:fragment="content">
     <div class="container-lg" >
-        <form class="my-4" th:if="${size != null}" th:action="@{/admin/list-masters}" method="POST">
+        <form class="my-4" th:if="${size != null}" th:action="@{/admin/list-masters}" method="GET">
             <div class="row gx-2 d-flex justify-content-center align-items-center">
                 <div class="col d-flex">
                     <input placeholder="Индекс" class="form-control" id="index" type="text" name="index"
@@ -73,7 +73,7 @@
 
         </form>
 
-        <div th:replace="~{fragment/choosePageSizeFragment :: pageSizeFragment('/admin/list-masters', ${size}, 3)}"></div>
+        <div th:replace="~{fragment/choosePageSizeFragment :: pageSizeFragment(${currentUrl}, ${size}, 3)}"></div>
 
 
 
@@ -154,7 +154,7 @@
                     </th:block>
                 </table>
 
-                <div th:replace="~{fragment/paginationFragment :: pagination('/admin/list-masters', ${master_page})}"></div>
+                <div th:replace="~{fragment/paginationFragment :: pagination(${currentUrl}, ${master_page})}"></div>
 
             </div>
 

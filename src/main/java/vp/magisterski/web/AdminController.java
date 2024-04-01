@@ -1,6 +1,8 @@
 package vp.magisterski.web;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +24,7 @@ import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
 import vp.magisterski.service.*;
 
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -39,6 +42,9 @@ public class AdminController {
     private final MasterThesisDocumentService masterThesisDocumentService;
     private final RoomService roomService;
 
+    @Autowired
+    private HttpServletRequest request;
+
     public AdminController(StudentService studentService, ProfessorService professorService, MasterThesisService masterThesisService, UserService userService, MasterThesisStatusChangeService masterThesisStatusChangeService, MasterThesisDocumentService masterThesisDocumentService, RoomService roomService) {
         this.studentService = studentService;
         this.professorService = professorService;
@@ -55,34 +61,25 @@ public class AdminController {
         model.addAttribute("user", username);
     }
 
-    private String addAtributes(String name, Model model, HttpSession session) {
-        if (session.getAttribute(name) != null) {
-            String att = session.getAttribute(name).toString();
-            model.addAttribute(name, att);
-            return att;
-        } else {
-            model.addAttribute(name, "");
-            return "";
-        }
-    }
+
 
     @GetMapping("/list-masters")
-    public String showMasterList(@RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "3") int size,
-                                 @RequestParam(required = false) String isValidation,
-                                 Model model,
-                                 HttpSession session) {
+    public String showMasterList(
+            @RequestParam(required = false) String index,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) MasterThesisStatus status,
+            @RequestParam(required = false) String mentor,
+            @RequestParam(required = false) String member,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(required = false) String isValidation,
+            Model model) {
 
-        String index = addAtributes("currentIndex", model, session);
-        String mentor = addAtributes("currentMentor", model, session);
-        String member = addAtributes("currentMember", model, session);
-        String title = addAtributes("currentTitle", model, session);
-        MasterThesisStatus status = null;
-        if (session.getAttribute("currentStatus") != null) {
-            status = (MasterThesisStatus) session.getAttribute("currentStatus");
-            model.addAttribute("currentStatus", session.getAttribute("currentStatus"));
-        }else { model.addAttribute("currentStatus", null);}
 
+        String currentUrl = request.getRequestURI() + "?" + request.getQueryString();
+        currentUrl = currentUrl.replaceFirst("(\\?|&)?page=[^&]*", "");
+        currentUrl = currentUrl.replaceFirst("(\\?|&)?size=[^&]*", "");
+        model.addAttribute("currentUrl", currentUrl);
 
         Pageable pageable = PageRequest.of(page, size);
         Student student = this.studentService.findStudentById(index).orElse(null);
@@ -99,75 +96,19 @@ public class AdminController {
         model.addAttribute("master_members", professorService.findAll());
 
 
-        model.addAttribute("isValidation", isValidation != null ? isValidation : "");
-
-        return "list_masters";
-    }
-
-
-    @PostMapping("/list-masters")
-    public String filterMasterList(@RequestParam(required = false) String index,
-                                   @RequestParam(required = false) String title,
-                                   @RequestParam(required = false) MasterThesisStatus status,
-                                   @RequestParam(required = false) String mentor,
-                                   @RequestParam(required = false) String member,
-                                   @RequestParam(defaultValue = "0") int page,
-                                   @RequestParam(defaultValue = "3") int size,
-                                   @RequestParam(required = false) String isValidation,
-                                   Model model,
-                                   HttpSession session) {
-        Pageable pageable = PageRequest.of(page, size);
-
-        session.setAttribute("currentIndex", index != null ? index : "");
-        session.setAttribute("currentTitle", title != null ? title : "");
-        session.setAttribute("currentStatus", status);
-        session.setAttribute("currentMentor", mentor != null ? mentor : "");
-        session.setAttribute("currentMember", member != null ? member : "");
-
-        model.addAttribute("currentIndex", session.getAttribute("currentIndex"));
-        model.addAttribute("currentTitle", session.getAttribute("currentTitle"));
-        model.addAttribute("currentStatus", session.getAttribute("currentStatus"));
-        model.addAttribute("currentMentor", session.getAttribute("currentMentor"));
-        model.addAttribute("currentMember", session.getAttribute("currentMember"));
-
-
-        Student student = this.studentService.findStudentById(index).orElse(null);
-        Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
-        Professor member1 = this.professorService.findProfessorById(member).orElse(null);
-        if ((student == null && index.isEmpty()) || (student != null && !index.isEmpty())) {
-
-            Specification<MasterThesis> specification = masterThesisService.filterMasterThesis(student, title, status, mentor1, member1, isValidation);
-
-            Page<MasterThesis> masterFilteredPage = this.masterThesisService.findAll(specification, pageable);
-
-
-            model.addAttribute("master_page", masterFilteredPage);
-            model.addAttribute("size", masterFilteredPage.getTotalElements());
-            model.addAttribute("master_page_total_elements", masterFilteredPage.getTotalElements());
-        } else {
-            MasterThesis empty = new MasterThesis();
-            Specification<MasterThesis> emptySpec = this.masterThesisService.filterMasterThesis(empty, "");
-            Page<MasterThesis> emptyPage = this.masterThesisService.findAll(emptySpec, pageable);
-            model.addAttribute("master_page", emptyPage);
-            model.addAttribute("size", 0);
-            model.addAttribute("master_page_total_elements", 0);
-        }
-
-        model.addAttribute("master_status", MasterThesisStatus.values());
-        model.addAttribute("master_mentors", this.professorService.findAll());
-        model.addAttribute("master_members", professorService.findAll());
+        model.addAttribute("currentIndex", index);
+        model.addAttribute("currentTitle", title);
+        model.addAttribute("currentStatus", status);
+        model.addAttribute("currentMentor", mentor1);
+        model.addAttribute("currentMember", member1);
 
 
         return "list_masters";
     }
+
 
     @GetMapping("/resetFilter")
-    public String resetFilter(HttpSession session) {
-        session.setAttribute("currentIndex", "");
-        session.setAttribute("currentTitle", "");
-        session.setAttribute("currentMember", "");
-        session.setAttribute("currentMentor", "");
-        session.setAttribute("currentStatus", null);
+    public String resetFilter() {
         return "redirect:list-masters";
     }
 
@@ -368,11 +309,11 @@ public class AdminController {
     public String archiveNumber(@PathVariable Long statusId,
                                 @RequestParam String archiveNumber,
                                 @RequestParam Long thesisId,
-                                @RequestParam (required = false) String note){
+                                @RequestParam(required = false) String note) {
         try {
             MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
 
-            masterThesisStatusChangeService.updateStatus(statusId, masterThesis,note, userService.getUser(), true);
+            masterThesisStatusChangeService.updateStatus(statusId, masterThesis, note, userService.getUser(), true);
             masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
             masterThesisService.updateArchiveNumber(thesisId, archiveNumber);
 
