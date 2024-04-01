@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="mk" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
+<html lang="mk" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -33,49 +34,109 @@
 <body>
 <div layout:fragment="content">
     <div class="container-lg">
-        <div class="row border p-4 mt-4 mb-4"
-             th:if="${admin == true and masterThesisStatusChange.get().getNextStatus().toString() == 'MENTOR_VALIDATION'}">
-            <div th:replace="~{fragment/firstStatusFragmentOblast :: firstStatusFragmentOblast}"></div>
-        </div>
 
-        <div class="row border p-4 mt-4 mb-4"
-             th:if="${admin == true and masterThesisStatusChange.get().getNextStatus().toString() == 'MENTOR_COMMISSION_CHOICE'}">
-            <div th:replace="~{fragment/mentorCommissionChoiceFragment :: mentorCommissionChoiceFragment}"></div>
-        </div>
-
-        <div class="row border p-4 mt-4 mb-4"
-             th:if="${admin == true and masterThesisStatusChange.get().getNextStatus().toString() == 'PROCESS_FINISHED'}">
-            <div th:replace="~{fragment/presentationStartTimeAndLocationFragment :: presentationStartTimeAndLocationFragment}"></div>
-        </div>
-
-
-        <div class="row border p-4 mt-4 mb-4"
-             th:if="${ admin == true and (masterThesisStatusChange.get().getNextStatus().toString() != 'MENTOR_VALIDATION' and
-             masterThesisStatusChange.get().getNextStatus().toString() != 'MENTOR_COMMISSION_CHOICE'
-             and masterThesisStatusChange.get().getNextStatus().toString() != 'STUDENT_DRAFT' and
-             masterThesisStatusChange.get().getNextStatus().toString() != 'FOURTH_SECRETARY_VALIDATION' and
-             masterThesisStatusChange.get().getNextStatus().toString() != 'PROCESS_FINISHED')
-             }">
-
+        <div class="row border p-2 mt-2 mb-2" th:if="${masterThesisStatusChange.get().getNextStatus().toString() == 'ADMINISTRATION_VALIDATION'
+        or masterThesisStatusChange.get().getNextStatus().toString() == 'ADMINISTRATION_ARCHIVING'}"
+             sec:authorize="hasRole('STUDENT_ADMINISTRATION')">
             <div th:replace="~{fragment/statusNoteFragment :: statusNoteFragment}"></div>
         </div>
+        <div
+                th:if="${masterThesisStatusChange.get().getNextStatus().toString() == 'ADMINISTRATION_VALIDATION'
+        or masterThesisStatusChange.get().getNextStatus().toString() == 'ADMINISTRATION_ARCHIVING'}"
+                sec:authorize="!hasRole('STUDENT_ADMINISTRATION')">
+            <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
+            (text='Се чека одобрение од студентска служба')}"></div>
+        </div>
 
-        <div class="row border p-4 mt-4 mb-4"
-             th:if="${admin == true and masterThesisStatusChange.get().getNextStatus().toString() == 'STUDENT_DRAFT'}">
+
+        <div class="row border p-2 mt-2 mb-2" th:if="${masterThesisStatusChange.get().getNextStatus().toString() == 'SECRETARY_VALIDATION'
+        or masterThesisStatusChange.get().getNextStatus().toString() == 'SECOND_SECRETARY_VALIDATION'
+        or masterThesisStatusChange.get().getNextStatus().toString() == 'THIRD_SECRETARY_VALIDATION'}"
+             sec:authorize="hasRole('ADMINISTRATION_MANAGER')">
+            <div th:replace="~{fragment/statusNoteFragment :: statusNoteFragment}"></div>
+        </div>
+        <div
+                th:if="${masterThesisStatusChange.get().getNextStatus().toString() == 'SECRETARY_VALIDATION'
+        or masterThesisStatusChange.get().getNextStatus().toString() == 'SECOND_SECRETARY_VALIDATION'
+        or masterThesisStatusChange.get().getNextStatus().toString() == 'THIRD_SECRETARY_VALIDATION'}"
+                sec:authorize="!hasRole('ADMINISTRATION_MANAGER')">
+            <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
+            (text='Се чека одобрение од секретар')}"></div>
+        </div>
+
+
+        <div class="row border p-2 mt-2 mb-2"
+             th:if="${masterThesisStatusChange.get().getNextStatus().toString() == 'FOURTH_SECRETARY_VALIDATION'}"
+             sec:authorize="hasRole('ADMINISTRATION_MANAGER')">
+            <div th:replace="~{fragment/archiveNumberFragment :: archiveNumberFragment}"></div>
+        </div>
+        <div
+                th:if="${masterThesisStatusChange.get().getNextStatus().toString() == 'FOURTH_SECRETARY_VALIDATION'}"
+                sec:authorize="!hasRole('ADMINISTRATION_MANAGER')">
+            <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
+            (text='Се чека одобрение од секретар')}"></div>
+        </div>
+
+
+        <div class="row border p-2 mt-2 mb-2" th:if="${masterThesisStatusChange.get().getNextStatus().toString() == 'COMMISSION_VALIDATION'
+        or masterThesisStatusChange.get().getNextStatus().toString() == 'COMMISSION_CHECK'}"
+             sec:authorize="hasRole('SCIENCE_AND_COOPERATION_VICE_DEAN')">
+            <div th:replace="~{fragment/statusNoteFragment :: statusNoteFragment}"></div>
+        </div>
+        <div
+                th:if="${masterThesisStatusChange.get().getNextStatus().toString() == 'COMMISSION_VALIDATION'
+        or masterThesisStatusChange.get().getNextStatus().toString() == 'COMMISSION_CHECK'}"
+                sec:authorize="!hasRole('SCIENCE_AND_COOPERATION_VICE_DEAN')">
+            <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
+            (text='Се чека одобрение од наставно научна комисија служба')}"></div>
+        </div>
+
+
+        <div class="row border p-2 mt-2 mb-2"
+             th:if="${mentor == true and masterThesisStatusChange.get().getNextStatus().toString() == 'MENTOR_VALIDATION'}">
+            <div th:replace="~{fragment/firstStatusFragmentOblast :: firstStatusFragmentOblast}"></div>
+        </div>
+        <div
+                th:if="${mentor == false and masterThesisStatusChange.get().getNextStatus().toString() == 'MENTOR_VALIDATION'}">
+            <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
+            (text='Се чека одобрение од ментор')}"></div>
+        </div>
+
+        <div class="row border p-2 mt-2 mb-2"
+             th:if="${mentor == true and masterThesisStatusChange.get().getNextStatus().toString() == 'MENTOR_COMMISSION_CHOICE'}">
+            <div th:replace="~{fragment/mentorCommissionChoiceFragment :: mentorCommissionChoiceFragment}"></div>
+        </div>
+        <div
+                th:if="${mentor == false and masterThesisStatusChange.get().getNextStatus().toString() == 'MENTOR_COMMISSION_CHOICE'}">
+            <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
+            (text='Се чека одобрение од ментор')}"></div>
+        </div>
+
+        <div class="row border p-2 pt-4 mt-4 mb-2"
+             th:if="${mentor == true and masterThesisStatusChange.get().getNextStatus().toString() == 'PROCESS_FINISHED'}">
+            <div th:replace="~{fragment/presentationStartTimeAndLocationFragment :: presentationStartTimeAndLocationFragment}"></div>
+        </div>
+        <div
+                th:if="${mentor == false and masterThesisStatusChange.get().getNextStatus().toString() == 'PROCESS_FINISHED'}">
+            <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
+            (text='Се чека менторот да избере датум, време и просторија')}"></div>
+        </div>
+
+
+        <div class="row border p-2 mt-2 mb-2"
+             th:if="${mentor==true and masterThesisStatusChange.get().getNextStatus().toString() == 'STUDENT_DRAFT'}">
             <div th:replace="~{fragment/studentDraftFragment :: studentDraftFragment}"></div>
         </div>
-        <div class="row border p-4 mt-4 mb-4"
-             th:if="${admin == true and masterThesisStatusChange.get().getNextStatus().toString() == 'FOURTH_SECRETARY_VALIDATION'}">
-            <div th:replace="~{fragment/archiveNumberFragment :: archiveNumberFragment}"></div>
+        <div
+                th:if="${mentor==false and masterThesisStatusChange.get().getNextStatus().toString() == 'STUDENT_DRAFT'}">
+            <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
+            (text='Се чека студентот да прикачи драфт документ')}"></div>
         </div>
 
 
         <div class="row">
             <div th:replace="~{fragment/detailsFragment :: detailsFragment}"></div>
             <div th:replace="~{fragment/statusHistoryFragment :: statusHistoryFragment}"></div>
-        </div>
-        <div class="row">
-            <div th:replace="~{fragment/downloadFragment :: downloadFragment}"></div>
         </div>
     </div>
 
