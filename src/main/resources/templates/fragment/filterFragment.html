@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div th:if="${size > 0}" th:fragment="filterFragment(url, size, defaultSize)">
+
+
+        <form class="my-4" th:if="${size != null}" th:action="@{/admin/list-masters}" method="GET">
+            <div class="row gx-2 d-flex justify-content-center align-items-center">
+                <div class="col d-flex">
+                    <input placeholder="Индекс" class="form-control" id="index" type="text" name="index"
+                           th:value="${currentIndex}"/>
+
+                </div>
+                <div class="col d-flex">
+                    <input placeholder="Наслов" class="form-control" id="title" type="text" name="title" th:value="${currentTitle}"/>
+                </div>
+                <div class="col d-flex">
+                    <select class="form-select" aria-label="Default select example" id="status" name="status">
+                        <option value="">Статус</option>
+                        <option th:each="status : ${master_status}"
+                                th:value="${status}" th:text="${status.getDisplayName()}"
+                                th:selected="${status == currentStatus}"></option>
+                    </select>
+                </div>
+                <div class="col d-flex justify-content-center align-items-center">
+                    <select class="form-select" aria-label="Default select example" id="mentor" name="mentor">
+                        <option value="">Ментор</option>
+                        <option th:each="mentor : ${master_mentors}"
+                                th:value="${mentor.getId()}" th:text="${mentor.getName()}"
+                                th:selected="${mentor == currentMentor}"></option>
+                    </select>
+                </div>
+                <div class="col d-flex justify-content-center align-items-center">
+                    <select class="form-select" aria-label="Default select example" id="firstMember" name="firstMember">
+                        <option value="">Член 1</option>
+                        <option th:each="member : ${master_members}"
+                                th:value="${member.getId()}" th:text="${member.name}"
+                                th:selected="${member == currentFirstMember}"></option>
+                    </select>
+                </div>
+
+                <div class="col d-flex justify-content-center align-items-center">
+                    <select class="form-select" aria-label="Default select example" id="secondMember" name="secondMember">
+                        <option value="">Член 2</option>
+                        <option th:each="member2 : ${master_members}"
+                                th:value="${member2.getId()}" th:text="${member2.name}"
+                                th:selected="${member2 == currentSecondMember}"></option>
+                    </select>
+                </div>
+                <div class="col d-flex justify-content-center align-items-center">
+                    <select class="form-select" aria-label="Default select example" id="isValidation" name="isValidation">
+                        <option value="" th:selected="${#strings.equals(isValidation, '')}">Валидација</option>
+                        <option value="NO_VALIDATION" th:value="NO_VALIDATION" th:selected="${#strings.equals(isValidation, 'NO_VALIDATION')}">Сите</option>
+                        <option value="VALIDATION" th:value="VALIDATION" th:selected="${#strings.equals(isValidation, 'VALIDATION')}">За валидација</option>
+                    </select>
+                </div>
+
+
+
+                <div class="col btn-group" role="group" aria-label="Search And Clear">
+                    <button type="submit" class="col-2 btn btn-success form-control">
+                        <i class="fa-solid fa-magnifying-glass"></i> Пребарувај
+                    </button>
+
+                </div>
+
+
+            </div>
+            <div class="row" th:if="${not #strings.isEmpty(currentIndex) ||
+                            not #strings.isEmpty(currentTitle) ||
+                            currentStatus != null ||
+                            not #strings.isEmpty(currentMentor) ||
+                            not #strings.isEmpty(currentFirstMember) ||
+                            not #strings.isEmpty(currentSecondMember)}">
+                <div class="col-4">
+                    <a th:href="@{/admin/resetFilter}" class="btn btn-success text-white border mt-4">Ресетирај
+                        Филтер</a>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+
+</body>
+</html>

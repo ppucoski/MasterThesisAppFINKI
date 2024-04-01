@@ -30,12 +30,14 @@ public interface MasterThesisService {
     Page<MasterThesis> findAll(Pageable pageable);
 
     Specification<MasterThesis> filterMasterThesis(Student student, String title, MasterThesisStatus status,
-                                                   Professor mentor, Professor member, String isValidation);
+                                                   Professor mentor, Professor member1, Professor member2, String isValidation);
 
     Specification<MasterThesis> filterMasterThesis(MasterThesis masterThesis, String isValidation);
     Specification<MasterThesis> filterMasterThesisByMentor(Professor mentor);
     Specification<MasterThesis> filterMasterThesisByStudent(Student student);
-    Specification<MasterThesis> filterMasterThesisByMember(Professor member);
+    Specification<MasterThesis> filterMasterThesisByMember(Professor firstMember, Professor secondMember);
+    Specification<MasterThesis> filterMasterThesisByFirstMember(Professor firstMember);
+    Specification<MasterThesis> filterMasterThesisBySecondMember(Professor secondMember);
 
     Page<MasterThesis> findAll(Specification<MasterThesis> specification, Pageable pageable);
 

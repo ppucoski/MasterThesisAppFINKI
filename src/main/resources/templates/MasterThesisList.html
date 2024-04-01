@@ -11,7 +11,11 @@
 <body>
 
 <div layout:fragment="content">
+
     <div class="container-xl">
+
+        <div th:replace="~{fragment/filterFragment :: filterFragment(${currentUrl}, ${size}, 3)}"></div>
+
         <h5 class="m-4" th:if="${MasterThesis.totalElements == 1}">Вкупно: <span th:text="${MasterThesis.totalElements}"></span> магистерскa работa</h5>
         <h5 class="m-4" th:if="${MasterThesis.totalElements > 1}">Вкупно: <span th:text="${MasterThesis.totalElements}"></span> магистерски работи</h5>
 

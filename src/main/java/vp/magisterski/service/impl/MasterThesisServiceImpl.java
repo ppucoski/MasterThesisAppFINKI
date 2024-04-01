@@ -107,7 +107,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
 
     @Override
     public Specification<MasterThesis> filterMasterThesis(Student student, String title, MasterThesisStatus status,
-                                                          Professor mentor, Professor member, String isValidation) {
+                                                          Professor mentor, Professor member1, Professor member2, String isValidation) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
@@ -126,11 +126,14 @@ public class MasterThesisServiceImpl implements MasterThesisService {
                         criteriaBuilder.equal(root.get("mentor"), mentor));
             }
 
-            if (member != null) {
-                predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.or(
-                                criteriaBuilder.equal(root.get("firstMember"), member),
-                                criteriaBuilder.equal(root.get("secondMember"), member)
+            if (member1 != null && member2 != null) {
+                predicate = criteriaBuilder.or(predicate,
+                        criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get("firstMember"), member1),
+                                criteriaBuilder.equal(root.get("secondMember"), member2)
+                        ),criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get("firstMember"), member2),
+                                criteriaBuilder.equal(root.get("secondMember"), member1)
                         ));
             }
 
@@ -168,11 +171,15 @@ public class MasterThesisServiceImpl implements MasterThesisService {
                         criteriaBuilder.equal(root.get("mentor"), masterThesis.getMentor()));
             }
 
-            if (masterThesis.getFirstMember() != null || masterThesis.getSecondMember() != null) {
-                predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.or(
+            if (masterThesis.getFirstMember() != null && masterThesis.getSecondMember() != null) {
+                predicate = criteriaBuilder.or(predicate,
+                        criteriaBuilder.and(
                                 criteriaBuilder.equal(root.get("firstMember"), masterThesis.getFirstMember()),
                                 criteriaBuilder.equal(root.get("secondMember"), masterThesis.getSecondMember())
+                        ),
+                        criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get("firstMember"), masterThesis.getSecondMember()),
+                                criteriaBuilder.equal(root.get("secondMember"), masterThesis.getFirstMember())
                         ));
             }
 
@@ -221,18 +228,64 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
-    public Specification<MasterThesis> filterMasterThesisByMember(Professor member) {
+    public Specification<MasterThesis> filterMasterThesisByMember(Professor firstMember, Professor secondMember) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
+
+            if (firstMember != null && secondMember != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.or(
+                                criteriaBuilder.and(
+                                        criteriaBuilder.equal(root.get("firstMember"), firstMember),
+                                        criteriaBuilder.equal(root.get("secondMember"), secondMember)
+                                ),
+                                criteriaBuilder.and(
+                                        criteriaBuilder.equal(root.get("firstMember"), secondMember),
+                                        criteriaBuilder.equal(root.get("secondMember"), firstMember)
+                                )
+                        ));
+            }
+
+            return predicate;
+        };
+    }
+
+    @Override
+    public Specification<MasterThesis> filterMasterThesisByFirstMember(Professor firstMember) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
 
-            if (member != null) {
-                predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.or(
-                                criteriaBuilder.equal(root.get("firstMember"), member),
-                                criteriaBuilder.equal(root.get("secondMember"), member)
-                        ));
-            }
+            predicate = criteriaBuilder.and(predicate,
+                    criteriaBuilder.or(
+                            criteriaBuilder.and(
+                                    criteriaBuilder.equal(root.get("firstMember"), firstMember)
+                            ),
+                            criteriaBuilder.and(
+                                    criteriaBuilder.equal(root.get("secondMember"), firstMember)
+                            )
+                    ));
+
+
+            return predicate;
+        };
+    }
+
+    @Override
+    public Specification<MasterThesis> filterMasterThesisBySecondMember(Professor secondMember) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
+
+
+            predicate = criteriaBuilder.and(predicate,
+                    criteriaBuilder.or(
+                            criteriaBuilder.and(
+                                    criteriaBuilder.equal(root.get("firstMember"), secondMember)
+                                    ),
+                            criteriaBuilder.and(
+                                    criteriaBuilder.equal(root.get("secondMember"), secondMember)
+                                    )
+                    ));
 
 
             return predicate;

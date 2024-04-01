@@ -71,12 +71,12 @@ public class AdminController {
             @RequestParam(required = false) String title,
             @RequestParam(required = false) MasterThesisStatus status,
             @RequestParam(required = false) String mentor,
-            @RequestParam(required = false) String member,
+            @RequestParam(required = false) String firstMember,
+            @RequestParam(required = false) String secondMember,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size,
             @RequestParam(required = false) String isValidation,
             Model model) {
-
 
         String currentUrl = request.getRequestURI() + "?" + request.getQueryString();
         currentUrl = currentUrl.replaceFirst("(\\?|&)?page=[^&]*", "");
@@ -86,8 +86,24 @@ public class AdminController {
         Pageable pageable = PageRequest.of(page, size);
         Student student = this.studentService.findStudentById(index).orElse(null);
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
-        Professor member1 = this.professorService.findProfessorById(member).orElse(null);
-        Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesis(student, title, status, mentor1, member1, isValidation);
+        Professor firstMember1 = this.professorService.findProfessorById(firstMember).orElse(null);
+        Professor secondMember1 = this.professorService.findProfessorById(secondMember).orElse(null);
+
+        Specification<MasterThesis> specification = Specification.where(null);
+
+        if (firstMember1 != null && secondMember1 != null) {
+            specification = specification.and(this.masterThesisService.filterMasterThesisByMember(firstMember1, secondMember1));
+        } else {
+            if (firstMember1 != null) {
+                specification = specification.and(this.masterThesisService.filterMasterThesisByFirstMember(firstMember1));
+            }
+
+            if (secondMember1 != null) {
+                specification = specification.and(this.masterThesisService.filterMasterThesisBySecondMember(secondMember1));
+            }
+        }
+
+        specification = specification.and(this.masterThesisService.filterMasterThesis(student, title, status, mentor1, firstMember1, secondMember1, isValidation));
 
         Page<MasterThesis> master_page = this.masterThesisService.findAll(specification, pageable);
 
@@ -97,13 +113,12 @@ public class AdminController {
         model.addAttribute("master_mentors", this.professorService.findAll());
         model.addAttribute("master_members", professorService.findAll());
 
-
         model.addAttribute("currentIndex", index);
         model.addAttribute("currentTitle", title);
         model.addAttribute("currentStatus", status);
         model.addAttribute("currentMentor", mentor1);
-        model.addAttribute("currentMember", member1);
-
+        model.addAttribute("currentFirstMember", firstMember1);
+        model.addAttribute("currentSecondMember", secondMember1);
 
         return "list_masters";
     }
@@ -159,7 +174,7 @@ public class AdminController {
         Pageable pageable = PageRequest.of(page, size);
         String username = userService.getUsernameFromUser();
         Professor mentor = professorService.findProfessorByName(username);
-        Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesisByMember(mentor);
+        Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesisByMember(mentor, mentor); //TODO: proveri dal e mentor ili member filter
         Page<MasterThesis> thesisPage = this.masterThesisService.findAll(specification, pageable);
         model.addAttribute("master_page", thesisPage);
         model.addAttribute("size", thesisPage.getTotalElements());
