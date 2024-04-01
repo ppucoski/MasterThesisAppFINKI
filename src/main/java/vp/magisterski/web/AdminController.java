@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import vp.magisterski.model.enumerations.AppRole;
 import vp.magisterski.model.enumerations.MasterThesisDocumentType;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisDocument;
@@ -22,6 +23,7 @@ import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.model.magister.MasterThesisStatusChange;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
+import vp.magisterski.model.shared.UserRole;
 import vp.magisterski.service.*;
 
 
@@ -216,13 +218,19 @@ public class AdminController {
         model.addAttribute("associatedDocuments", associatedDocuments);
         List<MasterThesisStatusChange> temp = masterThesisStatusChangeService.getAllByThesis(masterThesis);
         model.addAttribute("allChanges", temp);
-        model.addAttribute("admin", true);
+
+        model.addAttribute("role", userService.getUser().getRole());
+        model.addAttribute("mentor", Objects.equals(masterThesis.getMentor().getId(), userService.getUser().getId()));
+        model.addAttribute("student", false);
+
+
         if (masterThesis.getStatus().getNextStatusFromCurrent() == MasterThesisStatus.MENTOR_COMMISSION_CHOICE) {
             model.addAttribute("members", professorService.findAllByProfessorStatus(true, true));
         }
         if (masterThesis.getStatus().getNextStatusFromCurrent() == MasterThesisStatus.PROCESS_FINISHED) {
             model.addAttribute("rooms", roomService.findAll());
         }
+
         return "masterThesisDetails";
     }
 

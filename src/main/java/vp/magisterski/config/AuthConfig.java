@@ -15,7 +15,13 @@ public class AuthConfig {
                         .requestMatchers(
                                 "/admin/**").hasAnyRole(
                                 AppRole.PROFESSOR.name(),
-                                AppRole.ADMIN.name()
+                                AppRole.ADMIN.name(),
+                                AppRole.ACADEMIC_AFFAIR_VICE_DEAN.name(),
+                                AppRole.SCIENCE_AND_COOPERATION_VICE_DEAN.name(),
+                                AppRole.FINANCES_VICE_DEAN.name(),
+                                AppRole.STUDENT_ADMINISTRATION.name(),
+                                AppRole.ADMINISTRATION_MANAGER.name()
+
                         )
                         .anyRequest().authenticated()
                 )

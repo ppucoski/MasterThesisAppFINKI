@@ -2,7 +2,7 @@
 <html lang="en">
 <body>
 <div th:fragment="detailsFragment" class="col m-2">
-    <div style="height: 800px;">
+    <div class="m-2" style="padding-bottom: 50px">
         <p><strong>ID на магистерска: </strong>
             <span class="text-center text-dark" th:text="${thesis.id}"></span>
         </p>
@@ -21,30 +21,36 @@
             <span class="text-center text-dark" th:text="${thesis.getArea()}"></span>
         </p>
         <p><strong>Кратка содржина: </strong>
-            <div class="text-center text-dark" style="max-width: 400px; display: inline-block; word-wrap: break-word;"
-                  th:text="${thesis.getDescription()}"></div>
+        <div class="text-center text-dark" style="max-width: 400px; display: inline-block; word-wrap: break-word;"
+             th:text="${thesis.getDescription()}"></div>
         </p>
         <p><strong>Ментор: </strong>
             <span class="text-center text-dark" th:text="${thesis.getMentor().getName()}"></span>
         </p>
         <p><strong>Член 1: </strong>
-            <span class="text-center text-dark" th:if="${thesis.getFirstMember() != null}" th:text="${thesis.getFirstMember().getName()}"></span>
+            <span class="text-center text-dark" th:if="${thesis.getFirstMember() != null}"
+                  th:text="${thesis.getFirstMember().getName()}"></span>
             <span th:unless="${thesis.getFirstMember() != null}">No member assigned</span>
         </p>
         <p><strong>Член 2: </strong>
-            <span class="text-center text-dark" th:if="${thesis.getSecondMember() != null}" th:text="${thesis.getSecondMember().getName()}"></span>
+            <span class="text-center text-dark" th:if="${thesis.getSecondMember() != null}"
+                  th:text="${thesis.getSecondMember().getName()}"></span>
             <span th:unless="${thesis.getSecondMember() != null}">No member assigned</span>
         </p>
         <p><strong>Датум на одржување: </strong>
-            <span class="text-center text-dark" th:if="${thesis.getPresentation() != null}" th:text="${#temporals.format(thesis.getPresentation().getPresentationStartTime(), 'dd.MM.yyy')}"></span>
+            <span class="text-center text-dark" th:if="${thesis.getPresentation() != null}"
+                  th:text="${#temporals.format(thesis.getPresentation().getPresentationStartTime(), 'dd.MM.yyy')}"></span>
         </p>
         <p><strong>Статус: </strong>
             <span class="text-center text-dark" th:text="${thesis.getStatus().getDisplayName()}"></span>
         </p>
         <p><strong>Следен статус: </strong>
-            <span class="text-center text-dark" th:text="${masterThesisStatusChange.get().getNextStatus().getDisplayName()}"></span>
+            <span class="text-center text-dark"
+                  th:text="${masterThesisStatusChange.get().getNextStatus().getDisplayName()}"></span>
         </p>
     </div>
+    <div th:replace="~{fragment/downloadFragment :: downloadFragment}"></div>
+
 </div>
 </body>
 </html>

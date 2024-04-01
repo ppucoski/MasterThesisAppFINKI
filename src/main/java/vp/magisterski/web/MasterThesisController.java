@@ -18,6 +18,7 @@ import vp.magisterski.model.shared.Student;
 import vp.magisterski.service.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -69,6 +70,8 @@ public class MasterThesisController {
         model.addAttribute("thesis", masterThesis);
         model.addAttribute("masterThesisStatusChange", masterThesisStatusChange);
         model.addAttribute("associatedDocuments", associatedDocuments);
+        model.addAttribute("student", Objects.equals(masterThesis.getStudent().getIndex(), userService.getUsernameFromUser()));
+        model.addAttribute("mentor", false);
         return "masterThesisDetails";
     }
 

@@ -7,10 +7,10 @@ public enum UserRole {
     STUDENT(false, true, AppRole.STUDENT),
     // professors
     PROFESSOR(true, false, AppRole.PROFESSOR),
-    ACADEMIC_AFFAIR_VICE_DEAN(true, false, AppRole.PROFESSOR),
-    SCIENCE_AND_COOPERATION_VICE_DEAN(true, false, AppRole.PROFESSOR),
-    FINANCES_VICE_DEAN(true, false, AppRole.PROFESSOR),
-    DEAN(true, false, AppRole.PROFESSOR),
+    ACADEMIC_AFFAIR_VICE_DEAN(true, false, AppRole.ACADEMIC_AFFAIR_VICE_DEAN),
+    SCIENCE_AND_COOPERATION_VICE_DEAN(true, false, AppRole.SCIENCE_AND_COOPERATION_VICE_DEAN),
+    FINANCES_VICE_DEAN(true, false, AppRole.FINANCES_VICE_DEAN),
+    DEAN(true, false, AppRole.DEAN),
     // staff
     STUDENT_ADMINISTRATION(false, false, AppRole.STUDENT_ADMINISTRATION),
     STUDENT_ADMINISTRATION_MANAGER(false, false, AppRole.STUDENT_ADMINISTRATION_MANAGER),
