@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<body th:fragment="noElementsFoundFragment(url, size, defaultSize)">
+<div th:replace="~{fragment/filterFragment :: filterFragment(${currentUrl}, ${size}, 3)}"></div>
 <div th:if="${size == 0}" th:fragment="noElementsFragment(size)">
     <div class="container mt-5 col-5">
         <div class="alert alert-danger align-items-center justify-content-center text-center" role="alert">

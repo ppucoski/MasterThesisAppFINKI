@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <body>
-<div th:if="${size > 0}" th:fragment="resetFilterFragment(url, size, defaultSize)">
+<div th:fragment="resetFilterFragment(url, size, defaultSize)">
         <div class="row" th:if="${not #strings.isEmpty(currentIndex) ||
                             not #strings.isEmpty(currentTitle) ||
                             currentStatus != null ||
