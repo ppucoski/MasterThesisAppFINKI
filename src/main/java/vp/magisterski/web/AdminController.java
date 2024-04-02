@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 import vp.magisterski.model.enumerations.AppRole;
 import vp.magisterski.model.enumerations.MasterThesisDocumentType;
 import vp.magisterski.model.magister.MasterThesis;
@@ -119,7 +121,14 @@ public class AdminController {
         model.addAttribute("currentMentor", mentor1);
         model.addAttribute("currentFirstMember", firstMember1);
         model.addAttribute("currentSecondMember", secondMember1);
+        model.addAttribute("isValidation", isValidation);
+        model.addAttribute("reset", "/admin/resetFilter");
+        model.addAttribute("back", "/admin/list-masters");
+        return "list_masters";
+    }
 
+    @GetMapping("/goBack")
+    public String goBack(Model model) {
         return "list_masters";
     }
 

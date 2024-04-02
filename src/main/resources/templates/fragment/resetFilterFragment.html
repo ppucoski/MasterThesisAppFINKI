@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div th:if="${size > 0}" th:fragment="resetFilterFragment(url, size, defaultSize)">
+        <div class="row" th:if="${not #strings.isEmpty(currentIndex) ||
+                            not #strings.isEmpty(currentTitle) ||
+                            currentStatus != null ||
+                            not #strings.isEmpty(currentMentor) ||
+                            not #strings.isEmpty(currentFirstMember) ||
+                            not #strings.isEmpty(currentSecondMember) ||
+                            not #strings.isEmpty(isValidation)}">
+            <div class="col-4">
+                <a th:href="${reset.contains('/resetFilterHome') ? '/resetFilterHome' : '/admin/resetFilter'}" class="btn btn-success text-white border mt-4">Ресетирај Филтер</a>
+            </div>
+        </div>
+</div>
+
+
+</body>
+</html>

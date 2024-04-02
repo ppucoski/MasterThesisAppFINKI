@@ -13,16 +13,10 @@
     <div class="container-lg" >
     <div th:replace="~{fragment/filterFragment :: filterFragment(${currentUrl}, ${size}, 3)}"></div>
 
-
     <div th:replace="~{fragment/choosePageSizeFragment :: pageSizeFragment(${currentUrl}, ${size}, 3)}"></div>
-
-
-
-
 
         <h5 th:if="${master_page_total_elements !=null && master_page_total_elements == 1}">Вкупно <span th:text="${master_page_total_elements}"></span> пронајден резултат!</h5>
         <h5 th:if="${master_page_total_elements !=null && master_page_total_elements > 1}">Вкупно <span th:text="${master_page_total_elements}"></span> пронајдени резултати!</h5>
-
 
         <div th:if="${size > 0}">
 

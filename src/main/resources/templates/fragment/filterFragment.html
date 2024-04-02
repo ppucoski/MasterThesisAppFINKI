@@ -4,7 +4,7 @@
 <div th:if="${size > 0}" th:fragment="filterFragment(url, size, defaultSize)">
 
 
-        <form class="my-4" th:if="${size != null}" th:action="@{/admin/list-masters}" method="GET">
+    <form class="my-4" th:if="${size != null}" th:action="${url.contains('/list-MasterThesis') ? '/list-MasterThesis' : '/admin/list-masters'}" method="GET">
             <div class="row gx-2 d-flex justify-content-center align-items-center">
                 <div class="col d-flex">
                     <input placeholder="Индекс" class="form-control" id="index" type="text" name="index"
@@ -66,21 +66,13 @@
 
 
             </div>
-            <div class="row" th:if="${not #strings.isEmpty(currentIndex) ||
-                            not #strings.isEmpty(currentTitle) ||
-                            currentStatus != null ||
-                            not #strings.isEmpty(currentMentor) ||
-                            not #strings.isEmpty(currentFirstMember) ||
-                            not #strings.isEmpty(currentSecondMember)}">
-                <div class="col-4">
-                    <a th:href="@{/admin/resetFilter}" class="btn btn-success text-white border mt-4">Ресетирај
-                        Филтер</a>
-                </div>
-            </div>
+        <div th:replace="~{fragment/resetFilterFragment :: resetFilterFragment(${currentUrl}, ${size}, 3)}"></div>
 
 
-        </form>
+
+    </form>
     </div>
+</div>
 
 </body>
 </html>

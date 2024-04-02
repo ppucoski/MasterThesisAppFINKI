@@ -6,11 +6,13 @@
 </head>
 <body>
 <div th:if="${size == 0}" th:fragment="noElementsFragment(size)">
-  <div class="container mt-5 col-5">
-    <div class="alert alert-danger align-items-center justify-content-center text-center" role="alert">
-      <h4 class="alert-heading"><strong>Нема Резултати!</strong></h4> Нема резултати од пребарувањето.
+    <div class="container mt-5 col-5">
+        <div class="alert alert-danger align-items-center justify-content-center text-center" role="alert">
+            <h4 class="alert-heading"><strong>Нема Резултати!</strong></h4>
+            <p>Нема резултати од пребарувањето.</p>
+            <a th:href="${back.contains('/list-MasterThesis') ? '/list-MasterThesis' : '/admin/list-masters'}" class="btn btn-secondary mt-3">Назад</a>
+        </div>
     </div>
-  </div>
 </div>
 </body>
 </html>
