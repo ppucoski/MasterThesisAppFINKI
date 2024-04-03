@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.multipart.MultipartFile;
+import vp.magisterski.model.enumerations.MasterThesisDocumentType;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
@@ -47,7 +48,7 @@ public interface MasterThesisService {
 
     void cancelMasterThesis(Long id);
 
-    void saveFile(Long id, MultipartFile file) throws IOException;
+    void saveFile(Long id, MasterThesisDocumentType type, MultipartFile file) throws IOException;
 
     void updateStatus(Long thesisId, MasterThesisStatus status);
 

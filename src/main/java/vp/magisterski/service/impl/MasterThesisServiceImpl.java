@@ -7,13 +7,13 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import vp.magisterski.model.enumerations.MasterThesisDocumentType;
 import vp.magisterski.model.exceptions.ProfessorDoesNotExistException;
 import vp.magisterski.model.exceptions.RoomDoesNotExistsException;
 import vp.magisterski.model.exceptions.StudentDoesNotExistException;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisPresentation;
 import vp.magisterski.model.enumerations.MasterThesisStatus;
-import vp.magisterski.model.magister.MasterThesisStatusChange;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Room;
 import vp.magisterski.model.shared.Student;
@@ -36,14 +36,16 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     private final ProfessorRepository professorRepository;
     private final RoomRepository roomRepository;
     private final MasterThesisStatusChangeRepository masterThesisStatusChangeRepository;
+    private final MasterThesisDocumentServiceImpl masterThesisDocumentServiceImpl;
 
     public MasterThesisServiceImpl(MasterThesisRepository masterThesisRepository, StudentRepository studentRepository, ProfessorRepository professorRepository, RoomRepository roomRepository,
-                                   MasterThesisStatusChangeRepository masterThesisStatusChangeRepository) {
+                                   MasterThesisStatusChangeRepository masterThesisStatusChangeRepository, MasterThesisDocumentServiceImpl masterThesisDocumentServiceImpl) {
         this.masterThesisRepository = masterThesisRepository;
         this.studentRepository = studentRepository;
         this.professorRepository = professorRepository;
         this.roomRepository = roomRepository;
         this.masterThesisStatusChangeRepository = masterThesisStatusChangeRepository;
+        this.masterThesisDocumentServiceImpl = masterThesisDocumentServiceImpl;
     }
 
     @Override
@@ -324,7 +326,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
 
     @Override
     @Transactional
-    public void saveFile(Long id, MultipartFile file) throws IOException {
+    public void saveFile(Long id, MasterThesisDocumentType type, MultipartFile file) throws IOException {
         Optional<MasterThesis> optionalMasterThesis = masterThesisRepository.findById(id);
         if (optionalMasterThesis.isPresent()) {
             MasterThesis masterThesis = optionalMasterThesis.get();

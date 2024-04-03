@@ -215,7 +215,7 @@ public class AdminController {
 
     @PostMapping("/upload")
     public String uploadThesisFile(@RequestParam Long thesisId, @RequestParam("file") MultipartFile file) throws IOException {
-        masterThesisService.saveFile(thesisId, file);
+        masterThesisService.saveFile(thesisId, MasterThesisDocumentType.THESIS_TEXT, file);
         return "redirect:list-masters";
     }
 
@@ -278,7 +278,7 @@ public class AdminController {
         }
 
         if (fileInput1 != null) {
-            masterThesisDocumentService.saveFile(masterThesis, MasterThesisDocumentType.THESIS_TEXT, fileInput1);
+            masterThesisService.saveFile(thesisId, MasterThesisDocumentType.THESIS_TEXT, fileInput1);
         }
 
         return String.format("redirect:/admin/details/%d", thesisId);
