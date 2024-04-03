@@ -29,7 +29,7 @@ public interface MasterThesisService {
 
     Page<MasterThesis> findAll(Pageable pageable);
 
-    Specification<MasterThesis> filterMasterThesis(Student student, String title, MasterThesisStatus status,
+    Specification<MasterThesis> filterMasterThesis(String studentIndex, String title, MasterThesisStatus status,
                                                    Professor mentor, Professor member1, Professor member2, String isValidation);
 
     Specification<MasterThesis> filterMasterThesis(MasterThesis masterThesis, String isValidation);

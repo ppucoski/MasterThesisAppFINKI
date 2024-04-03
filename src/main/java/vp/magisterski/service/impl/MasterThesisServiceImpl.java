@@ -106,14 +106,20 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
-    public Specification<MasterThesis> filterMasterThesis(Student student, String title, MasterThesisStatus status,
+    public Specification<MasterThesis> filterMasterThesis(String studentIndex, String title, MasterThesisStatus status,
                                                           Professor mentor, Professor member1, Professor member2, String isValidation) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
-            if (student != null) {
-                predicate = criteriaBuilder.and(predicate,
-                        criteriaBuilder.equal(root.get("student"), student));
+            if (studentIndex != null && !studentIndex.isEmpty()) {
+                Student student = studentRepository.findByIndexStartingWith(studentIndex).orElse(null);
+                if(student!=null){
+                    predicate = criteriaBuilder.and(predicate,
+                            criteriaBuilder.equal(root.get("student"), student));
+                }
+                else{
+                    predicate =  criteriaBuilder.disjunction();
+                }
             }
 
             if (status != null) {

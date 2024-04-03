@@ -83,7 +83,7 @@ public class HomeController {
         model.addAttribute("currentUrl", currentUrl);
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("id"));
-        Student student = this.studentService.findStudentById(index).orElse(null);
+
         Professor mentor1 = this.professorService.findProfessorById(mentor).orElse(null);
         Professor firstMember1 = this.professorService.findProfessorById(firstMember).orElse(null);
         Professor secondMember1 = this.professorService.findProfessorById(secondMember).orElse(null);
@@ -102,7 +102,7 @@ public class HomeController {
             }
         }
 
-        specification = specification.and(this.masterThesisService.filterMasterThesis(student, title, status, mentor1, firstMember1, secondMember1, isValidation));
+        specification = specification.and(this.masterThesisService.filterMasterThesis(index, title, status, mentor1, firstMember1, secondMember1, isValidation));
 
         Page<MasterThesis> master_page = this.masterThesisService.findAll(specification, pageable);
 
