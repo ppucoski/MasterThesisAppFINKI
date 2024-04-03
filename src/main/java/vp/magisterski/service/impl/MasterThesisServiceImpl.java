@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -114,10 +115,10 @@ public class MasterThesisServiceImpl implements MasterThesisService {
             Predicate predicate = criteriaBuilder.conjunction();
 
             if (studentIndex != null && !studentIndex.isEmpty()) {
-                Student student = studentRepository.findByIndexStartingWith(studentIndex).orElse(null);
-                if(student!=null){
+                List<Student> students = studentRepository.findByIndexStartingWith(studentIndex);
+                if(!students.isEmpty()){
                     predicate = criteriaBuilder.and(predicate,
-                            criteriaBuilder.equal(root.get("student"), student));
+                            root.get("student").in(students));
                 }
                 else{
                     predicate =  criteriaBuilder.disjunction();
@@ -199,6 +200,39 @@ public class MasterThesisServiceImpl implements MasterThesisService {
             if ("VALIDATION".equals(isValidation)) {
                 predicate = criteriaBuilder.and(predicate,
                         criteriaBuilder.like(criteriaBuilder.lower(root.get("status")), "%validation%"));
+            }
+
+            return predicate;
+        };
+    }
+
+    @Override
+    public List<MasterThesisStatus> returnStatus(){
+        return Arrays.asList(
+                MasterThesisStatus.MENTOR_COMMISSION_CHOICE,
+                MasterThesisStatus.SECOND_SECRETARY_VALIDATION,
+                MasterThesisStatus.COMMISSION_CHECK,
+                MasterThesisStatus.THIRD_SECRETARY_VALIDATION,
+                MasterThesisStatus.DRAFT_CHECK,
+                MasterThesisStatus.REPORT_VALIDATION,
+                MasterThesisStatus.FOURTH_SECRETARY_VALIDATION,
+                MasterThesisStatus.ADMINISTRATION_ARCHIVING,
+                MasterThesisStatus.PROCESS_FINISHED
+        );
+    }
+
+    @Override
+    public Specification<MasterThesis> filterMasterThesisByStatus(MasterThesisStatus status) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.conjunction();
+
+            if (status != null) {
+                predicate = criteriaBuilder.and(predicate,
+                        criteriaBuilder.equal(root.get("status"), status));
+            } else {
+
+                predicate = criteriaBuilder.and(predicate,
+                        root.get("status").in(this.returnStatus()));
             }
 
             return predicate;
@@ -383,10 +417,6 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         }
     }
 
-    @Override
-    public Page<MasterThesis> findAllByStatusOrderGreaterThan(List<MasterThesisStatus> statuses, Pageable pageable) {
-        return this.masterThesisRepository.findByStatusIn(statuses, pageable);
-    }
 
 
     @Override

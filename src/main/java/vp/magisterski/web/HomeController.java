@@ -52,20 +52,6 @@ public class HomeController {
         return "index";
     }
 
-    public List<MasterThesisStatus> masterThesisToShow(){
-        List<MasterThesisStatus> statusList = new ArrayList<>();
-        statusList.add(MasterThesisStatus.MENTOR_COMMISSION_CHOICE);
-        statusList.add(MasterThesisStatus.SECOND_SECRETARY_VALIDATION);
-        statusList.add(MasterThesisStatus.COMMISSION_CHECK);
-        statusList.add(MasterThesisStatus.THIRD_SECRETARY_VALIDATION);
-        statusList.add(MasterThesisStatus.DRAFT_CHECK);
-        statusList.add(MasterThesisStatus.REPORT_VALIDATION);
-        statusList.add(MasterThesisStatus.FOURTH_SECRETARY_VALIDATION);
-        statusList.add(MasterThesisStatus.ADMINISTRATION_ARCHIVING);
-        statusList.add(MasterThesisStatus.PROCESS_FINISHED);
-        return statusList;
-
-    }
     @GetMapping("/list-MasterThesis")
     public String findAllThesis(@RequestParam(required = false) String index,
                                 @RequestParam(required = false) String title,
@@ -101,16 +87,18 @@ public class HomeController {
                 specification = specification.and(this.masterThesisService.filterMasterThesisBySecondMember(secondMember1));
             }
         }
+        specification = specification.and(this.masterThesisService.filterMasterThesisByStatus(status));
 
         specification = specification.and(this.masterThesisService.filterMasterThesis(index, title, status, mentor1, firstMember1, secondMember1, isValidation));
 
-        Page<MasterThesis> master_page = this.masterThesisService.findAll(specification, pageable);
+        Page<MasterThesis> masterThesis = masterThesisService.findAll(specification, pageable);
 
-        model.addAttribute("master_page", master_page);
-        model.addAttribute("size", master_page.getTotalElements());
-        model.addAttribute("master_status", MasterThesisStatus.values());
-        model.addAttribute("master_mentors", this.professorService.findAll());
+
+        model.addAttribute("master_page", masterThesis);
+        model.addAttribute("size", masterThesis.stream().toList().size());
         model.addAttribute("master_members", professorService.findAll());
+        model.addAttribute("master_status", masterThesisService.returnStatus());
+        model.addAttribute("master_mentors", this.professorService.findAll());
 
         model.addAttribute("currentIndex", index);
         model.addAttribute("currentTitle", title);
@@ -118,7 +106,7 @@ public class HomeController {
         model.addAttribute("currentMentor", mentor1);
         model.addAttribute("currentFirstMember", firstMember1);
         model.addAttribute("currentSecondMember", secondMember1);
-        model.addAttribute("MasterThesis", masterThesisService.findAllByStatusOrderGreaterThan(masterThesisToShow(), pageable));
+        model.addAttribute("MasterThesis", masterThesis);
         model.addAttribute("reset", "/resetFilterHome");
         model.addAttribute("back", "/list-MasterThesis");
         return "MasterThesisList";

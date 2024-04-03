@@ -18,12 +18,12 @@
 
         <div th:replace="~{fragment/choosePageSizeFragment :: pageSizeFragment(${currentUrl}, ${size}, 3)}"></div>
 
-        <h5 th:if="${master_page_total_elements !=null && master_page_total_elements == 1}">Вкупно <span th:text="${master_page_total_elements}"></span> пронајден резултат!</h5>
-        <h5 th:if="${master_page_total_elements !=null && master_page_total_elements > 1}">Вкупно <span th:text="${master_page_total_elements}"></span> пронајдени резултати!</h5>
+        <h5 class="m-4" th:if="${MasterThesis.totalElements == 1}">Вкупно: <span th:text="${MasterThesis.totalElements}"></span> магистерскa работa</h5>
+        <h5 class="m-4" th:if="${MasterThesis.totalElements > 1}">Вкупно: <span th:text="${MasterThesis.totalElements}"></span> магистерски работи</h5>
 
         <div th:if="${size > 0}">
 
-            <div th:each="masterThesis : ${master_page.content}">
+            <div th:each="masterThesis : ${MasterThesis}">
 
             <div class="row rounded border m-4  ">
                 <div class="bg-light" style="background-color: #dff0d8">
