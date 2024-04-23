@@ -22,7 +22,8 @@ public enum MasterThesisStatus {
     FOURTH_SECRETARY_VALIDATION(13, "Секретар додава архивски број и валидира."),
     ADMINISTRATION_ARCHIVING(14, "Студентска служба архивира и валидира."),
     PROCESS_FINISHED(15, "Процесот е завршен и се чека одбрана на трудот."),
-    CANCELLED(30, "Откажано.");
+    CANCELLED(30, "Откажано."),
+    EDITED(31, "Направена измена");
 
     private final double order;
     private final String displayName;

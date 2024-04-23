@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 import vp.magisterski.model.enumerations.AppRole;
 import vp.magisterski.model.enumerations.MasterThesisDocumentType;
+import vp.magisterski.model.exceptions.ThesisDoesNotExistException;
 import vp.magisterski.model.magister.MasterThesis;
 import vp.magisterski.model.magister.MasterThesisDocument;
 import vp.magisterski.model.enumerations.MasterThesisStatus;
@@ -354,6 +355,39 @@ public class AdminController {
         }
 
         return String.format("redirect:/admin/details/%d", thesisId);
+    }
+
+
+    @GetMapping("/edit/{thesisId}")
+    public String editMasterThesis(@PathVariable Long thesisId, Model model) {
+        MasterThesis thesis = masterThesisService.findThesisById(thesisId).orElseThrow(() -> new ThesisDoesNotExistException(String.valueOf(thesisId)));
+        model.addAttribute("masterThesis", thesis);
+        model.addAttribute("professors", professorService.findAllByProfessorStatus(true, false));
+        model.addAttribute("members", professorService.findAllByProfessorStatus(true, true));
+        model.addAttribute("rooms", roomService.findAll());
+        return "editMasterThesis";
+    }
+
+    @PostMapping("/update/{thesisId}")
+    public String updateMasterThesis(@PathVariable Long thesisId,
+                                     @RequestParam(required = false) String note,
+                                     @ModelAttribute MasterThesis masterThesis){
+        MasterThesis thesis = masterThesisService.findThesisById(thesisId).orElseThrow(() -> new ThesisDoesNotExistException(String.valueOf(thesisId)));
+        if (!thesis.equals(masterThesis)) {
+            masterThesisService.updateMasterThesis(thesisId, masterThesis);
+            masterThesisStatusChangeService.addEditStatus(thesis, note, userService.getUser());
+
+        }
+        return String.format("redirect:/admin/details/%d", thesisId);
+    }
+
+    @PostMapping("/cancel/{thesisId}")
+    public String cancelMasterThesis(@PathVariable Long thesisId, @RequestParam(required = false) String note,
+                                     @RequestParam Long statusId) {
+        MasterThesis thesis = masterThesisService.findThesisById(thesisId).orElseThrow(() -> new ThesisDoesNotExistException(String.valueOf(thesisId)));
+        masterThesisStatusChangeService.updateAndCancelStatus(statusId, thesis, note, userService.getUser(), false);
+        masterThesisService.updateStatus(thesisId, MasterThesisStatus.CANCELLED);
+        return String.format("redirect:/admin/list-masters", thesisId);
     }
 
 }

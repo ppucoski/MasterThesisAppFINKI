@@ -222,6 +222,24 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
+    public void updateMasterThesis(Long id, MasterThesis thesis) {
+        MasterThesis mt = masterThesisRepository.findById(id).orElse(null);
+        if (mt != null) {
+            mt.setArchiveNumber(thesis.getArchiveNumber());
+            mt.setTitle(thesis.getTitle());
+            mt.setArea(thesis.getArea());
+            mt.setDescription(thesis.getDescription());
+            mt.setMentor(thesis.getMentor());
+            mt.setFirstMember(thesis.getFirstMember());
+            mt.setSecondMember(thesis.getSecondMember());
+            mt.setPresentation(thesis.getPresentation());
+            masterThesisRepository.save(mt);
+        }
+
+    }
+
+
+    @Override
     public Specification<MasterThesis> filterMasterThesisByStatus(MasterThesisStatus status) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();

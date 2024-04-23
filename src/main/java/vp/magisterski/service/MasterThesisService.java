@@ -59,4 +59,6 @@ public interface MasterThesisService {
     void updateArchiveNumber(Long thesisId, String archiveNumber);
     Specification<MasterThesis> filterMasterThesisByStatus(MasterThesisStatus status);
     List<MasterThesisStatus> returnStatus();
+
+    void updateMasterThesis(Long id, MasterThesis thesis);
 }

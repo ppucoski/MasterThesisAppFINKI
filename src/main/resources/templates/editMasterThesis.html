@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="_layout">
+<head>
+    <title>Edit master thesis</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container-lg">
+        <h2>Измена на магистерска работа</h2>
+
+        <form th:action="@{/admin/update/{thesisId}(thesisId=${masterThesis.id})}" method="post" th:object="${masterThesis}">
+
+            <label>Title:</label><br>
+
+            <div class="form-group m-2">
+                <label for="archiveNumber">Архивски број на магистерска работа:</label>
+                <input class="form-control"
+                       type="text"
+                       id="archiveNumber"
+                       name="archiveNumber"
+                       th:field="*{archiveNumber}"
+                       th:value="${masterThesis.archiveNumber ?: ''}"
+                       th:disabled="${masterThesis.archiveNumber == null}"
+                       placeholder="Нема сеуште внесен архивски број"
+                       required>
+            </div>
+
+
+            <div class="form-group m-2">
+                <label for="title">Наслов на магистерска работа:</label>
+                <input class="form-control" type="text" id="title" name="title" th:field="*{title}" required>
+            </div>
+            <div class="form-group m-2">
+                <label for="title">Област на магистерска работа:</label>
+                <input class="form-control" type="text" id="area" name="area" th:field="*{area}" required>
+            </div>
+
+            <div class="form-group m-2">
+                <label for="description" class="form-label">Кратка содржина</label>
+                <textarea
+                        class="form-control"
+                        required
+                        id="description"
+                        name="description"
+                        th:field="*{description}"></textarea>
+            </div>
+
+            <div class="form-group m-2">
+                <label for="mentor" class="form-label">Ментор</label>
+                <select id="mentor" name="mentor" class="form-select" required>
+                    <option value="" disabled selected>Изберете ментор</option>
+                    <option th:each="professor : ${professors}"
+                            th:value="${professor.getId()}"
+                            th:text="${professor.getName()}"
+                            th:selected="${professor.getId() == masterThesis.mentor.id}"></option>
+                </select>
+            </div>
+
+            <div class="form-group m-2" th:if="${masterThesis.firstMember != null}">
+                <label for="firstMember" class="form-label">Член 1</label>
+                <select id="firstMember" name="firstMember" class="form-select" >
+                    <option value="" disabled selected>Изберете</option>
+                    <option th:each="member : ${members}"
+                            th:value="${member.getId()}"
+                            th:text="${member.getName()}"
+                            th:disabled="${masterThesis.firstMember == null}"
+                            th:selected="${member.getId() == masterThesis.firstMember.id}"></option>
+                </select>
+            </div>
+
+            <div class="form-group m-2" th:if="${masterThesis.secondMember != null}">
+                <label for="secondMember" class="form-label">Член 2</label>
+                <select id="secondMember" name="secondMember" class="form-select" >
+                    <option value="" disabled selected>Изберете</option>
+                    <option th:each="member : ${members}"
+                            th:value="${member.getId()}"
+                            th:text="${member.getName()}"
+                            th:selected="${member.getId() == masterThesis.secondMember.id}"></option>
+                </select>
+            </div>
+
+
+
+
+
+            <div class="m-2 form-group" th:if="${masterThesis.presentation != null}">
+                <label for="room" class="form-label">Просторија</label>
+                <select id="room" name="room" class="form-select" required>
+                    <option value="" disabled selected>Изберете</option>
+                    <option th:each="room : ${rooms}"
+                            th:value="${room.getName()}"
+                            th:text="${room.getName()}"
+                            th:selected="${room.getName() == presentation.location.getName()}"></option>
+                </select>
+            </div>
+
+
+            <div class="form-group m-2" th:if="${masterThesis.presentation != null}">
+                <label for="localDateTime">Селектирај датум и време на презентација:</label>
+                <div class="input-group">
+                    <input type="datetime-local" class="form-control" id="localDateTime" name="localDateTime"
+                           th:field="*{presentation.presentationStartTime}"
+                           th:value="${presentation != null ? presentation.presentationStartTime : ''}">
+                </div>
+            </div>
+
+
+            <div class="form-group m-2">
+                <label for="note">Внесете зошто и што сте замениле</label>
+                <textarea class="form-control" id="note" name="note" required></textarea>
+            </div>
+
+            <button type="submit m-2" class="btn btn-primary">Внеси</button>
+        </form>
+
+    </div>
+</div>
+</body>
+</html>

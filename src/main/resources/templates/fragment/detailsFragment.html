@@ -49,6 +49,24 @@
                   th:text="${masterThesisStatusChange.get().getNextStatus().getDisplayName()}"></span>
         </p>
     </div>
+    <div class="row">
+
+        <a class="btn btn-outline-primary w-25 m-2"
+           th:href="@{/admin/edit/{thesisId}(thesisId=${thesis.getId()})}">Измени</a>
+
+
+        <form th:action="@{/admin/cancel/{thesisId}(thesisId=${thesis.getId()})}" method="POST">
+            <input type="hidden" name="statusId" th:value="${masterThesisStatusChange.get().id}">
+
+            <div class="form-group m-2">
+                <label for="note">Забелешка</label>
+                <textarea class="form-control" id="note" name="note"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-danger m-2">Откажи</button>
+        </form>
+
+    </div>
     <div th:replace="~{fragment/downloadFragment :: downloadFragment}"></div>
 
 </div>
