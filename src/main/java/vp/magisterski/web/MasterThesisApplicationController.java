@@ -21,13 +21,15 @@ public class MasterThesisApplicationController {
     private final MasterThesisService masterThesisService;
     private final MasterThesisDocumentService masterThesisDocumentService;
     private final MasterThesisStatusChangeService masterThesisStatusChangeService;
+    private final EmailService emailService;
 
-    public MasterThesisApplicationController(UserService userService, ProfessorService professorService, MasterThesisService masterThesisService, MasterThesisDocumentService masterThesisDocumentService, MasterThesisStatusChangeService masterThesisStatusChangeService) {
+    public MasterThesisApplicationController(UserService userService, ProfessorService professorService, MasterThesisService masterThesisService, MasterThesisDocumentService masterThesisDocumentService, MasterThesisStatusChangeService masterThesisStatusChangeService, EmailService emailService) {
         this.userService = userService;
         this.professorService = professorService;
         this.masterThesisService = masterThesisService;
         this.masterThesisDocumentService = masterThesisDocumentService;
         this.masterThesisStatusChangeService = masterThesisStatusChangeService;
+        this.emailService = emailService;
     }
 
     @ModelAttribute
@@ -58,6 +60,7 @@ public class MasterThesisApplicationController {
             masterThesisDocumentService.saveFile(thesis, MasterThesisDocumentType.STUDENT_BIOGRAPHY, fileInput3);
             masterThesisStatusChangeService.addStatus(thesis, MasterThesisStatus.STUDENT_THESIS_REGISTRATION, LocalDateTime.now(), true);
             masterThesisStatusChangeService.addStatus(thesis, MasterThesisStatus.MENTOR_VALIDATION);
+            emailService.sendSimpleMessage("nikolajovanovski234@gmail.com", "uspesno podnesena prijava", "uspesno kreiravte nova magistarska prijava");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
