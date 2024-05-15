@@ -7,6 +7,7 @@ import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -56,6 +57,11 @@ public class MasterThesis {
 
     // 5 - 10
     private Integer grade;
+
+    private LocalDateTime lastUpdate;
+
+    @ManyToOne
+    private Professor coordinator;
 
     public MasterThesis(MasterThesisStatus status, MasterThesisPresentation presentation, Student student, String title, String area, String description, Professor mentor, Professor firstMember, Professor secondMember) {
         this.status = status;
