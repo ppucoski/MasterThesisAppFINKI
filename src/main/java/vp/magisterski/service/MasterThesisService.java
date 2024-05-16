@@ -61,4 +61,7 @@ public interface MasterThesisService {
     List<MasterThesisStatus> returnStatus();
 
     void updateMasterThesis(Long id, MasterThesis thesis);
+
+    void setLastUpdateMasterThesis(Long thesisId);
+    void addGrade(Long id, Integer grade);
 }

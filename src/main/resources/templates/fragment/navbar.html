@@ -23,7 +23,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/list-masters"
                            sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_PROFESSOR', 'ACADEMIC_AFFAIR_VICE_DEAN',
-                           'ROLE_STUDENT_ADMINISTRATION', 'SCIENCE_AND_COOPERATION_VICE_DEAN')">
+                           'ROLE_STUDENT_ADMINISTRATION', 'SCIENCE_AND_COOPERATION_VICE_DEAN',
+                           'ROLE_ADMINISTRATION_MANAGER')">
                             Магистерска
                         </a>
                     </li>
@@ -40,9 +41,15 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin/masterThesisInfo"
+                        <a class="nav-link" href="/admin/masterThesisMentorInfo"
                            sec:authorize="hasAnyRole('ROLE_PROFESSOR', 'ROLE_ADMIN', 'ACADEMIC_AFFAIR_VICE_DEAN')">
-                            Мои Магистерски
+                            Ментор
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/masterThesisMemberInfo"
+                           sec:authorize="hasAnyRole('ROLE_PROFESSOR', 'ROLE_ADMIN', 'ACADEMIC_AFFAIR_VICE_DEAN')">
+                            Член
                         </a>
                     </li>
                     <li class="nav-item">

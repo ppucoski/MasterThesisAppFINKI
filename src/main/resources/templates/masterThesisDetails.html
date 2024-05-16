@@ -78,17 +78,15 @@
         </div>
 
 
-        <div class="row border p-2 mt-2 mb-2" th:if="${masterThesisStatusChange.get().getNextStatus().toString() == 'COMMISSION_VALIDATION'
-        or masterThesisStatusChange.get().getNextStatus().toString() == 'COMMISSION_CHECK'}"
-             sec:authorize="hasRole('SCIENCE_AND_COOPERATION_VICE_DEAN')">
+
+        <div class="row border p-2 mt-2 mb-2"
+             th:if="${member == true and masterThesisStatusChange.get().getNextStatus().toString() == 'REPORT_VALIDATION'}">
             <div th:replace="~{fragment/statusNoteFragment :: statusNoteFragment}"></div>
         </div>
         <div
-                th:if="${masterThesisStatusChange.get().getNextStatus().toString() == 'COMMISSION_VALIDATION'
-        or masterThesisStatusChange.get().getNextStatus().toString() == 'COMMISSION_CHECK'}"
-                sec:authorize="!hasRole('SCIENCE_AND_COOPERATION_VICE_DEAN')">
+                th:if="${member == false and masterThesisStatusChange.get().getNextStatus().toString() == 'REPORT_VALIDATION'}">
             <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
-            (text='Се чека одобрение од наставно научна комисија служба')}"></div>
+            (text='Членови на комисија проверуваат извештај и валидираат.')}"></div>
         </div>
 
 
@@ -100,6 +98,19 @@
                 th:if="${mentor == false and masterThesisStatusChange.get().getNextStatus().toString() == 'MENTOR_VALIDATION'}">
             <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
             (text='Се чека одобрение од ментор')}"></div>
+        </div>
+
+
+
+
+        <div class="row border p-2 mt-2 mb-2"
+             th:if="${mentor == true and masterThesisStatusChange.get().getNextStatus().toString() == 'DRAFT_CHECK'}">
+            <div th:replace="~{fragment/statusNoteFragment :: statusNoteFragment}"></div>
+        </div>
+        <div
+                th:if="${mentor == false and masterThesisStatusChange.get().getNextStatus().toString() == 'DRAFT_CHECK'}">
+            <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
+            (text='Комисија внесува забелешки, студентот корегира, менторот валидира.')}"></div>
         </div>
 
         <div class="row border p-2 mt-2 mb-2"
@@ -134,9 +145,33 @@
         </div>
 
 
+        <div class="row border p-2 mt-2 mb-2"
+             th:if="${coordinator==true and (masterThesisStatusChange.get().getNextStatus().toString() == 'COMMISSION_VALIDATION'
+             or masterThesisStatusChange.get().getNextStatus().toString() == 'COMMISSION_CHECK')}">
+            <div th:replace="~{fragment/statusNoteFragment :: statusNoteFragment}"></div>
+        </div>
+        <div
+                th:if="${coordinator==false and (masterThesisStatusChange.get().getNextStatus().toString() == 'COMMISSION_VALIDATION'
+             or masterThesisStatusChange.get().getNextStatus().toString() == 'COMMISSION_CHECK')}">
+            <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
+            (text='Се чека одобрение од наставно научна комисија служба')}"></div>
+        </div>
+
+
+        <div class="row border p-2 mt-2 mb-2"
+             th:if="${coordinator==true and grade==false and masterThesisStatusChange.get().getNextStatus().toString() == 'FINISHED'}">
+            <div th:replace="~{fragment/statusGradeFragment :: statusGradeFragment}"></div>
+        </div>
+        <div
+                th:if="${coordinator==false and grade==false and masterThesisStatusChange.get().getNextStatus().toString() == 'FINISHED'}">
+            <div th:replace="~{fragment/waitingForValidationFragment :: waitingForValidationFragment
+            (text='Се чека одбрана на трудот')}"></div>
+        </div>
+
+
         <div class="row">
-            <div th:replace="~{fragment/detailsFragment :: detailsFragment}"></div>
-            <div th:replace="~{fragment/statusHistoryFragment :: statusHistoryFragment}"></div>
+            <div  th:replace="~{fragment/detailsFragment :: detailsFragment}"></div>
+            <div  th:replace="~{fragment/statusHistoryFragment :: statusHistoryFragment}"></div>
         </div>
 
     </div>

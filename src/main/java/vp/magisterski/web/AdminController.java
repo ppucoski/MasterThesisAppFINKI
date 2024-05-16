@@ -7,6 +7,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -67,7 +68,6 @@ public class AdminController {
     }
 
 
-
     @GetMapping("/list-masters")
     public String showMasterList(
             @RequestParam(required = false) String index,
@@ -108,6 +108,13 @@ public class AdminController {
 
         specification = specification.and(this.masterThesisService.filterMasterThesis(index, title, status, mentor1, firstMember1, secondMember1, isValidation));
 
+        //TODO da proverime dali ova rabotat sea site se bez vreme pa ne znajme dali rabotat
+        specification = specification.and((root, query, criteriaBuilder) -> {
+            query.orderBy(criteriaBuilder.desc(root.get("lastUpdate")));
+            return null;
+        });
+        //TODO do ovde
+
         Page<MasterThesis> master_page = this.masterThesisService.findAll(specification, pageable);
 
         model.addAttribute("master_page", master_page);
@@ -147,21 +154,6 @@ public class AdminController {
         return "newMasterThesis";
     }
 
-    @GetMapping("/masterThesisInfo")
-    public String getMasterThesisInfo(Model model) {
-        String username = userService.getUsernameFromUser();
-        Professor thesisMentor = professorService.findProfessorByName(username);
-        model.addAttribute("thesisMentor", thesisMentor);
-        return "masterThesisInfo";
-    }
-
-    @PostMapping("/masterThesisInfo")
-    public String filterThesis(@RequestParam String filter) {
-        if (filter.equals("mentor")) {
-            return "redirect:masterThesisMentorInfo";
-        }
-        return "redirect:masterThesisMemberInfo";
-    }
 
     @GetMapping("/masterThesisMentorInfo")
     public String getMasterThesisMentorInfo(@RequestParam(defaultValue = "0") int page,
@@ -246,6 +238,15 @@ public class AdminController {
 
         model.addAttribute("role", userService.getUser().getRole());
         model.addAttribute("mentor", Objects.equals(masterThesis.getMentor().getId(), userService.getUser().getId()));
+        model.addAttribute("coordinator", Objects.equals(masterThesis.getCoordinator().getId(), userService.getUser().getId()));
+        model.addAttribute("grade", masterThesis.getGrade() != null);
+        if (masterThesis.getFirstMember() == null || masterThesis.getSecondMember() == null) {
+            model.addAttribute("member", false);
+        } else {
+            model.addAttribute("member", Objects.equals(masterThesis.getFirstMember().getId(), userService.getUser().getId()) ||
+                    Objects.equals(masterThesis.getSecondMember().getId(), userService.getUser().getId()));
+        }
+
         model.addAttribute("student", false);
 
 
@@ -371,7 +372,7 @@ public class AdminController {
     @PostMapping("/update/{thesisId}")
     public String updateMasterThesis(@PathVariable Long thesisId,
                                      @RequestParam(required = false) String note,
-                                     @ModelAttribute MasterThesis masterThesis){
+                                     @ModelAttribute MasterThesis masterThesis) {
         MasterThesis thesis = masterThesisService.findThesisById(thesisId).orElseThrow(() -> new ThesisDoesNotExistException(String.valueOf(thesisId)));
         if (!thesis.equals(masterThesis)) {
             masterThesisService.updateMasterThesis(thesisId, masterThesis);
@@ -388,6 +389,25 @@ public class AdminController {
         masterThesisStatusChangeService.updateAndCancelStatus(statusId, thesis, note, userService.getUser(), false);
         masterThesisService.updateStatus(thesisId, MasterThesisStatus.CANCELLED);
         return String.format("redirect:/admin/list-masters", thesisId);
+    }
+
+    @PostMapping("/grade/{statusId}")
+    public String setGrade(@PathVariable Long statusId,
+                                @RequestParam Integer grade,
+                                @RequestParam Long thesisId,
+                                @RequestParam(required = false) String note) {
+        try {
+            MasterThesis masterThesis = masterThesisService.findThesisById(thesisId).get();
+
+            masterThesisStatusChangeService.updateLastStatus(statusId, masterThesis, note, userService.getUser(), true);
+            masterThesisService.updateStatus(thesisId, masterThesis.getStatus().getNextStatusFromCurrent());
+            masterThesisService.addGrade(thesisId, grade);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return String.format("redirect:/admin/details/%d", thesisId);
     }
 
 }

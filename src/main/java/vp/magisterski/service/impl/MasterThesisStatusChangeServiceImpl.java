@@ -107,13 +107,27 @@ public class MasterThesisStatusChangeServiceImpl implements MasterThesisStatusCh
     }
 
     @Override
+    public MasterThesisStatusChange updateLastStatus(Long statusId, MasterThesis thesis, String note, User user, Boolean approved) {
+        MasterThesisStatusChange masterThesisStatusChange = this.masterThesisStatusChangeRepository.findById(statusId).orElse(null);
+        if (masterThesisStatusChange != null) {
+            masterThesisStatusChange.setNote(note);
+            masterThesisStatusChange.setStatusChangeDate(LocalDateTime.now());
+            masterThesisStatusChange.setStatusChangedBy(user);
+            masterThesisStatusChange.setApproved(approved);
+            masterThesisStatusChangeRepository.save(masterThesisStatusChange);
+        }
+        return masterThesisStatusChange;
+    }
+
+    @Override
     public void updateAndCancelStatus(Long statusId, MasterThesis thesis,String note,User user, Boolean approved) {
         MasterThesisStatusChange masterThesisStatusChange = this.masterThesisStatusChangeRepository.findById(statusId).orElse(null);
         if (masterThesisStatusChange != null) {
             masterThesisStatusChange.setStatusChangeDate(LocalDateTime.now());
             masterThesisStatusChange.setApproved(approved);
             masterThesisStatusChangeRepository.save(masterThesisStatusChange);
-            this.addStatus(thesis, LocalDateTime.now(), MasterThesisStatus.CANCELLED,user, note);
+            masterThesisStatusChangeRepository.save(new MasterThesisStatusChange(thesis, LocalDateTime.now(),
+                    MasterThesisStatus.CANCELLED, user, note, approved));
 
     }
     }

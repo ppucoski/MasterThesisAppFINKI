@@ -82,12 +82,15 @@ public class MasterThesis {
         this.mentor = mentor;
     }
 
-    public MasterThesis(MasterThesisStatus status, Student student, String title, Professor mentor, String description) {
+    public MasterThesis(MasterThesisStatus status, Student student, String title, Professor mentor, String description,
+                        Professor coordinator) {
         this.status = status;
         this.student = student;
         this.title = title;
         this.mentor = mentor;
         this.description = description;
+        this.coordinator = coordinator;
+        this.lastUpdate = LocalDateTime.now();
     }
 
     @Override

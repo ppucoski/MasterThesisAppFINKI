@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import vp.magisterski.model.accreditations.StudyProgramDetails;
 import vp.magisterski.model.enumerations.MasterThesisDocumentType;
 import vp.magisterski.model.exceptions.ProfessorDoesNotExistException;
 import vp.magisterski.model.exceptions.RoomDoesNotExistsException;
@@ -36,17 +37,20 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     private final StudentRepository studentRepository;
     private final ProfessorRepository professorRepository;
     private final RoomRepository roomRepository;
+    private final StudyProgramDetailsRepository studyProgramDetailsRepository;
     private final MasterThesisStatusChangeRepository masterThesisStatusChangeRepository;
     private final MasterThesisDocumentServiceImpl masterThesisDocumentServiceImpl;
 
     public MasterThesisServiceImpl(MasterThesisRepository masterThesisRepository, StudentRepository studentRepository, ProfessorRepository professorRepository, RoomRepository roomRepository,
-                                   MasterThesisStatusChangeRepository masterThesisStatusChangeRepository, MasterThesisDocumentServiceImpl masterThesisDocumentServiceImpl) {
+                                   MasterThesisStatusChangeRepository masterThesisStatusChangeRepository, MasterThesisDocumentServiceImpl masterThesisDocumentServiceImpl,
+                                   StudyProgramDetailsRepository studyProgramDetailsRepository) {
         this.masterThesisRepository = masterThesisRepository;
         this.studentRepository = studentRepository;
         this.professorRepository = professorRepository;
         this.roomRepository = roomRepository;
         this.masterThesisStatusChangeRepository = masterThesisStatusChangeRepository;
         this.masterThesisDocumentServiceImpl = masterThesisDocumentServiceImpl;
+        this.studyProgramDetailsRepository = studyProgramDetailsRepository;
     }
 
     @Override
@@ -71,7 +75,12 @@ public class MasterThesisServiceImpl implements MasterThesisService {
                 .orElseThrow(() -> new StudentDoesNotExistException(studentIndex));
         Professor mentor = this.professorRepository.findById(mentorId)
                 .orElseThrow(() -> new ProfessorDoesNotExistException(mentorId));
-        MasterThesis masterThesis = new MasterThesis(MasterThesisStatus.STUDENT_THESIS_REGISTRATION, student, title, mentor, description);
+        StudyProgramDetails studyProgramDetails = this.studyProgramDetailsRepository.findById(student.getStudyProgram().getCode()).orElse(null);
+        Professor coordinator = null;
+        if (studyProgramDetails != null) {
+            coordinator = studyProgramDetails.getCoordinator();
+        }
+        MasterThesis masterThesis = new MasterThesis(MasterThesisStatus.STUDENT_THESIS_REGISTRATION, student, title, mentor, description, coordinator);
         return this.masterThesisRepository.save(masterThesis);
     }
 
@@ -116,12 +125,11 @@ public class MasterThesisServiceImpl implements MasterThesisService {
 
             if (studentIndex != null && !studentIndex.isEmpty()) {
                 List<Student> students = studentRepository.findByIndexStartingWith(studentIndex);
-                if(!students.isEmpty()){
+                if (!students.isEmpty()) {
                     predicate = criteriaBuilder.and(predicate,
                             root.get("student").in(students));
-                }
-                else{
-                    predicate =  criteriaBuilder.disjunction();
+                } else {
+                    predicate = criteriaBuilder.disjunction();
                 }
             }
 
@@ -140,7 +148,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
                         criteriaBuilder.and(
                                 criteriaBuilder.equal(root.get("firstMember"), member1),
                                 criteriaBuilder.equal(root.get("secondMember"), member2)
-                        ),criteriaBuilder.and(
+                        ), criteriaBuilder.and(
                                 criteriaBuilder.equal(root.get("firstMember"), member2),
                                 criteriaBuilder.equal(root.get("secondMember"), member1)
                         ));
@@ -207,7 +215,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     }
 
     @Override
-    public List<MasterThesisStatus> returnStatus(){
+    public List<MasterThesisStatus> returnStatus() {
         return Arrays.asList(
                 MasterThesisStatus.MENTOR_COMMISSION_CHOICE,
                 MasterThesisStatus.SECOND_SECRETARY_VALIDATION,
@@ -236,6 +244,26 @@ public class MasterThesisServiceImpl implements MasterThesisService {
             masterThesisRepository.save(mt);
         }
 
+    }
+
+    @Override
+    public void setLastUpdateMasterThesis(Long thesisId) {
+        MasterThesis mt = masterThesisRepository.findById(thesisId).orElse(null);
+        if (mt != null) {
+            mt.setLastUpdate(LocalDateTime.now());
+            masterThesisRepository.save(mt);
+        }
+
+    }
+
+    @Override
+    public void addGrade(Long id, Integer grade) {
+        MasterThesis mt = masterThesisRepository.findById(id).orElse(null);
+        if (mt != null) {
+            mt.setGrade(grade);
+            mt.setLastUpdate(LocalDateTime.now());
+            masterThesisRepository.save(mt);
+        }
     }
 
 
@@ -341,10 +369,10 @@ public class MasterThesisServiceImpl implements MasterThesisService {
                     criteriaBuilder.or(
                             criteriaBuilder.and(
                                     criteriaBuilder.equal(root.get("firstMember"), secondMember)
-                                    ),
+                            ),
                             criteriaBuilder.and(
                                     criteriaBuilder.equal(root.get("secondMember"), secondMember)
-                                    )
+                            )
                     ));
 
 
@@ -434,7 +462,6 @@ public class MasterThesisServiceImpl implements MasterThesisService {
             masterThesisRepository.save(thesis);
         }
     }
-
 
 
     @Override

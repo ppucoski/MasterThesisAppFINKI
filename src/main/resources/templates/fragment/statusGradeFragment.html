@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<div th:fragment="statusGradeFragment" class="col m-2">
+
+    <p th:text="${masterThesisStatusChange.get().nextStatus.getDisplayName()}"></p>
+    <form th:action="@{/admin/grade/{statusId}(statusId=${masterThesisStatusChange.get().id})}" method="POST">
+        <input type="hidden" name="thesisId" th:value="${thesisId}">
+        <div class="form-group m-2">
+            <label for="grade">Оцена</label>
+            <input class="form-control" type="number" id="grade" name="grade" min="5" max="10" step="1">
+        </div>
+
+        <div class="form-group m-2">
+            <label for="note">Забелешка</label>
+            <textarea class="form-control" id="note" name="note"></textarea>
+        </div>
+        <div class="form-group m-2">
+            <button type="submit" name="action" value="approve" class="btn btn-secondary">Внеси</button>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>

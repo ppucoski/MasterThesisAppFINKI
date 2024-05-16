@@ -22,6 +22,7 @@ public interface MasterThesisStatusChangeService {
     List<MasterThesisStatusChange> getAllByThesis(MasterThesis thesis);
 
     MasterThesisStatusChange updateStatus(Long statusId,MasterThesis thesis, String note, User user, Boolean approved);
+    MasterThesisStatusChange updateLastStatus(Long statusId,MasterThesis thesis, String note, User user, Boolean approved);
     void updateAndCancelStatus(Long statusId,MasterThesis thesis,String note, User user, Boolean approved);
     Optional<MasterThesisStatusChange> findByThesis(MasterThesis thesis);
 

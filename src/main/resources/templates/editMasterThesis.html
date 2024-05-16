@@ -91,7 +91,7 @@
                     <option th:each="room : ${rooms}"
                             th:value="${room.getName()}"
                             th:text="${room.getName()}"
-                            th:selected="${room.getName() == presentation.location.getName()}"></option>
+                            th:selected="${room.getName() == masterThesis.getPresentation().getLocation()}"></option>
                 </select>
             </div>
 
@@ -100,8 +100,8 @@
                 <label for="localDateTime">Селектирај датум и време на презентација:</label>
                 <div class="input-group">
                     <input type="datetime-local" class="form-control" id="localDateTime" name="localDateTime"
-                           th:field="*{presentation.presentationStartTime}"
-                           th:value="${presentation != null ? presentation.presentationStartTime : ''}">
+                           th:field="${masterThesis.presentation.presentationStartTime}"
+                           th:value="${masterThesis.presentation.presentationStartTime != null ? masterThesis.presentation.presentationStartTime : ''}">
                 </div>
             </div>
 
