@@ -27,6 +27,7 @@ import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.model.magister.MasterThesisStatusChange;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
+import vp.magisterski.model.shared.User;
 import vp.magisterski.model.shared.UserRole;
 import vp.magisterski.service.*;
 
@@ -63,23 +64,16 @@ public class AdminController {
 
     @ModelAttribute
     public void trackUsername(Model model) {
+        User fullUser = userService.getUser();
         String username = userService.getUsernameFromUser();
         model.addAttribute("user", username);
+        model.addAttribute("fullUser", fullUser);
     }
 
-
-    @GetMapping("/list-masters")
-    public String showMasterList(
-            @RequestParam(required = false) String index,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) MasterThesisStatus status,
-            @RequestParam(required = false) String mentor,
-            @RequestParam(required = false) String firstMember,
-            @RequestParam(required = false) String secondMember,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size,
-            @RequestParam(required = false) String isValidation,
-            Model model) {
+    private String processMasterThesisInfoForFiltering(
+            String index, String title, MasterThesisStatus status,
+            String mentor, String firstMember, String secondMember,
+            String isValidation, int page, int size, Model model, String viewName) {
 
         String currentUrl = request.getRequestURI() + "?" + request.getQueryString();
         currentUrl = currentUrl.replaceFirst("(\\?|&)?page=[^&]*", "");
@@ -130,22 +124,40 @@ public class AdminController {
         model.addAttribute("currentFirstMember", firstMember1);
         model.addAttribute("currentSecondMember", secondMember1);
         model.addAttribute("isValidation", isValidation);
-        model.addAttribute("reset", "/admin/resetFilter");
-        model.addAttribute("back", "/admin/list-masters");
-        return "list_masters";
+
+        return viewName;
     }
 
-    @GetMapping("/goBack")
-    public String goBack(Model model) {
-        return "list_masters";
-    }
+    @GetMapping("/list-masters")
+    public String showMasterList(
+            @RequestParam(required = false) String index,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) MasterThesisStatus status,
+            @RequestParam(required = false) String mentor,
+            @RequestParam(required = false) String firstMember,
+            @RequestParam(required = false) String secondMember,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(required = false) String isValidation,
+            Model model) {
 
+        return processMasterThesisInfoForFiltering(index, title, status, mentor, firstMember, secondMember, isValidation, page, size, model, "list_masters");
+    }
 
     @GetMapping("/resetFilter")
     public String resetFilter() {
         return "redirect:list-masters";
     }
 
+    @GetMapping("/resetFilterMentorInfo")
+    public String resetFilterMentorInfo() {
+        return "redirect:masterThesisMentorInfo";
+    }
+
+    @GetMapping("/resetFilterMemberInfo")
+    public String resetFilterMemberInfo() {
+        return "redirect:masterThesisMemberInfo";
+    }
 
     @GetMapping("/newMasterThesis")
     public String newMasterThesis(Model model) {
@@ -156,31 +168,48 @@ public class AdminController {
 
 
     @GetMapping("/masterThesisMentorInfo")
-    public String getMasterThesisMentorInfo(@RequestParam(defaultValue = "0") int page,
+    public String getMasterThesisMentorInfo(
+                                            @RequestParam(required = false) String index,
+                                            @RequestParam(required = false) String title,
+                                            @RequestParam(required = false) MasterThesisStatus status,
+                                            @RequestParam(required = false) String mentor,
+                                            @RequestParam(required = false) String firstMember,
+                                            @RequestParam(required = false) String secondMember,
+                                            @RequestParam(required = false) String isValidation,
+                                            @RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "3") int size,
                                             Model model) {
-        Pageable pageable = PageRequest.of(page, size);
-        String username = userService.getUsernameFromUser();
-        Professor mentor = professorService.findProfessorByName(username);
-        Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesisByMentor(mentor);
-        Page<MasterThesis> thesisPage = this.masterThesisService.findAll(specification, pageable);
-        model.addAttribute("master_page", thesisPage);
-        model.addAttribute("size", thesisPage.getTotalElements());
-        return "masterThesisMentorInfo";
+//        String username = userService.getUsernameFromUser();
+//        Professor mentor = professorService.findProfessorByName(username);
+        return processMasterThesisInfoForFiltering(index, title, status, mentor, firstMember, secondMember, isValidation, page, size, model, "masterThesisMentorInfo");
+//        String username = userService.getUsernameFromUser();
+//        Professor mentor = professorService.findProfessorByName(username);
+//        Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesisByMentor(mentor);
+//        Page<MasterThesis> thesisPage = this.masterThesisService.findAll(specification, pageable);
+//        model.addAttribute("master_page", thesisPage);
+//        model.addAttribute("size", thesisPage.getTotalElements());
     }
 
     @GetMapping("/masterThesisMemberInfo")
-    public String getMasterThesisMemberInfo(@RequestParam(defaultValue = "0") int page,
+    public String getMasterThesisMemberInfo(
+                                            @RequestParam(required = false) String index,
+                                            @RequestParam(required = false) String title,
+                                            @RequestParam(required = false) MasterThesisStatus status,
+                                            @RequestParam(required = false) String mentor,
+                                            @RequestParam(required = false) String firstMember,
+                                            @RequestParam(required = false) String secondMember,
+                                            @RequestParam(required = false) String isValidation,
+                                            @RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "3") int size,
                                             Model model) {
-        Pageable pageable = PageRequest.of(page, size);
-        String username = userService.getUsernameFromUser();
-        Professor mentor = professorService.findProfessorByName(username);
-        Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesisByMember(mentor, mentor); //TODO: proveri dal e mentor ili member filter
-        Page<MasterThesis> thesisPage = this.masterThesisService.findAll(specification, pageable);
-        model.addAttribute("master_page", thesisPage);
-        model.addAttribute("size", thesisPage.getTotalElements());
-        return "masterThesisMemberInfo";
+        return processMasterThesisInfoForFiltering(index, title, status, mentor, firstMember, secondMember, isValidation, page, size, model, "masterThesisMemberInfo");
+//        Pageable pageable = PageRequest.of(page, size);
+//        String username = userService.getUsernameFromUser();
+//        Professor mentor = professorService.findProfessorByName(username);
+//        Specification<MasterThesis> specification = this.masterThesisService.filterMasterThesisByMember(mentor, mentor); //TODO: proveri dal e mentor ili member filter
+//        Page<MasterThesis> thesisPage = this.masterThesisService.findAll(specification, pageable);
+//        model.addAttribute("master_page", thesisPage);
+//        model.addAttribute("size", thesisPage.getTotalElements());
     }
 
     @PostMapping("/newMasterThesis")

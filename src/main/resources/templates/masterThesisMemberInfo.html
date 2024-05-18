@@ -14,10 +14,12 @@
             </div>
         </div>
 
+        <div th:replace="~{fragment/filterFragment :: filterFragment(${currentUrl}, ${size}, 3)}"></div>
+
+        <div th:replace="~{fragment/choosePageSizeFragment :: pageSizeFragment('/admin/masterThesisMentorInfo', ${size}, 3)}"></div>
+
         <h5 class="m-4" th:if="${size == 1}">Вкупно: <span th:text="${size}"></span> магистерскa работa</h5>
         <h5 class="m-4" th:if="${size > 1}">Вкупно: <span th:text="${size}"></span> магистерски работи</h5>
-
-        <div th:replace="~{fragment/choosePageSizeFragment :: pageSizeFragment('/admin/masterThesisMemberInfo', ${size}, 3)}"></div>
 
         <div th:if="${size > 0}">
             <div class="table-responsive justify-content-center align-items-center">
@@ -86,13 +88,13 @@
                     </th:block>
                 </table>
 
-                <div th:replace="~{fragment/paginationFragment :: pagination('/admin/masterThesisMentorInfo', ${master_page})}"></div>
+                <div th:replace="~{fragment/paginationFragment :: pagination('/admin/masterThesisMemberInfo', ${master_page})}"></div>
             </div>
 
         </div>
     </div>
+    <div th:replace="~{fragment/noElementsFoundFragment :: noElementsFragment(${size})}"></div>
 
-    <div>Нема тези каде што вие сте член!</div>
 
 </div>
 </body>

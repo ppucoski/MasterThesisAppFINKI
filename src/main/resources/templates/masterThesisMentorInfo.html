@@ -6,7 +6,7 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="container">
+    <div class="container-lg">
         <h3>Детали за нашите магистерски работи</h3>
         <div class="row">
             <div>
@@ -14,11 +14,12 @@
             </div>
         </div>
 
-        <h5 class="m-4" th:if="${size == 1}">Вкупно: <span th:text="${size}"></span> магистерскa работa</h5>
-        <h5 class="m-4" th:if="${size > 1}">Вкупно: <span th:text="${size}"></span> магистерски работи</h5>
-
+        <div th:replace="~{fragment/filterFragment :: filterFragment(${currentUrl}, ${size}, 3)}"></div>
 
         <div th:replace="~{fragment/choosePageSizeFragment :: pageSizeFragment('/admin/masterThesisMentorInfo', ${size}, 3)}"></div>
+
+        <h5 class="m-4" th:if="${size == 1}">Вкупно: <span th:text="${size}"></span> магистерскa работa</h5>
+        <h5 class="m-4" th:if="${size > 1}">Вкупно: <span th:text="${size}"></span> магистерски работи</h5>
 
         <div th:if="${size > 0}">
             <div class="table-responsive justify-content-center align-items-center">
@@ -92,8 +93,7 @@
 
 
         </div>
-
-        <div>Нема тези каде што вие сте ментор!</div>
+        <div th:replace="~{fragment/noElementsFoundFragment :: noElementsFragment(${size})}"></div>
 
     </div>
 </body>

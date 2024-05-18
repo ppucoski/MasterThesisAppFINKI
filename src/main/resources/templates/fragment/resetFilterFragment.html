@@ -10,7 +10,11 @@
                             not #strings.isEmpty(currentSecondMember) ||
                             not #strings.isEmpty(isValidation)}">
             <div class="col-4">
-                <a th:href="${reset.contains('/resetFilterHome') ? '/resetFilterHome' : '/admin/resetFilter'}" class="btn btn-success text-white border mt-4">Ресетирај Филтер</a>
+                <a th:if="${currentUrl != null}"
+                   th:href="${currentUrl.contains('/resetFilterHome') ? '/resetFilterHome' :
+                (currentUrl.contains('/masterThesisMentorInfo') ? '/admin/resetFilterMentorInfo' :
+                (currentUrl.contains('/masterThesisMemberInfo') ? '/admin/resetFilterMemberInfo' : '/admin/resetFilter'))}"
+                   class="btn btn-success text-white border mt-4">Ресетирај Филтер</a>
             </div>
         </div>
 </div>

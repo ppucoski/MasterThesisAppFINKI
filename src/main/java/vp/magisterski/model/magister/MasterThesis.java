@@ -7,6 +7,7 @@ import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.model.shared.Professor;
 import vp.magisterski.model.shared.Student;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -22,7 +23,15 @@ public class MasterThesis {
     @GeneratedValue
     private Long id;
 
-    private String archiveNumber;
+    private String applicationArchiveNumber;
+
+    private String deadlineExtensionArchiveNumber;
+
+    private String decisionForCommissionElectionArchiveNumber;
+
+    private String masterThesisApprovalArchiveNumber;
+
+    private LocalDate masterThesisDueDate;
 
     @Enumerated(EnumType.STRING)
     private MasterThesisStatus status;

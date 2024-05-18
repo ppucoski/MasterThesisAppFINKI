@@ -233,7 +233,8 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     public void updateMasterThesis(Long id, MasterThesis thesis) {
         MasterThesis mt = masterThesisRepository.findById(id).orElse(null);
         if (mt != null) {
-            mt.setArchiveNumber(thesis.getArchiveNumber());
+//            mt.setArchiveNumber(thesis.getArchiveNumber());
+            mt.setApplicationArchiveNumber(thesis.getApplicationArchiveNumber());
             mt.setTitle(thesis.getTitle());
             mt.setArea(thesis.getArea());
             mt.setDescription(thesis.getDescription());
@@ -468,7 +469,8 @@ public class MasterThesisServiceImpl implements MasterThesisService {
     public void updateArchiveNumber(Long thesisId, String archiveNumber) {
         MasterThesis thesis = masterThesisRepository.findById(thesisId).orElse(null);
         if (thesis != null) {
-            thesis.setArchiveNumber(archiveNumber);
+//            thesis.setArchiveNumber(archiveNumber);
+            thesis.setApplicationArchiveNumber(archiveNumber);
             masterThesisRepository.save(thesis);
         }
 

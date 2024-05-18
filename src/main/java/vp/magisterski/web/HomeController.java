@@ -107,13 +107,6 @@ public class HomeController {
         model.addAttribute("currentFirstMember", firstMember1);
         model.addAttribute("currentSecondMember", secondMember1);
         model.addAttribute("MasterThesis", masterThesis);
-        model.addAttribute("reset", "/resetFilterHome");
-        model.addAttribute("back", "/list-MasterThesis");
-        return "MasterThesisList";
-    }
-
-    @GetMapping("/goBack")
-    public String goBack(Model model) {
         return "MasterThesisList";
     }
 
