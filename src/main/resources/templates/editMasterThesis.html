@@ -19,9 +19,9 @@
                        type="text"
                        id="archiveNumber"
                        name="archiveNumber"
-                       th:field="*{archiveNumber}"
-                       th:value="${masterThesis.archiveNumber ?: ''}"
-                       th:disabled="${masterThesis.archiveNumber == null}"
+                       th:field="*{masterThesisApprovalArchiveNumber}"
+                       th:value="${masterThesis.getMasterThesisApprovalArchiveNumber() ?: ''}"
+                       th:disabled="${masterThesis.getMasterThesisApprovalArchiveNumber == null}"
                        placeholder="Нема сеуште внесен архивски број"
                        required>
             </div>
@@ -33,7 +33,9 @@
             </div>
             <div class="form-group m-2">
                 <label for="title">Област на магистерска работа:</label>
-                <input class="form-control" type="text" id="area" name="area" th:field="*{area}" required>
+                <input class="form-control" type="text" id="area" name="area" th:field="*{area}" required
+                       th:disabled="${masterThesis.getArea() == null}"
+                       placeholder="Нема сеуште внесена област">
             </div>
 
             <div class="form-group m-2">

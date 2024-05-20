@@ -267,7 +267,7 @@ public class AdminController {
 
         model.addAttribute("role", userService.getUser().getRole());
         model.addAttribute("mentor", Objects.equals(masterThesis.getMentor().getId(), userService.getUser().getId()));
-        model.addAttribute("coordinator", Objects.equals(masterThesis.getCoordinator().getId(), userService.getUser().getId()));
+        //model.addAttribute("coordinator", Objects.equals(masterThesis.getCoordinator().getId(), userService.getUser().getId()));
         model.addAttribute("grade", masterThesis.getGrade() != null);
         if (masterThesis.getFirstMember() == null || masterThesis.getSecondMember() == null) {
             model.addAttribute("member", false);

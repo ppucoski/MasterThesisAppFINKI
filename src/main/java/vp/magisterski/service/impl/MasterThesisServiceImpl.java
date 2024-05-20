@@ -75,7 +75,11 @@ public class MasterThesisServiceImpl implements MasterThesisService {
                 .orElseThrow(() -> new StudentDoesNotExistException(studentIndex));
         Professor mentor = this.professorRepository.findById(mentorId)
                 .orElseThrow(() -> new ProfessorDoesNotExistException(mentorId));
-        StudyProgramDetails studyProgramDetails = this.studyProgramDetailsRepository.findById(student.getStudyProgram().getCode()).orElse(null);
+        StudyProgramDetails studyProgramDetails = null;
+        if (student.getStudyProgram() != null)
+        {
+            studyProgramDetails = this.studyProgramDetailsRepository.findById(student.getStudyProgram().getCode()).orElse(null);
+        }
         Professor coordinator = null;
         if (studyProgramDetails != null) {
             coordinator = studyProgramDetails.getCoordinator();
@@ -234,7 +238,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         MasterThesis mt = masterThesisRepository.findById(id).orElse(null);
         if (mt != null) {
 //            mt.setArchiveNumber(thesis.getArchiveNumber());
-            mt.setApplicationArchiveNumber(thesis.getApplicationArchiveNumber());
+            mt.setMasterThesisApprovalArchiveNumber((thesis.getMasterThesisApprovalArchiveNumber()));
             mt.setTitle(thesis.getTitle());
             mt.setArea(thesis.getArea());
             mt.setDescription(thesis.getDescription());
@@ -470,7 +474,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         MasterThesis thesis = masterThesisRepository.findById(thesisId).orElse(null);
         if (thesis != null) {
 //            thesis.setArchiveNumber(archiveNumber);
-            thesis.setApplicationArchiveNumber(archiveNumber);
+            thesis.setMasterThesisApprovalArchiveNumber(archiveNumber);
             masterThesisRepository.save(thesis);
         }
 

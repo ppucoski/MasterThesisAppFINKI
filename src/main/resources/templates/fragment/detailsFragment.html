@@ -7,7 +7,7 @@
             <span class="text-center text-dark" th:text="${thesis.id}"></span>
         </p>
         <p><strong>Архивски број: </strong>
-            <span class="text-center text-dark" th:text="${thesis.archiveNumber}"></span>
+            <span class="text-center text-dark" th:text="${thesis.masterThesisApprovalArchiveNumber}"></span>
         </p>
         <p><strong>Студент: </strong>
             <span class="text-center text-dark" th:text="${thesis.getStudent().getIndex()}"></span>
@@ -38,7 +38,7 @@
             <span th:unless="${thesis.getSecondMember() != null}">No member assigned</span>
         </p>
         <p><strong>Координатор: </strong>
-            <span class="text-center text-dark" th:text="${thesis.getCoordinator().getName()}"></span>
+            <span class="text-center text-dark" th:if="${thesis.getCoordinator() != null}" th:text="${thesis.getCoordinator().getName()}"></span>
         </p>
         <p><strong>Последно изменета: </strong>
             <span class="text-center text-dark"
