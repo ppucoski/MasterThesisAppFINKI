@@ -53,7 +53,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         this.studyProgramDetailsRepository = studyProgramDetailsRepository;
     }
 
-    @Override
+    /*@Override
     public MasterThesis save(String studentIndex, LocalDateTime dateTime, String title, String area, String description, String mentorId, String firstMemberId, String secondMemberId) {
         Student student = this.studentRepository.findById(studentIndex)
                 .orElseThrow(() -> new StudentDoesNotExistException(studentIndex));
@@ -63,11 +63,12 @@ public class MasterThesisServiceImpl implements MasterThesisService {
                 .orElseThrow(() -> new ProfessorDoesNotExistException(firstMemberId));
         Professor secondMember = this.professorRepository.findById(secondMemberId)
                 .orElseThrow(() -> new ProfessorDoesNotExistException(secondMemberId));
-        MasterThesisPresentation presentation = new MasterThesisPresentation("", dateTime);
+        //TODO zoso ovde pram so null???
+        MasterThesisPresentation presentation = new MasterThesisPresentation(null, dateTime);
         MasterThesis masterThesis = new MasterThesis(MasterThesisStatus.STUDENT_THESIS_REGISTRATION, presentation,
                 student, title, area, description, mentor, firstMember, secondMember);
         return this.masterThesisRepository.save(masterThesis);
-    }
+    }*/
 
     @Override
     public MasterThesis newThesis(String studentIndex, String title, String mentorId, String description) {
@@ -453,7 +454,7 @@ public class MasterThesisServiceImpl implements MasterThesisService {
         MasterThesis thesis = masterThesisRepository.findById(thesisId).orElse(null);
         if (thesis != null) {
             Room r = this.roomRepository.findById(room).orElseThrow(() -> new RoomDoesNotExistsException(room));
-            MasterThesisPresentation masterThesisPresentation = new MasterThesisPresentation(room, time);
+            MasterThesisPresentation masterThesisPresentation = new MasterThesisPresentation(r, time);
             thesis.setPresentation(masterThesisPresentation);
             masterThesisRepository.save(thesis);
         }

@@ -46,8 +46,9 @@
         </p>
         <p><strong>Датум на одржување: </strong>
             <span class="text-center text-dark" th:if="${thesis.getPresentation() != null}"
-                  th:text="${#temporals.format(thesis.getPresentation().getPresentationStartTime(), 'dd.MM.yyy hh:mm')}"></span>
+                  th:text="${#temporals.format(thesis.getPresentation().getPresentationStartTime(), 'dd.MM.yyyy HH:mm')}"></span>
         </p>
+
         <p><strong>Статус: </strong>
             <span class="text-center text-dark" th:text="${thesis.getStatus().getDisplayName()}"></span>
         </p>
@@ -56,7 +57,7 @@
                   th:text="${masterThesisStatusChange.get().getNextStatus().getDisplayName()}"></span>
         </p>
     </div>
-    <div th:if="${thesis.getStatus().toString() != 'FINISHED'}" class="row">
+    <div th:if="${thesis.getStatus().toString() == 'FINISHED'}" class="row">
 
         <a class="btn btn-outline-primary w-25 m-2"
            th:href="@{/admin/edit/{thesisId}(thesisId=${thesis.getId()})}">Измени</a>

@@ -1,10 +1,13 @@
 package vp.magisterski.model.magister;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import vp.magisterski.model.shared.Room;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +18,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MasterThesisPresentation {
 
-    private String location;
+    @ManyToOne
+    @JoinColumn(name = "location")
+    private Room location;
 
     private LocalDateTime presentationStartTime;
 

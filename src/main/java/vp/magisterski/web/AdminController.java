@@ -34,6 +34,7 @@ import vp.magisterski.service.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -159,12 +160,7 @@ public class AdminController {
         return "redirect:masterThesisMemberInfo";
     }
 
-    @GetMapping("/newMasterThesis")
-    public String newMasterThesis(Model model) {
-        model.addAttribute("professors", professorService.findAllByProfessorStatus(true, false));
-        model.addAttribute("members", professorService.findAllByProfessorStatus(true, true));
-        return "newMasterThesis";
-    }
+
 
 
     @GetMapping("/masterThesisMentorInfo")
@@ -212,22 +208,7 @@ public class AdminController {
 //        model.addAttribute("size", thesisPage.getTotalElements());
     }
 
-    @PostMapping("/newMasterThesis")
-    public String saveNewMasterThesis(@RequestParam String index,
-                                      @RequestParam String title,
-                                      @RequestParam String area,
-                                      @RequestParam String description,
-                                      @RequestParam String mentor,
-                                      @RequestParam String firstMember,
-                                      @RequestParam String secondMember) {
-        try {
-            masterThesisService.save(index, LocalDateTime.now(), title, area, description, mentor, firstMember, secondMember);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
 
-        return "redirect:list-masters";
-    }
 
     @GetMapping("/upload")
     public String uploadThesisFile(Model model, @RequestParam Long thesisId) {
@@ -391,6 +372,12 @@ public class AdminController {
     @GetMapping("/edit/{thesisId}")
     public String editMasterThesis(@PathVariable Long thesisId, Model model) {
         MasterThesis thesis = masterThesisService.findThesisById(thesisId).orElseThrow(() -> new ThesisDoesNotExistException(String.valueOf(thesisId)));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+        String formattedDateTime = null;
+        if (thesis.getPresentation() != null && thesis.getPresentation().getPresentationStartTime() != null) {
+            formattedDateTime = thesis.getPresentation().getPresentationStartTime().format(formatter);
+        }
+        model.addAttribute("formattedDateTime", formattedDateTime);
         model.addAttribute("masterThesis", thesis);
         model.addAttribute("professors", professorService.findAllByProfessorStatus(true, false));
         model.addAttribute("members", professorService.findAllByProfessorStatus(true, true));

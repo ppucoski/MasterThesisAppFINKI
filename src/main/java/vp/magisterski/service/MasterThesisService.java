@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MasterThesisService {
-    MasterThesis save(String studentIndex, LocalDateTime dateTime, String title, String area,
+    /*MasterThesis save(String studentIndex, LocalDateTime dateTime, String title, String area,
                       String description, String mentorId, String firstMemberId,
-                      String secondMemberId);
+                      String secondMemberId);*/
 
     MasterThesis newThesis(String studentIndex, String title, String mentorId, String description);
 

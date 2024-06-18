@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.Hibernate;
 import vp.magisterski.model.enumerations.MasterThesisStatus;
 import vp.magisterski.model.shared.User;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -35,6 +37,7 @@ public class MasterThesisStatusChange {
     private String note;
 
     private Boolean approved;
+    private LocalDate nextStatusProcessingDueDate;
 
     @Override
     public boolean equals(Object o) {

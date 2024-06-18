@@ -5,6 +5,7 @@ import vp.magisterski.model.shared.Professor;
 import vp.magisterski.repository.ProfessorRepository;
 import vp.magisterski.service.ProfessorService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class ProfessorServiceImpl implements ProfessorService {
                 .stream()
                 .filter(professor -> professor.getTitle().isProfessor() &&
                         (canBeElected || !professor.getTitle().name().startsWith("ELECTED")))
+                .sorted(Comparator.comparing(Professor::getName))
                 .collect(Collectors.toList());
     }
 

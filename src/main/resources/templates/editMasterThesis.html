@@ -98,12 +98,12 @@
             </div>
 
 
+
             <div class="form-group m-2" th:if="${masterThesis.presentation != null}">
                 <label for="localDateTime">Селектирај датум и време на презентација:</label>
                 <div class="input-group">
-                    <input type="datetime-local" class="form-control" id="localDateTime" name="localDateTime"
-                           th:field="${masterThesis.presentation.presentationStartTime}"
-                           th:value="${masterThesis.presentation.presentationStartTime != null ? masterThesis.presentation.presentationStartTime : ''}">
+                    <input type="datetime-local" class="form-control" id="localDateTime" name="presentation.presentationStartTime"
+                           th:value="${formattedDateTime != null ? formattedDateTime : ''}">
                 </div>
             </div>
 
